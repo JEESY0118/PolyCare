@@ -26,7 +26,7 @@ public class EventActivity extends AppCompatActivity{
         Log.i(ACTIVITY, "Debug here");
 
         Intent intent = getIntent();
-        String name = intent.getExtras().getString("Name");
+        String name ="Titre : " +intent.getExtras().getString("Name");
         Log.i(ACTIVITY, name);
 
 

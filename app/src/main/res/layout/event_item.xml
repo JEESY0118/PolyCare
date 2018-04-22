@@ -29,14 +29,16 @@
                     android:id="@+id/name_view"
                     android:layout_width="190dp"
                     android:layout_height="match_parent"
-                    android:text="name" />
+                    android:text="name"
+                    tools:text="Prénom" />
 
                 <TextView
                     android:id="@+id/date_view"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="date" />
+                    android:text="date"
+                    tools:text="Date" />
             </LinearLayout>
 
             <LinearLayout
@@ -50,13 +52,15 @@
                     android:id="@+id/category_view"
                     android:layout_width="190dp"
                     android:layout_height="match_parent"
-                    android:text="category" />
+                    android:text="category"
+                    tools:text="Catégorie" />
 
                 <TextView
                     android:id="@+id/title_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="title" />
+                    android:text="title"
+                    tools:text="Titre" />
 
             </LinearLayout>
 
@@ -70,13 +74,16 @@
                     android:id="@+id/phone_view"
                     android:layout_width="191dp"
                     android:layout_height="match_parent"
-                    android:text="phone" />
+                    android:text="phone"
+                    tools:text="Téléphone" />
 
                 <TextView
                     android:id="@+id/importance_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="importance" />
+                    android:drawableEnd="?android:attr/colorSecondary"
+                    android:text="importance"
+                    tools:text="Urgence" />
 
             </LinearLayout>
 
@@ -89,13 +96,15 @@
                     android:id="@+id/state_view"
                     android:layout_width="match_parent"
                     android:layout_height="59dp"
-                    android:text="state" />
+                    android:text="state"
+                    tools:text="État" />
 
                 <TextView
                     android:id="@+id/description_view"
                     android:layout_width="match_parent"
                     android:layout_height="146dp"
-                    android:text="description" />
+                    android:text="description"
+                    tools:text="Description" />
 
 
                 <com.google.android.gms.maps.MapView

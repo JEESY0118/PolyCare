@@ -9,4 +9,8 @@
     <string name="lastname">*nom</string>
     <string name="firstname">*prenom</string>
     <string name="name">name</string>
+    <string name="title_home">Home</string>
+    <string name="title_declaration">Déclarer</string>
+    <string name="title_graphe">Graphe</string>
+    <string name="title_location">Map</string>
 </resources>

@@ -51,7 +51,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
      */
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        holder.title.setText(data.get(position).toString());
+        holder.title.setText("Titre: "+data.get(position).getTitle());
+        holder.arthor.setText("Arthor: "+data.get(position).getReporter());
+        holder.category.setText("Catégorie: "+data.get(position).getCategory());
+        holder.importance.setText("Urgence: "+data.get(position).getImportance());
+        holder.date.setText("Date: "+data.get(position).getDate());
+
 
         //set listener
         holder.cardView.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +64,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             public void onClick(View view) {
                 //用来启动其他新的Activity。 二:作为传递数据和事件的桥梁
                 Intent intent = new Intent(context, EventActivity.class);
-                intent.putExtra("Name", data.get(position).getName());
+                intent.putExtra("Title", data.get(position).getTitle());
+                intent.putExtra("Name", data.get(position).getReporter());
+                intent.putExtra("Category", data.get(position).getCategory());
+                intent.putExtra("Importance", data.get(position).getImportance());
+                intent.putExtra("Description", data.get(position).getDescription());
+                intent.putExtra("State", data.get(position).getState());
+                intent.putExtra("Date", data.get(position).getDate());
+                intent.putExtra("Phone", data.get(position).getNumber());
 
                 context.startActivity(intent);
             }
@@ -80,13 +92,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
      * dans holder, we find the view by id, in cardview_item.xml
      */
     public static class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView title;
+        TextView title, arthor,category,importance,date;
         CardView cardView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            title = (TextView) itemView.findViewById(R.id.event);
+            title = (TextView) itemView.findViewById(R.id.title);
+            arthor = (TextView) itemView.findViewById(R.id.arthor);
+            category = (TextView) itemView.findViewById(R.id.category);
+            importance = (TextView) itemView.findViewById(R.id.importance);
+            date = (TextView) itemView.findViewById(R.id.date);
             cardView=(CardView)itemView.findViewById(R.id.main);
         }
     }

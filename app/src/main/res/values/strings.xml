@@ -13,4 +13,5 @@
     <string name="title_declaration">Déclarer</string>
     <string name="title_graphe">Graphe</string>
     <string name="title_location">Map</string>
+    <string name="check_declaration"></string>
 </resources>

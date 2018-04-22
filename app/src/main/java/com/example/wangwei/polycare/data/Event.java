@@ -1,24 +1,87 @@
 package com.example.wangwei.polycare.data;
 
 public class Event {
-    private String name;
+    private String title;
+    private String category;
+    private String description;
+    private String reporter;
+    private String importance;
+    private String state;
+    private String date;
+    private String number;
 
-    public Event(String name) {
-        this.name = name;
+    public Event(String title, String category, String description, String reporter, String importance, String state, String date, String number) {
+        this.title = title;
+        this.category = category;
+        this.description = description;
+        this.reporter = reporter;
+        this.importance = importance;
+        this.state = state;
+        this.date = date;
+        this.number = number;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getCategory() {
+        return category;
     }
 
-    @Override
-    public String toString() {
-        return "Event{" +
-                "name='" + name + '\'' +
-                '}';
+    public String getDescription() {
+        return description;
+    }
+
+    public String getReporter() {
+        return reporter;
+    }
+
+    public String getImportance() {
+        return importance;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setReporter(String reporter) {
+        this.reporter = reporter;
+    }
+
+    public void setImportance(String importance) {
+        this.importance = importance;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 }

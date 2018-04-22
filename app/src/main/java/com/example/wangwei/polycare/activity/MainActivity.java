@@ -15,6 +15,7 @@ import android.view.View;
 
 import com.example.wangwei.polycare.R;
 import com.example.wangwei.polycare.adapter.RecyclerViewAdapter;
+import com.example.wangwei.polycare.data.DBHelper;
 import com.example.wangwei.polycare.data.Event;
 
 import java.util.ArrayList;
@@ -22,8 +23,12 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     List<Event> events;
+    private DBHelper dbHelper;
     public static final String ACTIVITY =  "debug here";
 
+    /**
+     * add action for bottom navigator
+     */
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -49,20 +54,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        events = new ArrayList<>();
-
-        events.add(new Event("1"));
-        events.add(new Event("2"));
-        events.add(new Event("3"));
-        events.add(new Event("4"));
-        events.add(new Event("5"));
-        events.add(new Event("6"));
-        events.add(new Event("7"));
-        events.add(new Event("8"));
-        events.add(new Event("9"));
-
-        Log.i(ACTIVITY, "Debug here");
+        dbHelper = new DBHelper(this);
+        events = dbHelper.getAllEvent();
 
         RecyclerView myview = (RecyclerView) findViewById(R.id.recyclerview);
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, events);

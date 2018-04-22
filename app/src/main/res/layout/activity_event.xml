@@ -29,9 +29,9 @@ cardview:cardCornerRadius="4dp"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/arthor"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="45dp"
                     android:layout_weight="1"
                     android:text="Arthor" />
 
@@ -57,9 +57,9 @@ cardview:cardCornerRadius="4dp"
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/textView"
+                        android:id="@+id/title"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="46dp"
                         android:layout_weight="1"
                         android:text="Title" />
 
@@ -81,7 +81,7 @@ cardview:cardCornerRadius="4dp"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/event"
+                    android:id="@+id/date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -90,7 +90,7 @@ cardview:cardCornerRadius="4dp"
                     android:textSize="13sp" />
 
                 <ProgressBar
-                    android:id="@+id/progressBar"
+                    android:id="@+id/state"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

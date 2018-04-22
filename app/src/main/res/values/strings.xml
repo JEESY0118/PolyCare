@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">polycare</string>
-    <string name="titre">Titre</string>
-    <string name="nom">nom</string>
-    <string name="prenom">prenom</string>
-    <string name="phonenumber">téléphone</string>
-    <string name="importance">importance</string>
-    <string name="category">category</string>
-    <string name="date">date</string>
+    <string name="titre">*titre</string>
+    <string name="phonenumber">*téléphone</string>
+    <string name="importance">*urgence(5/5)</string>
+    <string name="category">*category</string>
+    <string name="date">*date</string>
     <string name="partagez_votre_localisation">partagez votre localisation</string>
+    <string name="lastname">*nom</string>
+    <string name="firstname">*prenom</string>
 </resources>

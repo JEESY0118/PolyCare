@@ -17,7 +17,9 @@
             android:id="@+id/linear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp">
 
             <LinearLayout
                 android:id="@+id/linear_name"
@@ -31,9 +33,9 @@
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/nom"
-                        android:layout_width="match_parent"
+                        android:layout_width="190dp"
                         android:layout_height="wrap_content"
-                        android:hint="@string/nom" />
+                        android:hint="@string/lastname" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -45,7 +47,7 @@
                         android:id="@+id/prenom"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/prenom" />
+                        android:hint="@string/firstname" />
                 </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
@@ -74,11 +76,11 @@
                     android:layout_height="wrap_content">
 
                     <android.support.design.widget.TextInputEditText
-                        android:id="@+id/importance"
+                        android:id="@+id/title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/importance"
-                        android:inputType="number" />
+                        android:hint="@string/titre"
+                        android:inputType="text" />
                 </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
@@ -107,11 +109,11 @@
                     android:layout_height="match_parent">
 
                     <android.support.design.widget.TextInputEditText
-                        android:id="@+id/date"
+                        android:id="@+id/importance"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/date"
-                        android:inputType="date" />
+                        android:hint="@string/importance"
+                        android:inputType="number" />
                 </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>

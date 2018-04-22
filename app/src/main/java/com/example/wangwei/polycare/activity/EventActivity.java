@@ -22,7 +22,7 @@ public class EventActivity extends AppCompatActivity{
         setContentView(R.layout.event_item);
 
 
-        titleview = (TextView) findViewById(R.id.details);
+        titleview = (TextView) findViewById(R.id.title_view);
         Log.i(ACTIVITY, "Debug here");
 
         Intent intent = getIntent();

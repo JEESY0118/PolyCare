@@ -6,25 +6,111 @@
     android:layout_height="match_parent"
     tools:context=".activity.EventActivity">
 
+
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
-        android:padding="10dp">
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/details"
+            android:id="@+id/linear"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="details of event"/>
+            android:orientation="vertical"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp">
+
+            <LinearLayout
+                android:id="@+id/linear_name"
+                android:layout_width="match_parent"
+                android:layout_height="61dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/name_view"
+                    android:layout_width="190dp"
+                    android:layout_height="match_parent"
+                    android:text="name" />
+
+                <TextView
+                    android:id="@+id/date_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="date" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_phone"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:id="@+id/category_view"
+                    android:layout_width="190dp"
+                    android:layout_height="match_parent"
+                    android:text="category" />
+
+                <TextView
+                    android:id="@+id/title_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="title" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_category"
+                android:layout_width="match_parent"
+                android:layout_height="62dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/phone_view"
+                    android:layout_width="191dp"
+                    android:layout_height="match_parent"
+                    android:text="phone" />
+
+                <TextView
+                    android:id="@+id/importance_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="importance" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="374dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/state_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="59dp"
+                    android:text="state" />
+
+                <TextView
+                    android:id="@+id/description_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="146dp"
+                    android:text="description" />
+
+
+                <com.google.android.gms.maps.MapView
+                    android:id="@+id/mapview"
+                    android:layout_width="match_parent"
+                    android:layout_height="235dp"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
 
 
         </LinearLayout>
 
+
     </android.support.v4.widget.NestedScrollView>
+
 
 </LinearLayout>

@@ -8,4 +8,5 @@
     <string name="partagez_votre_localisation">partagez votre localisation</string>
     <string name="lastname">*nom</string>
     <string name="firstname">*prenom</string>
+    <string name="name">name</string>
 </resources>

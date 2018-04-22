@@ -8,23 +8,98 @@ android:clickable="true"
 android:layout_margin="5dp"
 android:layout_gravity="center"
 android:foreground="?android:attr/selectableItemBackground"
-cardview:cardCornerRadius="4dp">
+cardview:cardCornerRadius="4dp"
+    android:focusable="true">
 
-<LinearLayout
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/event"
-        android:textSize="13sp"
-        android:textColor="#2d2d2d"
-        android:gravity="center"
-        android:text="Contexte"/>
+        android:gravity="bottom"
+        android:orientation="vertical">
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="100dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:text="Arthor" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="100dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:text="Title" />
+
+            <TextView
+                android:id="@+id/event"
+                android:layout_width="100dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:text="Date"
+                android:textColor="#2d2d2d"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/category"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="category" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/importance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="importance" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:visibility="visible"
+                    cardview:visibility="visible" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/state"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="State" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 
 </android.support.v7.widget.CardView>

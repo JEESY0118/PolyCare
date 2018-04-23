@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
-    private static String DB_NAME = "polycare.sqlite";
+    private static String DB_NAME = "polytech.sqlite";
     private static final String ACTIVITY_TAG = "LogDemo";
 
     private SQLiteDatabase myDataBase;
@@ -34,6 +34,11 @@ public class DBHelper extends SQLiteOpenHelper {
         //Open the database
         String myPath = myContext.getDatabasePath(DB_NAME).getAbsolutePath();
         myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+    }
+
+    @Override
+    public SQLiteDatabase getWritableDatabase() {
+        return super.getWritableDatabase();
     }
 
     public void createDataBase() throws IOException {

@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
-    private static String DB_NAME = "mydatabase.sqlite";
+    private static String DB_NAME = "android.sqlite";
     private static final String ACTIVITY_TAG = "LogDemo";
 
     private SQLiteDatabase myDataBase;
@@ -102,26 +102,16 @@ public class DBHelper extends SQLiteOpenHelper {
         try {
             createDataBase();
             openDataBase();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
 
-        Cursor cursor = myDataBase.rawQuery("\n" +
-                "                SELECT e.event_title, c.category_name, e.event_description,\n" +
-                "                u.user_firstname, g.urgence_name, s.state_name,e.event_report_date, u.user_phone\n" +
-                "                FROM events e, categories c, users u, states s, urgences g\n" +
-                "                where e.event_reporter = u.user_id\n" +
-                "                and e.event_category = c.category_id\n" +
-                "\t\t\t\tand e.event_importance = g.urgence_id\n" +
-                "\t\t\t\tand e.event_state = s.state_id", null);
+        Cursor cursor = myDataBase.rawQuery("SELECT * FROM events", null);
         cursor.moveToNext();
         while (!cursor.isAfterLast()) {
-            event = new Event(cursor.getString(0), cursor.getString(1),
-                    cursor.getString(2), cursor.getString(3),
-                    cursor.getString(4), cursor.getString(5), cursor.getString(6),
-                    cursor.getString(7));
+            event = new Event(cursor.getInt(0),cursor.getString(1), cursor.getString(2),
+                    cursor.getString(3), cursor.getString(4),
+                    cursor.getString(5), cursor.getString(6), cursor.getString(7),cursor.getString(8));
             events.add(event);
             cursor.moveToNext();
         }
@@ -129,6 +119,51 @@ public class DBHelper extends SQLiteOpenHelper {
         close();
         return events;
     }
+
+    public List<String> getCategories(){
+        String string = null;
+        List<String> strings = new ArrayList<>();
+        try {
+            createDataBase();
+            openDataBase();
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
+
+        Cursor cursor = myDataBase.rawQuery("SELECT * FROM \"categories\";", null);
+        cursor.moveToNext();
+        while (!cursor.isAfterLast()) {
+            string = cursor.getString(1);
+            strings.add(string);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        close();
+        return strings;
+    }
+
+    public List<String> getUrgences(){
+        String string = null;
+        List<String> strings = new ArrayList<>();
+        try {
+            createDataBase();
+            openDataBase();
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
+
+        Cursor cursor = myDataBase.rawQuery("select * from urgences", null);
+       cursor.moveToNext();
+        while (!cursor.isAfterLast()) {
+            string = cursor.getString(1);
+            strings.add(string);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        close();
+        return strings;
+    }
+
 
     public static String getDbName() {
         return DB_NAME;

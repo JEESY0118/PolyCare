@@ -10,7 +10,17 @@ public class Event {
     private String date;
     private String number;
 
-    public Event(String title, String category, String description, String reporter, String importance, String state, String date, String number) {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    private int id;
+
+    public Event(int id, String title, String category, String description, String reporter, String importance, String state, String date, String number) {
         this.title = title;
         this.category = category;
         this.description = description;

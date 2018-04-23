@@ -52,10 +52,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         holder.title.setText("Titre: "+data.get(position).getTitle());
-        holder.arthor.setText("Arthor: "+data.get(position).getReporter());
-        holder.category.setText("Catégorie: "+data.get(position).getCategory());
-        holder.importance.setText("Urgence: "+data.get(position).getImportance());
+        holder.arthor.setText(data.get(position).getReporter() +" : " );
         holder.date.setText("Date: "+data.get(position).getDate());
+        holder.description.setText(data.get(position).getDescription());
 
 
         //set listener
@@ -92,7 +91,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
      * dans holder, we find the view by id, in cardview_item.xml
      */
     public static class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView title, arthor,category,importance,date;
+        TextView title, arthor,date,description;
         CardView cardView;
 
         public MyViewHolder(View itemView) {
@@ -100,9 +99,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             title = (TextView) itemView.findViewById(R.id.title);
             arthor = (TextView) itemView.findViewById(R.id.arthor);
-            category = (TextView) itemView.findViewById(R.id.category);
-            importance = (TextView) itemView.findViewById(R.id.importance);
             date = (TextView) itemView.findViewById(R.id.date);
+            description =(TextView) itemView.findViewById(R.id.description);
             cardView=(CardView)itemView.findViewById(R.id.main);
         }
     }

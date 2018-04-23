@@ -89,7 +89,6 @@
                     android:layout_height="match_parent"
                     android:drawableEnd="?android:attr/colorSecondary"
                     android:text="@string/importance"
-                    tools:targetApi="n_mr1"
                     tools:text="Urgence" />
 
             </LinearLayout>

@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
-    private static String DB_NAME = "android.sqlite";
+    private static String DB_NAME = "polycare.sqlite";
     private static final String ACTIVITY_TAG = "LogDemo";
 
     private SQLiteDatabase myDataBase;

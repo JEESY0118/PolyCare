@@ -24,4 +24,5 @@
     <string name="categorie">category</string>
     <string name="state">state</string>
     <string name="description">description</string>
+    <string name="button">Valider</string>
 </resources>

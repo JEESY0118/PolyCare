@@ -1,9 +1,11 @@
 package com.example.wangwei.polycare.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.wangwei.polycare.R;
 import com.example.wangwei.polycare.data.DBHelper;
@@ -35,16 +38,6 @@ public class AnnouncementActivity extends AppCompatActivity{
         helper = new DBHelper(this);
         createUrgenceSpinner();
         createCategorySpinner();
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.floatingActionButton);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setClass(AnnouncementActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
 
     }
 
@@ -118,6 +111,35 @@ public class AnnouncementActivity extends AppCompatActivity{
 
             }
         });
+    }
+
+    public void onclick(View view){
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setIcon(R.drawable.ic_add_alert_black_24dp);//设置图标
+        builder.setTitle("Validation de déclaration");//设置对话框的标题
+        builder.setMessage("Vous voulez valider？");//设置对话框的内容
+        builder.setPositiveButton("Valider", new DialogInterface.OnClickListener() {  //这个是设置确定按钮
+
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                Toast.makeText(AnnouncementActivity.this, "Réussi", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent();
+                intent.setClass(AnnouncementActivity.this, MainActivity.class);
+                startActivity(intent);
+
+            }
+        });
+        builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {  //取消按钮
+
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                Toast.makeText(AnnouncementActivity.this, "Annuler", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        AlertDialog b=builder.create();
+        b.show();  //必须show一下才能看到对话框，跟Toast一样的道理
+
     }
 
 }

@@ -101,8 +101,9 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-    public List<Event> getAllEvent() {
+    public List<Event> getAllEvent(String cate) {
         Event event = null;
+        Cursor cursor = null;
         List<Event> events = new ArrayList<>();
         try {
             createDataBase();
@@ -110,8 +111,13 @@ public class DBHelper extends SQLiteOpenHelper {
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
-
-        Cursor cursor = myDataBase.rawQuery("SELECT * FROM events", null);
+        if(cate=="Tout") {
+            cursor = myDataBase.rawQuery("SELECT * FROM events order by event_date", null);
+        }
+        else {
+            cursor = myDataBase.rawQuery("SELECT * FROM events where event_category ='"+cate+"'" + "order by event_date", null);
+        }
+        Log.i(ACTIVITY_TAG, "cate");
         cursor.moveToNext();
         while (!cursor.isAfterLast()) {
             event = new Event(cursor.getInt(0),cursor.getString(1), cursor.getString(2),

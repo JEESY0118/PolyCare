@@ -87,6 +87,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return data.size();
     }
 
+    public void setData(List<Event> data) {
+        this.data = data;
+    }
+
     /**
      * dans holder, we find the view by id, in cardview_item.xml
      */
@@ -104,4 +108,5 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             cardView=(CardView)itemView.findViewById(R.id.main);
         }
     }
+
 }

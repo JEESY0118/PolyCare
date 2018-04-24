@@ -38,7 +38,7 @@ public class AnnouncementActivity extends AppCompatActivity {
     private ArrayAdapter<String> adapter;
     private ArrayAdapter<String> adapterCate;
     List<String> categories = new ArrayList<String>();
-    EditText nom, prenom, title, category, urgence, description, number;
+    EditText prenom, title,description, number;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

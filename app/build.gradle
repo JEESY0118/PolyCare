@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "com.example.wangwei.polycare"
+        applicationId "com.example.wangwei.polycare_f"
         minSdkVersion 21
         targetSdkVersion 26
         versionCode 1
@@ -29,5 +29,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation 'com.android.support:design:26.1.0'
     implementation 'com.google.android.gms:play-services-maps:15.0.0'
-    compile 'com.getbase:floatingactionbutton:1.10.1'
+    implementation 'com.getbase:floatingactionbutton:1.10.1'
 }

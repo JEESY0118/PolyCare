@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mian_linear"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.DeclarationActivity">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/linear"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
+            android:orientation="vertical"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp">
+
+            <LinearLayout
+                android:id="@+id/linear_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="190dp"
+                    android:layout_height="match_parent">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/nom_input"
+                        android:layout_width="190dp"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/nom"
+                        android:inputType="text" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="190dp"
+                    android:layout_height="match_parent">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/prenom_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/pernom" />
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:orientation="horizontal">
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="190dp"
+                    android:layout_height="wrap_content">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/title_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/titre"
+                        android:inputType="text" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <Spinner
+                    android:id="@+id/Spinner_category"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@android:drawable/btn_dropdown"
+                    tools:layout_editor_absoluteX="0dp"
+                    tools:layout_editor_absoluteY="1dp">
+
+                </Spinner>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="190dp"
+                    android:layout_height="match_parent">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/phone_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="@string/t_l_phone"
+                        android:inputType="phone" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <Spinner
+                    android:id="@+id/Spinner_urgence"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@android:drawable/btn_dropdown"
+                    tools:layout_editor_absoluteX="0dp"
+                    tools:layout_editor_absoluteY="1dp">
+
+                </Spinner>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/description_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2dp">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/description_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="102dp"
+                        android:layout_marginBottom="2dp"
+                        android:hint="@string/description"
+                        android:inputType="text" />
+
+                    <Switch
+                        android:id="@+id/switch1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/partagez_votre_localisation" />
+
+                    <com.google.android.gms.maps.MapView
+                        android:id="@+id/mapView"
+                        android:layout_width="match_parent"
+                        android:layout_height="205dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/common_google_signin_btn_icon_dark_normal" />
+
+                    <Button
+                        android:id="@+id/button"
+                        style="@android:style/Widget.Material.Light.Button.Toggle"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1"
+                        android:background="?android:attr/statusBarColor"
+                        android:onClick="onclick"
+                        android:text="@string/button"
+                        tools:text="Valider" />
+
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </android.support.v4.widget.NestedScrollView>
+
+</LinearLayout>

@@ -1,5 +1,6 @@
 package com.example.wangwei.polycare_f.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
@@ -49,10 +50,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
      */
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        holder.title.setText("Titre: " + data.get(position).getTitle());
-        holder.arthor.setText(data.get(position).getReporter() + " : ");
-        holder.date.setText("Date: " + data.get(position).getDate());
-        holder.description.setText(data.get(position).getDescription());
+       setIcon(holder, position);
 
 
         //set listener
@@ -76,6 +74,56 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     }
 
+    private void setIcon(MyViewHolder holder, final int position){
+        holder.title.setText("Titre: " + data.get(position).getTitle());
+        holder.arthor.setText(data.get(position).getReporter() + " : ");
+        holder.date.setText("Date: " + data.get(position).getDate());
+        holder.description.setText(data.get(position).getDescription());
+
+        switch (data.get(position).getImportance()){
+            case "Faible":
+                switch (data.get(position).getState()){
+                    case "A faire":
+                        holder.circle.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_star_faible_a_faire,0,0);
+                        break;
+                    case "En cours":
+                        holder.circle.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_star_faible_en_cours,0,0);
+                        break;
+                    case "Résolu":
+                        holder.circle.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_star_faible_done,0,0);
+                        break;
+                }
+                break;
+            case "Moyenne":
+                switch (data.get(position).getState()){
+                    case "A faire":
+                        holder.circle.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_star_moyenne_a_faire,0,0);
+                        break;
+                    case "En cours":
+                        holder.circle.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_star_moyenne_a_faire,0,0);
+                        break;
+                    case "Résolu":
+                        holder.circle.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_star_moyenne_done,0,0);
+                        break;
+                }
+                break;
+            case "Elevée":
+                switch (data.get(position).getState()){
+                    case "A faire":
+                        holder.circle.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_star_elevee_a_faire,0,0);
+                        break;
+                    case "En cours":
+                        holder.circle.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_star_elevee_en_cours,0,0);
+                        break;
+                    case "Résolu":
+                        holder.circle.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_star_elevee_done,0,0);
+                        break;
+                }
+                break;
+
+        }
+    }
+
     /**
      * get the number of items
      *
@@ -94,7 +142,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
      * dans holder, we find the view by id, in cardview_item.xml
      */
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView title, arthor, date, description;
+        TextView title, arthor, date, description, circle;
         CardView cardView;
 
         public MyViewHolder(View itemView) {
@@ -104,6 +152,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             arthor = (TextView) itemView.findViewById(R.id.arthor);
             date = (TextView) itemView.findViewById(R.id.date);
             description = (TextView) itemView.findViewById(R.id.description);
+            circle = (TextView)itemView.findViewById(R.id.circle);
             cardView = (CardView) itemView.findViewById(R.id.main);
         }
     }

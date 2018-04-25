@@ -1,5 +1,6 @@
 package com.example.wangwei.polycare_f.activity;
 
+import android.graphics.Color;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;

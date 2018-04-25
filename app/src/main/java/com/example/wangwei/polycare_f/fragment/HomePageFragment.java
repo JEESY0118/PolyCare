@@ -126,6 +126,7 @@ public class HomePageFragment extends Fragment {
     private void createImpSpinner(){
         tris.add("Date");
         tris.add("Urgence");
+        tris.add("État");
 
         impSpinner = rootview.findViewById(R.id.Spinner_tri);
         adapterImp = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_item, tris);
@@ -141,8 +142,13 @@ public class HomePageFragment extends Fragment {
                         recyclerview.setAdapter(viewAdapter);
                         break;
                     case "Urgence":
-                        List<Event> list = getSortByImportance(events);
-                        viewAdapter.setData(list);
+                        List<Event> list1 = getSortByImportance(events);
+                        viewAdapter.setData(list1);
+                        recyclerview.setAdapter(viewAdapter);
+                        break;
+                    case "État":
+                        List<Event> list2 = getSortByState(events);
+                        viewAdapter.setData(list2);
                         recyclerview.setAdapter(viewAdapter);
                         break;
                 }
@@ -214,6 +220,31 @@ public class HomePageFragment extends Fragment {
 
         return eventList;
     }
+
+    public List<Event> getSortByState(List<Event> events){
+        List<Event> eventList = new ArrayList<>();
+        for (Event e : events) {
+            if(e.getState().equals("A faire")){
+                eventList.add(e);
+            }
+        }
+
+        for (Event e : events) {
+            if(e.getState().equals("En cours")){
+                eventList.add(e);
+            }
+        }
+
+        for (Event e : events) {
+            if(e.getState().equals("Résolu")){
+                eventList.add(e);
+            }
+        }
+
+        return eventList;
+    }
+
+
 
     /**
      * sorted by date

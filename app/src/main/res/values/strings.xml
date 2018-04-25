@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">polycare_f</string>
+    <string name="app_name">PolyCare</string>
     <string name="add">add</string>
     <string name="graphe">graphe</string>
     <string name="homepage">homepage</string>
-    <string name="tri_par">tri_par</string>
-    <string name="filtre">filtre</string>
+    <string name="tri_par">Tri par</string>
+    <string name="filtre">Filtre</string>
     <string name="title">title</string>
     <string name="datey">dateY</string>
     <string name="arthor">arthor</string>
@@ -20,4 +20,6 @@
     <string name="description">description</string>
     <string name="partagez_votre_localisation">partagez_votre_localisation</string>
     <string name="button">valider</string>
+    <string name="urgence">urgence</string>
+    <string name="state">state</string>
 </resources>

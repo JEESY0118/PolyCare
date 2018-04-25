@@ -47,8 +47,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * add action for bottom navigator
      */
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -97,13 +96,18 @@ public class MainActivity extends AppCompatActivity {
         categories.addAll(dbHelper.getCategories());
 
         cateSpinner = (Spinner)findViewById(R.id.Spinner_cate);
+
         //第二步：为下拉列表定义一个适配器，这里就用到里前面定义的list。
+        //we have to define an adapter for spinner
         adapterCate = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
         //第三步：为适配器设置下拉列表下拉时的菜单样式。
+        //set style for spinner
         adapterCate.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //第四步：将适配器添加到下拉列表上
+        //we add adapter on the spinner
         cateSpinner.setAdapter(adapterCate);
         //第五步：为下拉列表设置各种事件的响应，这个事响应菜单被选中
+        //add listener for spinner
         cateSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
             public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 cate = cateSpinner.getSelectedItem().toString();
@@ -141,13 +145,9 @@ public class MainActivity extends AppCompatActivity {
         tris.add("Urgence");
 
         impSpinner = (Spinner)findViewById(R.id.Spinner_tri);
-        //第二步：为下拉列表定义一个适配器，这里就用到里前面定义的list。
         adapterImp = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tris);
-        //第三步：为适配器设置下拉列表下拉时的菜单样式。
         adapterImp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //第四步：将适配器添加到下拉列表上
         impSpinner.setAdapter(adapterImp);
-        //第五步：为下拉列表设置各种事件的响应，这个事响应菜单被选中
         impSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
             public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 sort = impSpinner.getSelectedItem().toString();
@@ -184,6 +184,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * get events according to its category
+     * @param events
+     * @param cate
+     * @return
+     */
     public List<Event> getNewEventsAccordingToCate(List<Event> events, String cate) {
         List<Event> eventList = new ArrayList<>();
         if(!cate.equals("Tout")) {
@@ -197,6 +203,12 @@ public class MainActivity extends AppCompatActivity {
         return events;
     }
 
+    /**
+     * sorted by importance,
+     * Elevée, Moyenne, Faible
+     * @param events
+     * @return
+     */
     public List<Event> getSortByImportance(List<Event> events){
         List<Event> eventList = new ArrayList<>();
         for (Event e : events) {
@@ -220,6 +232,10 @@ public class MainActivity extends AppCompatActivity {
         return eventList;
     }
 
+    /**
+     * sorted by date
+     * @param list
+     */
     private static void getSortByDate(List<Event> list) {
         Collections.sort(list, new Comparator<Event>() {
             @Override

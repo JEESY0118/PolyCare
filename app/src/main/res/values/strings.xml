@@ -25,4 +25,5 @@
     <string name="state">state</string>
     <string name="description">description</string>
     <string name="button">Valider</string>
+    <string name="graphe">Graphe</string>
 </resources>

@@ -100,6 +100,8 @@ public class HomePageFragment extends Fragment {
                     recyclerview.setAdapter(viewAdapter);
                 }
                 else {
+                    viewAdapter.setData(newsEvents);
+                    recyclerview.setAdapter(viewAdapter);
                     Toast.makeText(getContext(), "Pas d'évenement dans "+cate, Toast.LENGTH_SHORT).show();
                 }
             }

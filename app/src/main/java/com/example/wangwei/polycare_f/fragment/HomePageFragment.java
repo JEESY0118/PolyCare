@@ -1,6 +1,7 @@
 package com.example.wangwei.polycare_f.fragment;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -50,7 +51,12 @@ public class HomePageFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootview = inflater.inflate(R.layout.homepage_fragment, container, false);
+        if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            rootview = inflater.inflate(R.layout.homepage_fragment_land, container, false);
+        }
+        else {
+            rootview = inflater.inflate(R.layout.homepage_fragment, container, false);
+        }
         dbHelper = new DBHelper(getContext());
 
         events = dbHelper.getAllEvent(cate);
@@ -260,9 +266,9 @@ public class HomePageFragment extends Fragment {
                 try {
                     Date dt1 = myFmt.parse(e1.getDate());
                     Date dt2 = myFmt.parse(e2.getDate());
-                    if (dt1.getTime() > dt2.getTime()) {
+                    if (dt1.getTime() < dt2.getTime()) {
                         return 1;
-                    } else if (dt1.getTime() < dt2.getTime()) {
+                    } else if (dt1.getTime() > dt2.getTime()) {
                         return -1;
                     } else {
                         return 0;

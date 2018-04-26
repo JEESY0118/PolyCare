@@ -30,7 +30,7 @@
 
                 <TextView
                     android:id="@+id/name_view"
-                    android:layout_width="190dp"
+                    android:layout_width="280dp"
                     android:layout_height="match_parent"
                     tools:text="Prénom" />
 
@@ -51,7 +51,7 @@
 
                 <TextView
                     android:id="@+id/category_view"
-                    android:layout_width="190dp"
+                    android:layout_width="280dp"
                     android:layout_height="match_parent"
                     tools:text="Catégorie" />
 
@@ -72,7 +72,7 @@
 
                 <TextView
                     android:id="@+id/phone_view"
-                    android:layout_width="191dp"
+                    android:layout_width="280dp"
                     android:layout_height="match_parent"
                     tools:text="Téléphone" />
 

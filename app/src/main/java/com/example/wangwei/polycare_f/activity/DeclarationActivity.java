@@ -2,6 +2,7 @@ package com.example.wangwei.polycare_f.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -40,7 +41,12 @@ public class DeclarationActivity  extends AppCompatActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.declaration_activity);
+        if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            setContentView(R.layout.declaration_activity_land);
+        }
+        else {
+            setContentView(R.layout.declaration_activity);
+        }
 
         helper = new DBHelper(this);
         createUrgenceSpinner();

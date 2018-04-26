@@ -3,6 +3,7 @@ package com.example.wangwei.polycare_f.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -39,7 +40,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         View view;
         //用来加载布局
         LayoutInflater inflater = LayoutInflater.from(context);
-        view = inflater.inflate(R.layout.card_view, parent, false);
+        if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            view = inflater.inflate(R.layout.card_view_land, parent, false);
+        }
+        else {
+            view = inflater.inflate(R.layout.card_view, parent, false);
+        }
+
 
         return new MyViewHolder(view);
     }

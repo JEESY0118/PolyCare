@@ -1,6 +1,7 @@
 package com.example.wangwei.polycare_f.activity;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -21,7 +22,12 @@ public class EventActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.event_item);
+        if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            setContentView(R.layout.event_item_land);
+        }
+        else {
+            setContentView(R.layout.event_item);
+        }
 
 
         titleview = (TextView) findViewById(R.id.title_view);

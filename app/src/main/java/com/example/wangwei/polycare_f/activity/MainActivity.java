@@ -1,5 +1,6 @@
 package com.example.wangwei.polycare_f.activity;
 
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -29,7 +30,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            setContentView(R.layout.activity_main_land);
+        }
+        else {
+            setContentView(R.layout.activity_main);
+        }
         initUI();
     }
 

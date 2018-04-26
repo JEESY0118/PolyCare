@@ -1,6 +1,7 @@
 package com.example.wangwei.polycare_f.fragment;
 
 
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -42,7 +43,12 @@ public class GrapheFragment extends Fragment implements OnChartGestureListener {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootview = inflater.inflate(R.layout.graphe_fragment, container, false);
+        if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            rootview = inflater.inflate(R.layout.graphe_fragment_land, container, false);
+        }
+        else {
+            rootview = inflater.inflate(R.layout.graphe_fragment, container, false);
+        }
         Log.d(TAG, "On create char");
 
         dbHelper = new DBHelper(getContext());

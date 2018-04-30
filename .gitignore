@@ -1,4 +1,4 @@
-*.idea/
+*.idea
 
 *.properties
-*.gradle/
+*.gradle

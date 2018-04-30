@@ -32,7 +32,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-public class HomePageFragment extends Fragment {
+public class    HomePageFragment extends Fragment {
     List<Event> events;
     List<String> categories = new ArrayList<String>();
     List<String> tris = new ArrayList<String>();
@@ -61,7 +61,7 @@ public class HomePageFragment extends Fragment {
 
         events = dbHelper.getAllEvent(cate);
 
-        FloatingActionButton fab = rootview.findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) rootview.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

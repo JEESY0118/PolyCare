@@ -1,4 +1,4 @@
-package com.example.wangwei.polycare_f.activity;
+package com.project.polycare_f.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,7 +18,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.wangwei.polycare_f.R;
-import com.example.wangwei.polycare_f.data.DBHelper;
+import com.project.polycare_f.data.DBHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.example.wangwei.polycare_f.fragment;
+package com.project.polycare_f.fragment;
 
 
 import android.content.res.Configuration;
@@ -14,8 +14,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.wangwei.polycare_f.R;
-import com.example.wangwei.polycare_f.data.DBHelper;
-import com.example.wangwei.polycare_f.data.Event;
+import com.project.polycare_f.data.DBHelper;
+import com.project.polycare_f.data.Event;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;

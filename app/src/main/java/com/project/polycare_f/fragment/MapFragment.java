@@ -1,4 +1,4 @@
-package com.example.wangwei.polycare_f.fragment;
+package com.project.polycare_f.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

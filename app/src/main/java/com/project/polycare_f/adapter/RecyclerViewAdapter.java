@@ -1,6 +1,5 @@
-package com.example.wangwei.polycare_f.adapter;
+package com.project.polycare_f.adapter;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -11,9 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.wangwei.polycare_f.data.Event;
+import com.project.polycare_f.data.Event;
 import com.example.wangwei.polycare_f.R;
-import com.example.wangwei.polycare_f.activity.EventActivity;
+import com.project.polycare_f.activity.EventActivity;
 
 import java.util.List;
 

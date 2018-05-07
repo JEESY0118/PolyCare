@@ -1,4 +1,4 @@
-package com.example.wangwei.polycare_f;
+package com.project.polycare_f;
 
 import org.junit.Test;
 

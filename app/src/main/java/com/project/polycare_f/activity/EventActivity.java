@@ -1,10 +1,9 @@
-package com.example.wangwei.polycare_f.activity;
+package com.project.polycare_f.activity;
 
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.example.wangwei.polycare_f.R;

@@ -1,7 +1,6 @@
-package com.example.wangwei.polycare_f.activity;
+package com.project.polycare_f.activity;
 
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -11,9 +10,9 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.wangwei.polycare_f.R;
-import com.example.wangwei.polycare_f.fragment.GrapheFragment;
-import com.example.wangwei.polycare_f.fragment.HomePageFragment;
-import com.example.wangwei.polycare_f.fragment.MapFragment;
+import com.project.polycare_f.fragment.GrapheFragment;
+import com.project.polycare_f.fragment.HomePageFragment;
+import com.project.polycare_f.fragment.MapFragment;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     private HomePageFragment homePageFragment;

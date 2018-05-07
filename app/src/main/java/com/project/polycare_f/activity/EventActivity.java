@@ -1,4 +1,4 @@
-package com.example.wangwei.polycare_f.activity;
+package com.project.polycare_f.activity;
 
 import android.content.Intent;
 import android.content.res.Configuration;

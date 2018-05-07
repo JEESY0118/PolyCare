@@ -1,4 +1,4 @@
-package com.example.wangwei.polycare_f.fragment;
+package com.project.polycare_f.fragment;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -15,15 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.wangwei.polycare_f.activity.DeclarationActivity;
-import com.example.wangwei.polycare_f.data.DBHelper;
-import com.example.wangwei.polycare_f.data.Event;
+import com.project.polycare_f.activity.DeclarationActivity;
+import com.project.polycare_f.data.DBHelper;
+import com.project.polycare_f.data.Event;
 import com.example.wangwei.polycare_f.R;
-import com.example.wangwei.polycare_f.adapter.RecyclerViewAdapter;
+import com.project.polycare_f.adapter.RecyclerViewAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

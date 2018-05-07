@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.example.wangwei.polycare_f.R;
+import com.project.polycare_f.R;
 import com.project.polycare_f.fragment.GrapheFragment;
 import com.project.polycare_f.fragment.HomePageFragment;
 import com.project.polycare_f.fragment.MapFragment;

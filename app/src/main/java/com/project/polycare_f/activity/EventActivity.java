@@ -4,13 +4,11 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.example.wangwei.polycare_f.R;
+import com.project.polycare_f.R;
 
 
 public class EventActivity extends AppCompatActivity {

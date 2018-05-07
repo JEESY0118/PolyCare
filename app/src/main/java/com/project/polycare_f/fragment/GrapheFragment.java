@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.wangwei.polycare_f.R;
+import com.project.polycare_f.R;
 import com.project.polycare_f.data.DBHelper;
 import com.project.polycare_f.data.Event;
 import com.github.mikephil.charting.charts.PieChart;

@@ -18,10 +18,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.project.polycare_f.R;
 import com.project.polycare_f.activity.DeclarationActivity;
 import com.project.polycare_f.data.DBHelper;
 import com.project.polycare_f.data.Event;
-import com.example.wangwei.polycare_f.R;
 import com.project.polycare_f.adapter.RecyclerViewAdapter;
 
 import java.text.SimpleDateFormat;

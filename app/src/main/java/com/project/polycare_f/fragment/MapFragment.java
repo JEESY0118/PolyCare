@@ -8,7 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.wangwei.polycare_f.R;
+import com.project.polycare_f.R;
+
 
 public class MapFragment extends Fragment {
     @Nullable

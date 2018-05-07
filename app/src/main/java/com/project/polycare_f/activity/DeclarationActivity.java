@@ -17,7 +17,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.wangwei.polycare_f.R;
+import com.project.polycare_f.R;
 import com.project.polycare_f.data.DBHelper;
 
 import java.text.SimpleDateFormat;

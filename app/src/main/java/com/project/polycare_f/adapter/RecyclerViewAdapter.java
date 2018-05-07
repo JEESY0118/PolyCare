@@ -10,8 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.project.polycare_f.R;
 import com.project.polycare_f.data.Event;
-import com.example.wangwei.polycare_f.R;
 import com.project.polycare_f.activity.EventActivity;
 
 import java.util.List;

@@ -18,8 +18,15 @@
     <string name="titre">*titre</string>
     <string name="t_l_phone">téléphone</string>
     <string name="description">description</string>
-    <string name="partagez_votre_localisation">partagez_votre_localisation</string>
+    <string name="partagez_votre_localisation">partagez votre localisation</string>
     <string name="button">valider</string>
     <string name="urgence">urgence</string>
     <string name="state">state</string>
+    <string name="arthor_text">Arthor : </string>
+    <string name="title_text">Titre : </string>
+    <string name="description_text">Description : </string>
+    <string name="urgence_text">Urgence : </string>
+    <string name="state_text">État : </string>
+    <string name="date_text">Date : </string>
+    <string name="number_text">Téléphone : </string>
 </resources>

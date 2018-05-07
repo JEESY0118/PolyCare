@@ -1,4 +1,4 @@
-package com.example.wangwei.polycare_f.activity;
+package com.project.polycare_f.activity;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -12,7 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.example.wangwei.polycare_f.R;
+import com.project.polycare_f.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +48,8 @@ public class ChangeEventActivity extends AppCompatActivity{
         titre = intent.getExtras().getString("Title");
         des =intent.getExtras().getString("Description");
         phone = intent.getExtras().getString("Phone");
+        importance = intent.getExtras().getString("Importance");
+        category = intent.getExtras().getString("Category");
 
 
         prenom.setText(arthor);

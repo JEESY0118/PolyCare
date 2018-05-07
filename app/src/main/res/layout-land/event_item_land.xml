@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".activity.EventActivity">
 
@@ -30,8 +31,9 @@
 
                 <TextView
                     android:id="@+id/name_view"
-                    android:layout_width="280dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     tools:text="Prénom" />
 
                 <TextView
@@ -51,14 +53,16 @@
 
                 <TextView
                     android:id="@+id/category_view"
-                    android:layout_width="280dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     tools:text="Catégorie" />
 
                 <TextView
                     android:id="@+id/title_view"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:text="@string/title"
                     tools:text="Titre" />
 
@@ -72,14 +76,17 @@
 
                 <TextView
                     android:id="@+id/phone_view"
-                    android:layout_width="280dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     tools:text="Téléphone" />
 
                 <TextView
                     android:id="@+id/importance_view"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    tools:targetApi="n_mr1"
                     tools:text="Urgence" />
 
             </LinearLayout>
@@ -98,7 +105,7 @@
                 <TextView
                     android:id="@+id/description_view"
                     android:layout_width="match_parent"
-                    android:layout_height="146dp"
+                    android:layout_height="100dp"
                     android:background="@android:drawable/editbox_dropdown_light_frame"
                     tools:text="Description" />
 

@@ -30,12 +30,13 @@
                 android:orientation="horizontal">
 
                 <android.support.design.widget.TextInputLayout
-                    android:layout_width="190dp"
-                    android:layout_height="match_parent">
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/nom_input"
-                        android:layout_width="190dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/nom"
                         android:inputType="text" />
@@ -43,8 +44,9 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
-                    android:layout_width="190dp"
-                    android:layout_height="match_parent">
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/prenom_input"
@@ -64,13 +66,15 @@
 
 
                 <android.support.design.widget.TextInputLayout
-                    android:layout_width="190dp"
-                    android:layout_height="wrap_content">
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/title_input"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:hint="@string/titre"
                         android:inputType="text" />
 
@@ -92,13 +96,13 @@
             <LinearLayout
                 android:id="@+id/linear_phone"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
+                android:layout_height="match_parent"
                 android:orientation="horizontal">
 
                 <android.support.design.widget.TextInputLayout
-                    android:layout_width="190dp"
-                    android:layout_height="match_parent">
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/phone_input"

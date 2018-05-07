@@ -83,6 +83,6 @@
             app:backgroundTint="@color/colorPrimary"
             app:srcCompat="@android:drawable/ic_menu_edit" />
 
-</com.getbase.floatingactionbutton.FloatingActionsMenu>
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </android.support.constraint.ConstraintLayout>

@@ -1,16 +1,20 @@
 package com.project.polycare_f.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.project.polycare_f.R;
 
@@ -132,6 +136,42 @@ public class ChangeEventActivity extends AppCompatActivity{
 
             }
         });
+    }
+
+    public void onclick(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setIcon(R.drawable.ic_add_alert_black_24dp);//设置图标
+        builder.setTitle("Validation de la modification");//设置对话框的标题
+        builder.setMessage("Vous voulez applique la modification？");//设置对话框的内容
+        builder.setPositiveButton("Appliquer", new DialogInterface.OnClickListener() {  //这个是设置确定按钮
+
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+//                List<String> strings = getInput();
+//                String sql = "\n" +
+//                        "INSERT INTO events (event_title, event_category, event_description,event_reporter ," +
+//                        "event_importance,event_state, event_date,event_number )\n" +
+//                        "VALUES('"+strings.get(0) + "','" + cate + "','"+ strings.get(1) +"','" + strings.get(4) + "','" +
+//                        urg + "','" + strings.get(5) + "','" + strings.get(3) + "','" + strings.get(2) + "');";
+//                Log.i(ACTIVITY_TAG, sql);
+//                inertOrUpdateDateBatch(sql);
+                Toast.makeText(ChangeEventActivity.this, "Réussi", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent();
+                intent.setClass(ChangeEventActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {  //取消按钮
+
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                Toast.makeText(ChangeEventActivity.this, "Annuler", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        AlertDialog b = builder.create();
+        b.show();  //必须show一下才能看到对话框，跟Toast一样的道理
+
     }
 
 }

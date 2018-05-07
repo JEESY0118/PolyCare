@@ -19,6 +19,7 @@
         </activity>
         <activity android:name=".activity.EventActivity" />
         <activity android:name=".activity.DeclarationActivity" />
+        <activity android:name=".activity.ChangeEventActivity" />
     </application>
 
 </manifest>

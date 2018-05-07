@@ -5,6 +5,9 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.wangwei.polycare_f.R;
@@ -13,6 +16,7 @@ import com.example.wangwei.polycare_f.R;
 public class EventActivity extends AppCompatActivity {
     private TextView titleview, arthorview, categoryview, importanceview, dateview, descriptionview, numberview, stateview;
     public static final String ACTIVITY = "debug here";
+    String prenom, title, category, description, importance, date, state, phonenumber;
 
     /**
      * set informations
@@ -41,25 +45,52 @@ public class EventActivity extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        String arthor = "Arthor : " + intent.getExtras().getString("Name");
-        String title = "Titre : " + intent.getExtras().getString("Title");
-        String category = "Catégorie : " + intent.getExtras().getString("Category");
-        String description = "Description : " + intent.getExtras().getString("Description");
-        String importance = "Urgence : " + intent.getExtras().getString("Importance");
-        String date = "Date : " + intent.getExtras().getString("Date");
-        String state = "État : " + intent.getExtras().getString("State");
-        String phonenumber = "Téléphone : " + intent.getExtras().getString("Phone");
+        prenom = intent.getExtras().getString("Name");
+        title = intent.getExtras().getString("Title");
+        category = intent.getExtras().getString("Category");
+        description = intent.getExtras().getString("Description");
+        importance = intent.getExtras().getString("Importance");
+        date = intent.getExtras().getString("Date");
+        state =intent.getExtras().getString("State");
+        phonenumber = intent.getExtras().getString("Phone");
 
 
-        titleview.setText(title);
-        arthorview.setText(arthor);
-        importanceview.setText(importance);
-        categoryview.setText(category);
-        dateview.setText(date);
-        descriptionview.setText(description);
-        stateview.setText(state);
-        numberview.setText(phonenumber);
+        arthorview.setText("Arthor : " + prenom);
+        titleview.setText("Titre : " + title);
+        importanceview.setText("Urgence : " +importance);
+        categoryview.setText("Catégorie : " + category);
+        dateview.setText("Date : " + date);
+        descriptionview.setText("Description : " + description);
+        stateview.setText( "État : " + state);
+        numberview.setText("Téléphone : " + phonenumber);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.top_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.modifier:
+                Intent intent = new Intent(this, ChangeEventActivity.class);
+                intent.putExtra("Title", title);
+                intent.putExtra("Name", prenom);
+                intent.putExtra("Category", category);
+                intent.putExtra("Importance", importance);
+                intent.putExtra("Description",description);
+                intent.putExtra("State", state);
+                intent.putExtra("Phone", phonenumber);
+
+                this.startActivity(intent);
+                break;
+            case R.id.rapeler:
+                break;
+        }
+        return true;
     }
 
 }

@@ -29,4 +29,5 @@
     <string name="state_text">État : </string>
     <string name="date_text">Date : </string>
     <string name="number_text">Téléphone : </string>
+    <string name="tat">État</string>
 </resources>

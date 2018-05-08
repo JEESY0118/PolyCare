@@ -19,34 +19,33 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:orientation="horizontal">
+            android:layout_height="35dp">
 
             <TextView
                 android:id="@+id/title"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1.2"
+                android:layout_weight="1"
                 android:gravity="left"
                 android:text="@string/title"
-                android:textSize="12sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/date"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1.2"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
                 android:gravity="left"
                 android:text="@string/datey"
-                android:textSize="12sp"
+                android:textSize="13sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/circle"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.3" />
+                android:layout_weight="0.5" />
 
         </LinearLayout>
 
@@ -62,7 +61,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="5dp"
-                android:layout_weight="0.2"
+                android:layout_weight="0.3"
                 android:gravity="left"
                 android:text="@string/arthor" />
 
@@ -73,6 +72,13 @@
                 android:layout_weight="1"
                 android:gravity="left"
                 android:text="@string/descriptions" />
+
+            <TextView
+                android:id="@+id/state"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:text="@string/tat" />
 
         </LinearLayout>
 

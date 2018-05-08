@@ -39,10 +39,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         View view;
         //用来加载布局
         LayoutInflater inflater = LayoutInflater.from(context);
-        if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+        if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             view = inflater.inflate(R.layout.card_view_land, parent, false);
-        }
-        else {
+        } else {
             view = inflater.inflate(R.layout.card_view, parent, false);
         }
 
@@ -56,7 +55,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
      */
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-       setIcon(holder, position);
+        setIcon(holder, position);
 
 
         //set listener
@@ -81,51 +80,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     }
 
-    private void setIcon(MyViewHolder holder, final int position){
+    private void setIcon(MyViewHolder holder, final int position) {
         holder.title.setText("Titre: " + data.get(position).getTitle());
         holder.arthor.setText(data.get(position).getReporter() + " : ");
         holder.date.setText("Date: " + data.get(position).getDate());
         holder.description.setText(data.get(position).getDescription());
+        holder.state.setText("État: " + data.get(position).getState());
 
-        switch (data.get(position).getImportance()){
+        switch (data.get(position).getImportance()) {
             case "Faible":
-                switch (data.get(position).getState()){
-                    case "A faire":
-                        holder.circle.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_star_faible_a_faire,0,0);
-                        break;
-                    case "En cours":
-                        holder.circle.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_star_faible_en_cours,0,0);
-                        break;
-                    case "Résolu":
-                        holder.circle.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_star_faible_done,0,0);
-                        break;
-                }
+                holder.circle.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_star_faible_done, 0, 0);
                 break;
             case "Moyenne":
-                switch (data.get(position).getState()){
-                    case "A faire":
-                        holder.circle.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_star_moyenne_a_faire,0,0);
-                        break;
-                    case "En cours":
-                        holder.circle.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_star_moyenne_en_cours,0,0);
-                        break;
-                    case "Résolu":
-                        holder.circle.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_star_moyenne_done,0,0);
-                        break;
-                }
+                holder.circle.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_star_moyenne_done, 0, 0);
                 break;
             case "Elevée":
-                switch (data.get(position).getState()){
-                    case "A faire":
-                        holder.circle.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_star_elevee_a_faire,0,0);
-                        break;
-                    case "En cours":
-                        holder.circle.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_star_elevee_en_cours,0,0);
-                        break;
-                    case "Résolu":
-                        holder.circle.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_star_elevee_done,0,0);
-                        break;
-                }
+                holder.circle.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_star_elevee_done, 0, 0);
                 break;
 
         }
@@ -149,7 +119,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
      * dans holder, we find the view by id, in cardview_item.xml
      */
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView title, arthor, date, description, circle;
+        TextView title, arthor, date, description, circle, state;
         CardView cardView;
 
         public MyViewHolder(View itemView) {
@@ -159,8 +129,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             arthor = (TextView) itemView.findViewById(R.id.arthor);
             date = (TextView) itemView.findViewById(R.id.date);
             description = (TextView) itemView.findViewById(R.id.description);
-            circle = (TextView)itemView.findViewById(R.id.circle);
+            circle = (TextView) itemView.findViewById(R.id.circle);
             cardView = (CardView) itemView.findViewById(R.id.main);
+            state = (TextView) itemView.findViewById(R.id.state);
         }
     }
 

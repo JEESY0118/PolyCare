@@ -81,11 +81,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     private void setIcon(MyViewHolder holder, final int position) {
-        holder.title.setText("Titre: " + data.get(position).getTitle());
-        holder.arthor.setText(data.get(position).getReporter() + " : ");
-        holder.date.setText("Date: " + data.get(position).getDate());
-        holder.description.setText(data.get(position).getDescription());
-        holder.state.setText("État: " + data.get(position).getState());
+        holder.title.setText(data.get(position).getTitle());
+        holder.date.setText(data.get(position).getDate());
+        holder.state.setText(data.get(position).getState());
 
         switch (data.get(position).getImportance()) {
             case "Faible":
@@ -119,16 +117,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
      * dans holder, we find the view by id, in cardview_item.xml
      */
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView title, arthor, date, description, circle, state;
+        TextView title,date, circle, state;
         CardView cardView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
             title = (TextView) itemView.findViewById(R.id.title);
-            arthor = (TextView) itemView.findViewById(R.id.arthor);
             date = (TextView) itemView.findViewById(R.id.date);
-            description = (TextView) itemView.findViewById(R.id.description);
             circle = (TextView) itemView.findViewById(R.id.circle);
             cardView = (CardView) itemView.findViewById(R.id.main);
             state = (TextView) itemView.findViewById(R.id.state);

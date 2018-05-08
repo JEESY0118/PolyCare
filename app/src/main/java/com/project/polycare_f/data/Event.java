@@ -9,15 +9,6 @@ public class Event {
     private String state;
     private String date;
     private String number;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     private int id;
 
     public Event(int id, String title, String category, String description, String reporter, String importance, String state, String date, String number) {
@@ -29,6 +20,7 @@ public class Event {
         this.state = state;
         this.date = date;
         this.number = number;
+        this.id = id;
     }
 
     public String getTitle() {
@@ -93,5 +85,13 @@ public class Event {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

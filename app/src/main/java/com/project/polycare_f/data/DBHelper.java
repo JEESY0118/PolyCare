@@ -109,7 +109,7 @@ public class DBHelper extends SQLiteOpenHelper {
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
-        if(cate=="Tout") {
+        if(cate.equals("Tout")) {
             cursor = myDataBase.rawQuery("SELECT * FROM events order by event_date", null);
         }
         else {

@@ -19,11 +19,15 @@ import android.widget.Toast;
 
 import com.project.polycare_f.R;
 
+import java.util.Objects;
+
 
 public class EventActivity extends AppCompatActivity {
     private TextView titleview, arthorview, categoryview, importanceview, dateview, descriptionview, numberview, stateview;
     public static final String ACTIVITY = "debug here";
-    String prenom, title, category, description, importance, date, state, phonenumber;
+    String title, category, description, importance, date, state, phonenumber;
+    String arthor;
+    int id;
 
     /**
      * set informations
@@ -51,7 +55,7 @@ public class EventActivity extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        prenom = intent.getExtras().getString("Name");
+        arthor = intent.getExtras().getString("Name");
         title = intent.getExtras().getString("Title");
         category = intent.getExtras().getString("Category");
         description = intent.getExtras().getString("Description");
@@ -59,9 +63,10 @@ public class EventActivity extends AppCompatActivity {
         date = intent.getExtras().getString("Date");
         state = intent.getExtras().getString("State");
         phonenumber = intent.getExtras().getString("Phone");
+        id = intent.getExtras().getInt("Id");
 
 
-        arthorview.setText("Arthor : " + prenom);
+        arthorview.setText("Arthor : " + arthor);
         titleview.setText("Titre : " + title);
         importanceview.setText("Urgence : " + importance);
         categoryview.setText("Catégorie : " + category);
@@ -84,12 +89,14 @@ public class EventActivity extends AppCompatActivity {
             case R.id.modifier:
                 Intent intent = new Intent(this, ChangeEventActivity.class);
                 intent.putExtra("Title", title);
-                intent.putExtra("Name", prenom);
+                intent.putExtra("Name", arthor);
                 intent.putExtra("Category", category);
                 intent.putExtra("Importance", importance);
                 intent.putExtra("Description", description);
                 intent.putExtra("State", state);
                 intent.putExtra("Phone", phonenumber);
+                intent.putExtra("Id", id);
+                intent.putExtra("Date", date);
 
                 this.startActivity(intent);
                 break;

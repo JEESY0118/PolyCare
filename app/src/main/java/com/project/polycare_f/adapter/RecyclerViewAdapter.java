@@ -65,6 +65,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             public void onClick(View view) {
                 //用来启动其他新的Activity。 二:作为传递数据和事件的桥梁
                 Intent intent = new Intent(context, EventActivity.class);
+                intent.putExtra("Id", data.get(position).getId());
                 intent.putExtra("Title", data.get(position).getTitle());
                 intent.putExtra("Name", data.get(position).getReporter());
                 intent.putExtra("Category", data.get(position).getCategory());
@@ -106,7 +107,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         holder.circle.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_star_moyenne_a_faire,0,0);
                         break;
                     case "En cours":
-                        holder.circle.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_star_moyenne_a_faire,0,0);
+                        holder.circle.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_star_moyenne_en_cours,0,0);
                         break;
                     case "Résolu":
                         holder.circle.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_star_moyenne_done,0,0);

@@ -46,13 +46,12 @@ public class EventActivity extends AppCompatActivity {
 
         titleview = (TextView) findViewById(R.id.title_view);
         arthorview = (TextView) findViewById(R.id.name_view);
-        importanceview = (TextView) findViewById(R.id.importance_view);
+        importanceview = (TextView) findViewById(R.id.importance);
         categoryview = (TextView) findViewById(R.id.category_view);
-        dateview = (TextView) findViewById(R.id.date_view);
+        dateview = (TextView) findViewById(R.id.date);
         descriptionview = (TextView) findViewById(R.id.description_view);
         numberview = (TextView) findViewById(R.id.phone_view);
-        stateview = (TextView) findViewById(R.id.state_view);
-
+        stateview = (TextView) findViewById(R.id.state);
 
         Intent intent = getIntent();
         arthor = intent.getExtras().getString("Name");
@@ -68,12 +67,24 @@ public class EventActivity extends AppCompatActivity {
 
         arthorview.setText("Arthor : " + arthor);
         titleview.setText("Titre : " + title);
-        importanceview.setText("Urgence : " + importance);
         categoryview.setText("Catégorie : " + category);
         dateview.setText("Date : " + date);
         descriptionview.setText("Description : " + description);
         stateview.setText("État : " + state);
         numberview.setText("Téléphone : " + phonenumber);
+
+        switch (importance){
+            case "Faible":
+                importanceview.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_star_faible_done, 0, 0);
+                break;
+            case "Moyenne":
+                importanceview.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_star_moyenne_done, 0, 0);
+                break;
+            case "Elevée":
+                importanceview.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_star_elevee_done, 0, 0);
+                break;
+        }
+
 
     }
 

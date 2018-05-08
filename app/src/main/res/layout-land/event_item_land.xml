@@ -1,32 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".activity.EventActivity">
 
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/border">
 
         <LinearLayout
             android:id="@+id/linear"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="3dp"
-            android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
-            android:orientation="vertical"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp">
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/border"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/state"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.6"
+                    android:text="state"
+                    android:textColor="@color/text_gray" />
+
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/datey"
+                    android:textColor="@color/text_gray" />
+
+                <TextView
+                    android:id="@+id/importance"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:gravity="right"
+                    android:textColor="@color/text_gray" />
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/linear_name"
                 android:layout_width="match_parent"
-                android:layout_height="53dp"
-                android:layout_marginTop="5dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -34,20 +63,25 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:textColor="#463939"
+                    android:textSize="16sp"
                     tools:text="Prénom" />
 
                 <TextView
-                    android:id="@+id/date_view"
+                    android:id="@+id/phone_view"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    tools:text="Date" />
+                    android:textColor="#463939"
+                    android:textSize="16sp"
+                    tools:text="Téléphone" />
+
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/linear_phone"
                 android:layout_width="match_parent"
-                android:layout_height="53dp"
+                android:layout_height="45dp"
                 android:orientation="horizontal">
 
 
@@ -56,6 +90,8 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:textColor="#463939"
+                    android:textSize="16sp"
                     tools:text="Catégorie" />
 
                 <TextView
@@ -64,56 +100,30 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="@string/title"
+                    android:textColor="#463939"
+                    android:textSize="16sp"
                     tools:text="Titre" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linear_category"
                 android:layout_width="match_parent"
-                android:layout_height="53dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/phone_view"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    tools:text="Téléphone" />
-
-                <TextView
-                    android:id="@+id/importance_view"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    tools:targetApi="n_mr1"
-                    tools:text="Urgence" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="374dp"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/state_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="59dp"
-                    tools:text="État" />
 
                 <TextView
                     android:id="@+id/description_view"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:background="@android:drawable/editbox_dropdown_light_frame"
+                    android:textColor="#463939"
+                    android:textSize="16sp"
                     tools:text="Description" />
 
 
                 <com.google.android.gms.maps.MapView
                     android:id="@+id/mapview"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1" />
 
             </LinearLayout>

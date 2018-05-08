@@ -4,57 +4,55 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
     android:orientation="vertical">
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
-        android:orientation="vertical"
-        >
+        android:layout_height="48dp"
+        android:background="@drawable/border"
+        android:backgroundTint="@color/colorPrimary"
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/filtre"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0"
+            android:text="@string/filtre"
+            android:textColor="#fdfdfd"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/filtre"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="0"
-                android:text="@string/filtre" />
+        <Spinner
+            android:id="@+id/Spinner_cate"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown">
 
-            <Spinner
-                android:id="@+id/Spinner_cate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@android:drawable/btn_dropdown">
+        </Spinner>
 
-            </Spinner>
+        <TextView
+            android:id="@+id/tri"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0"
+            android:text="@string/tri_par"
+            android:textColor="#fdfdfd"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tri"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="0"
-                android:text="@string/tri_par" />
+        <Spinner
+            android:id="@+id/Spinner_tri"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown">
 
-            <Spinner
-                android:id="@+id/Spinner_tri"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@android:drawable/btn_dropdown">
-
-            </Spinner>
-        </LinearLayout>
-
+        </Spinner>
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
@@ -68,10 +66,13 @@
 
 
     </android.support.v7.widget.RecyclerView>
+
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="bottom|end">
+        android:layout_gravity="bottom|end"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"

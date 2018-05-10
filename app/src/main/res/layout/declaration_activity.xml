@@ -145,36 +145,45 @@
                         android:hint="@string/description"
                         android:inputType="text" />
 
-                    <Switch
-                        android:id="@+id/switch1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/partagez_votre_localisation" />
-
-                    <com.google.android.gms.maps.MapView
-                        android:id="@+id/mapView"
-                        android:layout_width="match_parent"
-                        android:layout_height="205dp"
-                        android:layout_marginBottom="2dp"
-                        android:layout_marginTop="2dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/common_google_signin_btn_icon_dark_normal" />
-
-                    <Button
-                        android:id="@+id/button"
-                        style="@android:style/Widget.Material.Light.Button.Toggle"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="2dp"
-                        android:layout_marginTop="2dp"
-                        android:layout_weight="1"
-                        android:background="?android:attr/statusBarColor"
-                        android:onClick="onclick"
-                        android:text="@string/button"
-                        tools:text="Valider" />
+                    <!--<com.google.android.gms.maps.MapView-->
+                    <!--android:id="@+id/mapView"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="205dp"-->
+                    <!--android:layout_marginBottom="2dp"-->
+                    <!--android:layout_marginTop="2dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:apiKey="AIzaSyAh_LBhFXMO-ZGnekJkiF7gLX5PtyZRd2U"-->
+                    <!--android:clickable="true"/>-->
 
                 </android.support.design.widget.TextInputLayout>
+
+                <Switch
+                    android:id="@+id/mapopener"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:text="@string/partagez_votre_localisation"
+                    android:textSize="16sp" />
+
+                <fragment
+                    android:id="@+id/map"
+                    class="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/button"
+                    style="@android:style/Widget.Material.Light.Button.Toggle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:background="?android:attr/statusBarColor"
+                    android:onClick="onclick"
+                    android:text="@string/button"
+                    tools:text="Valider" />
 
             </LinearLayout>
 

@@ -6,6 +6,8 @@ import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -13,19 +15,27 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.project.polycare_f.R;
 import com.project.polycare_f.data.DBHelper;
+import com.project.polycare_f.fragment.MapFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class DeclarationActivity  extends AppCompatActivity{
+public class DeclarationActivity  extends AppCompatActivity implements OnMapReadyCallback, CompoundButton.OnCheckedChangeListener{
     List<String> urgences = new ArrayList<String>();
     private static final String ACTIVITY_TAG = "LogDemo";
     private DBHelper helper;
@@ -37,6 +47,8 @@ public class DeclarationActivity  extends AppCompatActivity{
     private ArrayAdapter<String> adapterCate;
     List<String> categories = new ArrayList<String>();
     EditText prenom, title,description, number;
+    private Switch aSwitch;
+    SupportMapFragment supportMapFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,7 +63,8 @@ public class DeclarationActivity  extends AppCompatActivity{
         helper = new DBHelper(this);
         createUrgenceSpinner();
         createCategorySpinner();
-
+        aSwitch = (Switch) findViewById(R.id.mapopener);
+        aSwitch.setOnCheckedChangeListener(this);
     }
 
     private void createUrgenceSpinner() {
@@ -215,4 +228,25 @@ public class DeclarationActivity  extends AppCompatActivity{
     }
 
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        googleMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()){
+            case R.id.mapopener:
+                if(isChecked){
+                    Log.i(ACTIVITY_TAG, "Open");
+                    supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+                    supportMapFragment.getMapAsync(this);
+                }
+                else {
+                    supportMapFragment.onResume();
+                    Log.i(ACTIVITY_TAG, "Close");
+                }
+                break;
+        }
+    }
 }

@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -13,19 +14,30 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.project.polycare_f.R;
 import com.project.polycare_f.data.DBHelper;
+import com.project.polycare_f.data.Event;
+import com.project.polycare_f.gps.GPSTracker;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ChangeEventActivity extends AppCompatActivity{
+public class ChangeEventActivity extends AppCompatActivity implements OnMapReadyCallback, CompoundButton.OnCheckedChangeListener{
     List<String> urgences = new ArrayList<>();
     List<String> categories = new ArrayList<>();
     List<String> states = new ArrayList<>();
@@ -34,10 +46,17 @@ public class ChangeEventActivity extends AppCompatActivity{
     private ArrayAdapter<String> adapterSta;
     EditText prenom, title,description, number;
     Spinner urg, cate, state;
-    String arthor, titre, des, phone, importance, etat, category,date;
+    String arthor, titre, des, phone, importance, etat, category,date,latitude, longtitude;
     public static final String ACTIVITY = "debug here";
     int id;
     DBHelper helper;
+    SupportMapFragment supportMapFragment;
+    GPSTracker gpsTracker;
+    Location location;
+    GoogleMap mMap;
+    boolean isLocated = false;
+    LatLng latLng;
+    private Switch aSwitch;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,6 +69,10 @@ public class ChangeEventActivity extends AppCompatActivity{
         }
 
         helper = new DBHelper(this);
+        gpsTracker = new GPSTracker(this);
+        location = gpsTracker.getLocation();
+        aSwitch = (Switch) findViewById(R.id.switch1);
+        aSwitch.setOnCheckedChangeListener(this);
 
         prenom = (EditText) findViewById(R.id.prenom_input);
         title = (EditText) findViewById(R.id.title_input);
@@ -66,6 +89,8 @@ public class ChangeEventActivity extends AppCompatActivity{
         etat = intent.getExtras().getString("State");
         id = intent.getExtras().getInt("Id");
         date = intent.getExtras().getString("Date");
+        latitude = intent.getExtras().getString("Latitude");
+        longtitude = intent.getExtras().getString("Longtitude");
 
 
         prenom.setText(arthor);
@@ -205,20 +230,12 @@ public class ChangeEventActivity extends AppCompatActivity{
                         " event_importance= " +"'"+importance+"',"+
                         " event_state= " +"'"+etat+"',"+
                         " event_number= " +"'"+strings.get(6)+"'"+
+                                " event_latitude= " +"'"+strings.get(7)+"'"+
+                                " event_longtitude= " +"'"+strings.get(8)+"'"+
                         " where event_id = "+"'"+id+"'";
                 inertOrUpdateDateBatch(sql);
                 Toast.makeText(ChangeEventActivity.this, "Réussi", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent();
-//                intent.putExtra("Id", id);
-//                intent.putExtra("Title", strings.get(0));
-//                intent.putExtra("Name", strings.get(3));
-//                intent.putExtra("Category", category);
-//                intent.putExtra("Importance", importance);
-//                intent.putExtra("Description", strings.get(2));
-//                intent.putExtra("State", etat);
-//                intent.putExtra("Date", date);
-//                intent.putExtra("Phone", strings.get(6));
-
                 intent.setClass(ChangeEventActivity.this, MainActivity.class);
                 startActivity(intent);
             }
@@ -319,6 +336,8 @@ public class ChangeEventActivity extends AppCompatActivity{
         strings.add(importance);
         strings.add(etat);
         strings.add(phone);
+        strings.add(latitude);
+        strings.add(longtitude);
 
         Log.i(ACTIVITY, strings.get(0));
         Log.i(ACTIVITY, strings.get(1));
@@ -329,5 +348,39 @@ public class ChangeEventActivity extends AppCompatActivity{
         Log.i(ACTIVITY, strings.get(6));
         return strings;
     }
+
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longtitude));
+        mMap.addMarker(new MarkerOptions().position(latLng).title("I am Here"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+    }
+
+    public void createMapView(){
+        supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
+        supportMapFragment.getMapAsync(this);
+        Log.i(ACTIVITY, latitude);
+        Log.i(ACTIVITY, longtitude);
+    }
+
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()){
+            case R.id.switch1:
+                if(isChecked) {
+                    createMapView();
+                    isLocated = true;
+                }
+                else{
+                    mMap.clear();
+                    isLocated= false;
+                    }
+                break;
+        }
+    }
+
 
 }

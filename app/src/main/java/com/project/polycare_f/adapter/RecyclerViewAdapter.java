@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,7 @@ import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
 
-    public static final String ACTIVITY = "debug here";
+    public static final String ACTIVITY = "RecyclerView: ";
     private Context context;
     //abstraction，通过context来访问资源，还可以启动其他组件，activity，service，得到这种服务
     //像一个提供了应用的运行环境，通过这个来访问资源
@@ -73,6 +74,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 intent.putExtra("State", data.get(position).getState());
                 intent.putExtra("Date", data.get(position).getDate());
                 intent.putExtra("Phone", data.get(position).getNumber());
+                intent.putExtra("Latitude", data.get(position).getLatitude());
+                intent.putExtra("Longtitude", data.get(position).getLontitude());
 
                 context.startActivity(intent);
             }

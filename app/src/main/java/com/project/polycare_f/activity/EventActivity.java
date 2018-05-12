@@ -6,28 +6,48 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.database.sqlite.SQLiteDatabase;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.project.polycare_f.R;
+import com.project.polycare_f.data.DBHelper;
+import com.project.polycare_f.data.Event;
+import com.project.polycare_f.gps.GPSTracker;
 
+import java.util.List;
 import java.util.Objects;
 
 
-public class EventActivity extends AppCompatActivity {
+public class EventActivity extends AppCompatActivity implements OnMapReadyCallback{
     private TextView titleview, arthorview, categoryview, importanceview, dateview, descriptionview, numberview, stateview;
     public static final String ACTIVITY = "debug here";
     String title, category, description, importance, date, state, phonenumber;
     String arthor;
     int id;
+    DBHelper helper;
+    SupportMapFragment supportMapFragment;
+    GPSTracker gpsTracker;
+    Location location;
+    Event event;
+    String latitude, longtitude;
+    GoogleMap mMap;
 
     /**
      * set informations
@@ -43,7 +63,7 @@ public class EventActivity extends AppCompatActivity {
             setContentView(R.layout.event_item);
         }
 
-
+        helper = new DBHelper(this);
         titleview = (TextView) findViewById(R.id.title_view);
         arthorview = (TextView) findViewById(R.id.name_view);
         importanceview = (TextView) findViewById(R.id.importance);
@@ -63,6 +83,8 @@ public class EventActivity extends AppCompatActivity {
         state = intent.getExtras().getString("State");
         phonenumber = intent.getExtras().getString("Phone");
         id = intent.getExtras().getInt("Id");
+        latitude= intent.getExtras().getString("Latitude");
+        longtitude= intent.getExtras().getString("Longtitude");
 
 
         arthorview.setText("Arthor : " + arthor);
@@ -72,6 +94,10 @@ public class EventActivity extends AppCompatActivity {
         descriptionview.setText("Description : " + description);
         stateview.setText("État : " + state);
         numberview.setText("Téléphone : " + phonenumber);
+
+        if(longtitude!=null && latitude!=null){
+            createMapView();
+        }
 
         switch (importance){
             case "Faible":
@@ -84,7 +110,6 @@ public class EventActivity extends AppCompatActivity {
                 importanceview.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_star_elevee_done, 0, 0);
                 break;
         }
-
 
     }
 
@@ -108,12 +133,19 @@ public class EventActivity extends AppCompatActivity {
                 intent.putExtra("Phone", phonenumber);
                 intent.putExtra("Id", id);
                 intent.putExtra("Date", date);
+                intent.putExtra("Latitude", latitude);
+                intent.putExtra("Longtitude", longtitude);
 
                 this.startActivity(intent);
                 break;
             case R.id.rapeler:
                 phone();
                 break;
+            case R.id.delete:
+                //DELETE FROM  events WHERE event_id=0
+                delete();
+                break;
+
         }
         return true;
     }
@@ -146,4 +178,63 @@ public class EventActivity extends AppCompatActivity {
 
     }
 
+    public void delete() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setIcon(R.drawable.ic_add_alert_black_24dp);//设置图标
+        builder.setTitle("Enlever");//设置对话框的标题
+        builder.setMessage("Vous voulez enlever cet évenement ? ");//设置对话框的内容
+        builder.setPositiveButton("Enlever", new DialogInterface.OnClickListener() {  //这个是设置确定按钮
+            @SuppressLint("MissingPermission")
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                Intent intent1 = new Intent(EventActivity.this, MainActivity.class);
+                String sql = "delete from events where event_id= " + "'"+id+"'";
+                inertOrUpdateDateBatch(sql);
+                startActivity(intent1);
+            }
+        });
+        builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {  //取消按钮
+
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                Toast.makeText(EventActivity.this, "Annuler", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        AlertDialog b = builder.create();
+        b.show();  //必须show一下才能看到对话框，跟Toast一样的道理
+
+    }
+
+
+
+    public void inertOrUpdateDateBatch(String sqls) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        db.beginTransaction();
+        try {
+            db.execSQL(sqls);
+// 设置事务标志为成功，当结束事务时就会提交事务
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+// 结束事务
+            db.endTransaction();
+            db.close();
+        }
+    }
+
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        LatLng latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longtitude));
+        mMap.addMarker(new MarkerOptions().position(latLng).title("I am Here"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+    }
+
+    public void createMapView(){
+        supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
+        supportMapFragment.getMapAsync(this);
+    }
 }

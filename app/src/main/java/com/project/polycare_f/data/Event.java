@@ -1,5 +1,7 @@
 package com.project.polycare_f.data;
 
+import java.util.List;
+
 public class Event {
     private String title;
     private String category;
@@ -8,10 +10,11 @@ public class Event {
     private String importance;
     private String state;
     private String date;
-    private String number;
+    private String number,latitude, lontitude;
     private int id;
 
-    public Event(int id, String title, String category, String description, String reporter, String importance, String state, String date, String number) {
+    public Event(int id, String title, String category, String description, String reporter, String importance, String state, String date, String number,
+                 String latitude, String lontitude) {
         this.title = title;
         this.category = category;
         this.description = description;
@@ -21,6 +24,8 @@ public class Event {
         this.date = date;
         this.number = number;
         this.id = id;
+        this.latitude = latitude;
+        this.lontitude = lontitude;
     }
 
     public String getTitle() {
@@ -94,4 +99,43 @@ public class Event {
     public void setId(int id) {
         this.id = id;
     }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLontitude() {
+        return lontitude;
+    }
+
+    public void setLontitude(String lontitude) {
+        this.lontitude = lontitude;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj){
+            return true;
+        }
+
+        if(obj==null){
+            return false;
+        }
+
+        if(obj instanceof Event){
+            Event e = (Event) obj;
+            if(e.id==id){
+                return true;
+            }
+            return false;
+        }
+
+        return false;
+    }
+
+
 }

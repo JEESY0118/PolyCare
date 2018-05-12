@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
-    private static String DB_NAME = "polytech.sqlite";
+    private static String DB_NAME = "database.sqlite";
     private static final String ACTIVITY_TAG = "LogDemo";
 
     private SQLiteDatabase myDataBase;
@@ -120,7 +120,8 @@ public class DBHelper extends SQLiteOpenHelper {
         while (!cursor.isAfterLast()) {
             event = new Event(cursor.getInt(0),cursor.getString(1), cursor.getString(2),
                     cursor.getString(3), cursor.getString(4),
-                    cursor.getString(5), cursor.getString(6), cursor.getString(7),cursor.getString(8));
+                    cursor.getString(5), cursor.getString(6), cursor.getString(7),cursor.getString(8),cursor.getString(9),
+                    cursor.getString(10));
             events.add(event);
             cursor.moveToNext();
         }

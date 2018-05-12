@@ -31,10 +31,14 @@
             android:name=".activity.ChangeEventActivity"
             android:label="@string/change_activity"
             android:theme="@style/AppTheme"/>
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyAh_LBhFXMO-ZGnekJkiF7gLX5PtyZRd2U"/>
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAh_LBhFXMO-ZGnekJkiF7gLX5PtyZRd2U"/>
 
     </application>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
 </manifest>

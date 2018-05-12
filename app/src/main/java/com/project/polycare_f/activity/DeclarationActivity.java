@@ -1,13 +1,13 @@
 package com.project.polycare_f.activity;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -28,7 +29,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.project.polycare_f.R;
 import com.project.polycare_f.data.DBHelper;
-import com.project.polycare_f.fragment.MapFragment;
+import com.project.polycare_f.data.Event;
+import com.project.polycare_f.gps.GPSTracker;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -49,13 +51,22 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
     EditText prenom, title,description, number;
     private Switch aSwitch;
     SupportMapFragment supportMapFragment;
-
+    private GPSTracker gpsTracker;
+    Location location;
+    double latitude, longtitude;
+    GoogleMap mMap;
+    MarkerOptions marker;
+    int numberOfEvents;
+    boolean isLocated = false;
+    Event event;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
             setContentView(R.layout.declaration_activity_land);
         }
+
         else {
             setContentView(R.layout.declaration_activity);
         }
@@ -65,6 +76,9 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
         createCategorySpinner();
         aSwitch = (Switch) findViewById(R.id.mapopener);
         aSwitch.setOnCheckedChangeListener(this);
+
+        Intent intent = getIntent();
+        numberOfEvents = intent.getExtras().getInt("Number");
     }
 
     private void createUrgenceSpinner() {
@@ -86,7 +100,6 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
             }
 
             public void onNothingSelected(AdapterView<?> arg0) {
-
             }
         });
         /*下拉菜单弹出的内容选项触屏事件处理*/
@@ -122,7 +135,6 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
                 cate = cateSpinner.getSelectedItem().toString();
                 Log.i(ACTIVITY_TAG, cate);
             }
-
             public void onNothingSelected(AdapterView<?> arg0) {
 
             }
@@ -155,11 +167,14 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
                 List<String> strings = getInput();
                 String sql = "\n" +
                         "INSERT INTO events (event_title, event_category, event_description,event_reporter ," +
-                        "event_importance,event_state, event_date,event_number )\n" +
+                        "event_importance,event_state, event_date,event_number, event_latitude, event_longtitude )\n" +
                         "VALUES('"+strings.get(0) + "','" + cate + "','"+ strings.get(1) +"','" + strings.get(4) + "','" +
-                        urg + "','" + strings.get(5) + "','" + strings.get(3) + "','" + strings.get(2) + "');";
+                        urg + "','" + strings.get(5) + "','" + strings.get(3) + "','" + strings.get(2) +
+                        "','"+strings.get(6)+"','"+strings.get(7)+"');";
                 Log.i(ACTIVITY_TAG, sql);
                 inertOrUpdateDateBatch(sql);
+                event = new Event(numberOfEvents+1, strings.get(0), cate, strings.get(1), strings.get(4),
+                        urg, strings.get(5), strings.get(3),strings.get(2), Double.toString(latitude), Double.toString(longtitude));
                 Toast.makeText(DeclarationActivity.this, "Réussi", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent();
                 intent.setClass(DeclarationActivity.this, MainActivity.class);
@@ -207,6 +222,8 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
         strings.add(date);
         strings.add(name);
         strings.add(etat);
+        strings.add(Double.toString(latitude));
+        strings.add(Double.toString(longtitude));
 
         return strings;
     }
@@ -228,9 +245,14 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
     }
 
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        mMap = googleMap;
+        LatLng latLng = new LatLng(latitude, longtitude);
+        marker = new MarkerOptions().position(latLng).title("I am Here");
+        mMap.addMarker(marker);
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
     }
 
     @Override
@@ -239,14 +261,26 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
             case R.id.mapopener:
                 if(isChecked){
                     Log.i(ACTIVITY_TAG, "Open");
-                    supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-                    supportMapFragment.getMapAsync(this);
+                    createMapView();
+                    isLocated = true;
                 }
                 else {
-                    supportMapFragment.onResume();
+                    mMap.clear();
+                    isLocated = false;
                     Log.i(ACTIVITY_TAG, "Close");
                 }
                 break;
         }
     }
+
+    public void createMapView(){
+        gpsTracker = new GPSTracker(getApplicationContext());
+        location = gpsTracker.getLocation();
+        latitude = location.getLatitude();
+        longtitude = location.getLatitude();
+        supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        supportMapFragment.getMapAsync(this);
+    }
+
+
 }

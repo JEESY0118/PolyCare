@@ -49,6 +49,7 @@ public class    HomePageFragment extends Fragment {
     private ArrayAdapter<String> adapterImp;
     private View rootview;
     public static final String ACTIVITY =  "debug here";
+    int numberOfEvents;
 
     @Nullable
     @Override
@@ -62,12 +63,15 @@ public class    HomePageFragment extends Fragment {
         dbHelper = new DBHelper(getContext());
 
         events = dbHelper.getAllEvent(cate);
+        numberOfEvents = events.size();
 
         FloatingActionButton fab = (FloatingActionButton) rootview.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), DeclarationActivity.class));
+                Intent intent = new Intent(getActivity(), DeclarationActivity.class);
+                intent.putExtra("Number", numberOfEvents);
+                startActivity(intent);
             }
         });
 

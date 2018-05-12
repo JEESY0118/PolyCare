@@ -119,11 +119,11 @@
                     android:textSize="16sp"
                     tools:text="Description" />
 
-
-                <com.google.android.gms.maps.MapView
-                    android:id="@+id/mapview"
+                <fragment
+                    android:id="@+id/myMap"
+                    class="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="260dp"
                     android:layout_weight="1" />
 
             </LinearLayout>

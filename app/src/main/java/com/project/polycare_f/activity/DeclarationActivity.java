@@ -225,10 +225,13 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
         }
     }
 
+    /**
+     * if we have permission, we get the location of the device
+     * @param googleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
-        Log.d(TAG, "onMapReady: map is ready");
+        Toast.makeText(this, "Map is prête", Toast.LENGTH_SHORT).show();
         mMap = googleMap;
 
         if (mLocationPermissionsGranted) {
@@ -244,9 +247,10 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
         }
     }
 
+    /**
+     * get location of device
+     */
     private void getDeviceLocation() {
-        Log.d(TAG, "getDeviceLocation: getting the devices current location");
-
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(DeclarationActivity.this);
 
         try {
@@ -257,7 +261,6 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
                     @Override
                     public void onComplete(@NonNull Task task) {
                         if (task.isSuccessful()) {
-                            Log.d(TAG, "onComplete: found location!");
                             currentLocation = (Location) task.getResult();
 
                             if(currentLocation!=null) {
@@ -268,30 +271,36 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
                             }
 
                         } else {
-                            Log.d(TAG, "onComplete: current location is null");
-                            Toast.makeText(DeclarationActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DeclarationActivity.this, "impossible de to trouver la localisation", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
             }
         } catch (SecurityException e) {
-            Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
         }
     }
 
+    /**
+     *
+     * @param latLng
+     * @param zoom
+     */
     private void moveCamera(LatLng latLng, float zoom){
-        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
 
+    /**
+     * show map
+     */
     private void initMap(){
-        Log.d(TAG, "initMap: initializing map");
         supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         supportMapFragment.getMapAsync(this);
     }
 
+    /**
+     * get permission
+     */
     private void getLocationPermission(){
-        Log.d(TAG, "getLocationPermission: getting location permissions");
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION};
 
@@ -314,9 +323,14 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
     }
 
 
+    /**
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        Log.d(TAG, "onRequestPermissionsResult: called.");
         mLocationPermissionsGranted = false;
 
         switch(requestCode){
@@ -325,11 +339,9 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
                     for(int i = 0; i < grantResults.length; i++){
                         if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
                             mLocationPermissionsGranted = false;
-                            Log.d(TAG, "onRequestPermissionsResult: permission failed");
                             return;
                         }
                     }
-                    Log.d(TAG, "onRequestPermissionsResult: permission granted");
                     mLocationPermissionsGranted = true;
                     //initialize our map
                     initMap();

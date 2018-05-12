@@ -32,7 +32,7 @@
     <string name="tat">État</string>
     <string name="graphe_d_etat">Graphe d\'etat</string>
     <string name="graphe_d_urgence">Graphe d\'urgence</string>
-    <string name="graphe_de_category">Graphe de category</string>
+    <string name="graphe_de_category">Graphe de catégorie</string>
     <string name="event_activity">Détails d\'un évènement</string>
     <string name="declar_activity">Déclaration d\'un évènement</string>
     <string name="change_activity">Modification d\'un évènement</string>

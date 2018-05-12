@@ -94,8 +94,6 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
 
         showImportance(importance);
         createMapView();
-
-
     }
 
     private void showImportance(String importance){

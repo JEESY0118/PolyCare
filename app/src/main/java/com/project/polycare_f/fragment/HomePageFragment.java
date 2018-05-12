@@ -34,7 +34,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-public class    HomePageFragment extends Fragment {
+public class  HomePageFragment extends Fragment {
     List<Event> events;
     List<String> categories = new ArrayList<String>();
     List<String> tris = new ArrayList<String>();

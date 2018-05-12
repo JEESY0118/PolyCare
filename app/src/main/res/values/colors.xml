@@ -7,4 +7,18 @@
     <color name="colorSelected">#303F9F</color>
     <color name="text_gray">#808080</color>
     <color name="text_blue">#3F51B5</color>
+    <color name="afaire">#7dbf37</color>
+    <color name="encours">#f7ce2c</color>
+    <color name="resolu">#ee806d</color>
+    <color name="material">#6985a6</color>
+    <color name="parking">#c8b07f</color>
+    <color name="technique">#7a8f93</color>
+    <color name="autre">#06584c</color>
+    <color name="organisation">#e28eed</color>
+    <color name="faible">#85c309</color>
+    <color name="moyenne">#eb9809</color>
+    <color name="elevee">#950707</color>
+    <color name="one">#1c90a2</color>
+    <color name="two">#96d2e6</color>
+    <color name="three">#61c4cf</color>
 </resources>

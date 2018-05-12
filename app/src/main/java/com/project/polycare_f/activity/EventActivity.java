@@ -209,6 +209,7 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
         LatLng latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longtitude));
         mMap.addMarker(new MarkerOptions().position(latLng).title("I am Here"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        mMap.setMinZoomPreference(16);
     }
 
     private void createMapView() {

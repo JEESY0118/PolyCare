@@ -178,4 +178,22 @@ public class DBHelper extends SQLiteOpenHelper {
     public static String getDbName() {
         return DB_NAME;
     }
+
+
+    public void inertOrUpdateDateBatch(String sqls) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
+        try {
+            db.execSQL(sqls);
+// 设置事务标志为成功，当结束事务时就会提交事务
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+// 结束事务
+            db.endTransaction();
+            db.close();
+        }
+    }
+
 }

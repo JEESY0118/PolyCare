@@ -43,9 +43,6 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
     int id;
     DBHelper helper;
     SupportMapFragment supportMapFragment;
-    GPSTracker gpsTracker;
-    Location location;
-    Event event;
     String latitude, longtitude;
     GoogleMap mMap;
 
@@ -95,10 +92,13 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
         stateview.setText("État : " + state);
         numberview.setText("Téléphone : " + phonenumber);
 
-        if(longtitude!=null && latitude!=null){
-            createMapView();
-        }
+        showImportance(importance);
+        createMapView();
 
+
+    }
+
+    private void showImportance(String importance){
         switch (importance){
             case "Faible":
                 importanceview.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_star_faible_done, 0, 0);
@@ -110,7 +110,6 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
                 importanceview.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_star_elevee_done, 0, 0);
                 break;
         }
-
     }
 
     @Override
@@ -135,7 +134,6 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
                 intent.putExtra("Date", date);
                 intent.putExtra("Latitude", latitude);
                 intent.putExtra("Longtitude", longtitude);
-
                 this.startActivity(intent);
                 break;
             case R.id.rapeler:
@@ -189,7 +187,7 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
             public void onClick(DialogInterface arg0, int arg1) {
                 Intent intent1 = new Intent(EventActivity.this, MainActivity.class);
                 String sql = "delete from events where event_id= " + "'"+id+"'";
-                inertOrUpdateDateBatch(sql);
+                helper.inertOrUpdateDateBatch(sql);
                 startActivity(intent1);
             }
         });
@@ -198,32 +196,12 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
                 Toast.makeText(EventActivity.this, "Annuler", Toast.LENGTH_SHORT).show();
-
             }
         });
         AlertDialog b = builder.create();
         b.show();  //必须show一下才能看到对话框，跟Toast一样的道理
 
     }
-
-
-
-    public void inertOrUpdateDateBatch(String sqls) {
-        SQLiteDatabase db = helper.getWritableDatabase();
-        db.beginTransaction();
-        try {
-            db.execSQL(sqls);
-// 设置事务标志为成功，当结束事务时就会提交事务
-            db.setTransactionSuccessful();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-// 结束事务
-            db.endTransaction();
-            db.close();
-        }
-    }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -233,8 +211,10 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
     }
 
-    public void createMapView(){
-        supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
-        supportMapFragment.getMapAsync(this);
+    private void createMapView() {
+        if (longtitude != null && latitude != null) {
+            supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
+            supportMapFragment.getMapAsync(this);
+        }
     }
 }

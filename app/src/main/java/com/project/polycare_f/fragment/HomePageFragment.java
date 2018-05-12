@@ -121,20 +121,6 @@ public class    HomePageFragment extends Fragment {
 
             }
         });
-        /*下拉菜单弹出的内容选项触屏事件处理*/
-        cateSpinner.setOnTouchListener(new Spinner.OnTouchListener(){
-            public boolean onTouch(View v, MotionEvent event) {
-
-                return false;
-            }
-        });
-        /*下拉菜单弹出的内容选项焦点改变事件处理*/
-        cateSpinner.setOnFocusChangeListener(new Spinner.OnFocusChangeListener(){
-            public void onFocusChange(View v, boolean hasFocus) {
-                // TODO Auto-generated method stub
-
-            }
-        });
     }
 
     private void createImpSpinner(){
@@ -168,20 +154,6 @@ public class    HomePageFragment extends Fragment {
                 }
             }
             public void onNothingSelected(AdapterView<?> arg0) {
-
-            }
-        });
-        /*下拉菜单弹出的内容选项触屏事件处理*/
-        impSpinner.setOnTouchListener(new Spinner.OnTouchListener(){
-            public boolean onTouch(View v, MotionEvent event) {
-
-                return false;
-            }
-        });
-        /*下拉菜单弹出的内容选项焦点改变事件处理*/
-        impSpinner.setOnFocusChangeListener(new Spinner.OnFocusChangeListener(){
-            public void onFocusChange(View v, boolean hasFocus) {
-                // TODO Auto-generated method stub
 
             }
         });

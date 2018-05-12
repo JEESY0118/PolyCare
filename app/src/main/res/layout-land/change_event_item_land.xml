@@ -22,31 +22,29 @@
             android:paddingRight="4dp">
 
             <LinearLayout
+                android:background="@drawable/border_black"
                 android:id="@+id/linear_name"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_marginBottom="2dp"
                 android:layout_marginTop="5dp"
                 android:orientation="horizontal">
 
-                <android.support.design.widget.TextInputLayout
+                <TextView
+                    android:id="@+id/cate"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/prenom_input"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/pernom" />
-
-                </android.support.design.widget.TextInputLayout>
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="0.5"
+                    android:text="@string/category" />
 
                 <Spinner
                     android:id="@+id/Spinner_category"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="0.8"
                     android:background="@android:drawable/btn_dropdown"
                     tools:layout_editor_absoluteX="0dp"
                     tools:layout_editor_absoluteY="1dp">
@@ -55,33 +53,71 @@
 
             </LinearLayout>
 
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/title_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/titre"
+                    android:inputType="text" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/prenom_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/pernom" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/phone_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/t_l_phone"
+                    android:inputType="phone" />
+
+            </android.support.design.widget.TextInputLayout>
+
             <LinearLayout
+                android:background="@drawable/border_black"
                 android:id="@+id/linear_category"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_marginBottom="2dp"
                 android:orientation="horizontal">
 
 
-                <android.support.design.widget.TextInputLayout
+                <TextView
+                    android:id="@+id/urg"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/title_input"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/titre"
-                        android:inputType="text" />
-
-                </android.support.design.widget.TextInputLayout>
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="0.5"
+                    android:text="*Urgence" />
 
                 <Spinner
                     android:id="@+id/Spinner_urgence"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="0.8"
                     android:background="@android:drawable/btn_dropdown"
                     tools:layout_editor_absoluteX="0dp"
                     tools:layout_editor_absoluteY="1dp">
@@ -93,38 +129,35 @@
             <LinearLayout
                 android:id="@+id/linear_phone"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:background="@drawable/border_black"
+                android:layout_height="50dp"
                 android:layout_marginBottom="2dp"
                 android:orientation="horizontal">
 
-                <android.support.design.widget.TextInputLayout
+                <TextView
+                    android:id="@+id/state"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/phone_input"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="@string/t_l_phone"
-                        android:inputType="phone" />
-
-                </android.support.design.widget.TextInputLayout>
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="0.5"
+                    android:text="*État" />
 
                 <Spinner
                     android:id="@+id/Spinner_state"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="0.8"
                     android:background="@android:drawable/btn_dropdown">
 
                 </Spinner>
-
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@drawable/border_black"
                 android:orientation="vertical">
 
                 <android.support.design.widget.TextInputLayout

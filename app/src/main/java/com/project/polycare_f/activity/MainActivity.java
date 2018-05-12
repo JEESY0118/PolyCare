@@ -1,14 +1,19 @@
 package com.project.polycare_f.activity;
 
+import android.app.Dialog;
 import android.content.res.Configuration;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.project.polycare_f.R;
 import com.project.polycare_f.fragment.GrapheFragment;
 import com.project.polycare_f.fragment.HomePageFragment;
@@ -21,10 +26,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private FrameLayout frameLayout;
     private FragmentManager fragmentManager;
 
-    private TextView txt_homepage;
-    private TextView txt_graphe;
-    private TextView txt_map;
+    private TextView txt_homepage,txt_graphe,txt_map;
 
+    private static final String TAG = "MainActivity";
+
+    private static final int ERROR_DIALOG_REQUEST = 9001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,14 +93,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.txt_map:
-                reTxtSelect();
-                txt_map.setSelected(true);
-                if(mapFragment==null){
-                    mapFragment = new MapFragment();
-                    transaction.add(R.id.main_fragment_container,mapFragment);
-                }else{
-                    transaction.show(mapFragment);
-                }
+//                if(isServicesOK()) {
+                    reTxtSelect();
+                    txt_map.setSelected(true);
+                    if (mapFragment == null) {
+                        mapFragment = new MapFragment();
+                        transaction.add(R.id.main_fragment_container, mapFragment);
+                    } else {
+                        transaction.show(mapFragment);
+                    }
+          //      }
                 break;
 
         }
@@ -121,5 +129,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(mapFragment!=null){
             transaction.hide(mapFragment);
         }
+    }
+
+    public boolean isServicesOK(){
+        Log.d(TAG, "isServicesOK: checking google services version");
+
+        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MainActivity.this);
+
+        if(available == ConnectionResult.SUCCESS){
+            //everything is fine and the user can make map requests
+            Log.d(TAG, "isServicesOK: Google Play Services is working");
+            return true;
+        }
+        else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
+            //an error occured but we can resolve it
+            Log.d(TAG, "isServicesOK: an error occured but we can fix it");
+            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MainActivity.this, available, ERROR_DIALOG_REQUEST);
+            dialog.show();
+        }else{
+            Toast.makeText(this, "You can't make map requests", Toast.LENGTH_SHORT).show();
+        }
+        return false;
     }
 }

@@ -28,8 +28,6 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
     //create getLocation
-
-
     public Location getLocation() {
         try {
             locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
@@ -40,7 +38,7 @@ public class GPSTracker extends Service implements LocationListener {
                     || ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 if (isGPSEnabled) {
                     if (location == null) {
-                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 10, this);
+                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5*60*1000, 1, this);
                         if (locationManager != null) {
                             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                         }

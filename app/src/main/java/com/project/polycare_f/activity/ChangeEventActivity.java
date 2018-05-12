@@ -1,12 +1,18 @@
 package com.project.polycare_f.activity;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -21,12 +27,16 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.project.polycare_f.R;
 import com.project.polycare_f.data.DBHelper;
 import com.project.polycare_f.data.Event;
@@ -38,26 +48,33 @@ import java.util.Date;
 import java.util.List;
 
 public class ChangeEventActivity extends AppCompatActivity implements OnMapReadyCallback, CompoundButton.OnCheckedChangeListener{
+    public static final String ACTIVITY = "debug here";
     List<String> urgences = new ArrayList<>();
     List<String> categories = new ArrayList<>();
     List<String> states = new ArrayList<>();
-    private ArrayAdapter<String> adapterUr;
-    private ArrayAdapter<String> adapterCate;
-    private ArrayAdapter<String> adapterSta;
+    private ArrayAdapter<String> adapterUr,adapterCate,adapterSta;
     EditText prenom, title,description, number;
     Spinner urg, cate, state;
     String arthor, titre, des, phone, importance, etat, category,date,latitude, longtitude;
-    public static final String ACTIVITY = "debug here";
     int id;
     DBHelper helper;
     SupportMapFragment supportMapFragment;
     GPSTracker gpsTracker;
-    Location location;
+    Location currentLocation;
     GoogleMap mMap;
     boolean isLocated = false;
     LatLng latLng;
     private Switch aSwitch;
 
+    private static final String TAG = "MapActivity";
+
+    private Boolean mLocationPermissionsGranted = false;
+    private FusedLocationProviderClient mFusedLocationProviderClient;
+
+    private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
+    private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
+    private static final float DEFAULT_ZOOM = 15f;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,8 +86,6 @@ public class ChangeEventActivity extends AppCompatActivity implements OnMapReady
         }
 
         helper = new DBHelper(this);
-        gpsTracker = new GPSTracker(this);
-        location = gpsTracker.getLocation();
         aSwitch = (Switch) findViewById(R.id.switch1);
         aSwitch.setOnCheckedChangeListener(this);
 
@@ -106,7 +121,6 @@ public class ChangeEventActivity extends AppCompatActivity implements OnMapReady
 
     private void createUrgenceSpinner() {
         setUrgences();
-
         urg = (Spinner) findViewById(R.id.Spinner_urgence);
         //第二步：为下拉列表定义一个适配器，这里就用到里前面定义的list。
         adapterUr = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, urgences);
@@ -121,20 +135,6 @@ public class ChangeEventActivity extends AppCompatActivity implements OnMapReady
             }
 
             public void onNothingSelected(AdapterView<?> arg0) {
-
-            }
-        });
-        /*下拉菜单弹出的内容选项触屏事件处理*/
-        urg.setOnTouchListener(new Spinner.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-
-                return false;
-            }
-        });
-        /*下拉菜单弹出的内容选项焦点改变事件处理*/
-        urg.setOnFocusChangeListener(new Spinner.OnFocusChangeListener() {
-            public void onFocusChange(View v, boolean hasFocus) {
-                // TODO Auto-generated method stub
 
             }
         });
@@ -160,24 +160,9 @@ public class ChangeEventActivity extends AppCompatActivity implements OnMapReady
 
             }
         });
-        /*下拉菜单弹出的内容选项触屏事件处理*/
-        cate.setOnTouchListener(new Spinner.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-
-                return false;
-            }
-        });
-        /*下拉菜单弹出的内容选项焦点改变事件处理*/
-        cate.setOnFocusChangeListener(new Spinner.OnFocusChangeListener() {
-            public void onFocusChange(View v, boolean hasFocus) {
-                // TODO Auto-generated method stub
-
-            }
-        });
     }
 
     private void createStateSpinner() {
-
         setEtat();
         state = (Spinner) findViewById(R.id.Spinner_state);
         //第二步：为下拉列表定义一个适配器，这里就用到里前面定义的list。
@@ -193,20 +178,6 @@ public class ChangeEventActivity extends AppCompatActivity implements OnMapReady
             }
 
             public void onNothingSelected(AdapterView<?> arg0) {
-
-            }
-        });
-        /*下拉菜单弹出的内容选项触屏事件处理*/
-        state.setOnTouchListener(new Spinner.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-
-                return false;
-            }
-        });
-        /*下拉菜单弹出的内容选项焦点改变事件处理*/
-        state.setOnFocusChangeListener(new Spinner.OnFocusChangeListener() {
-            public void onFocusChange(View v, boolean hasFocus) {
-                // TODO Auto-generated method stub
 
             }
         });
@@ -229,11 +200,11 @@ public class ChangeEventActivity extends AppCompatActivity implements OnMapReady
                         " event_reporter= " + "'"+strings.get(3)+"',"+
                         " event_importance= " +"'"+importance+"',"+
                         " event_state= " +"'"+etat+"',"+
-                        " event_number= " +"'"+strings.get(6)+"'"+
-                                " event_latitude= " +"'"+strings.get(7)+"'"+
+                        " event_number= " +"'"+strings.get(6)+"',"+
+                                " event_latitude= " +"'"+strings.get(7)+"',"+
                                 " event_longtitude= " +"'"+strings.get(8)+"'"+
                         " where event_id = "+"'"+id+"'";
-                inertOrUpdateDateBatch(sql);
+                helper.inertOrUpdateDateBatch(sql);
                 Toast.makeText(ChangeEventActivity.this, "Réussi", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent();
                 intent.setClass(ChangeEventActivity.this, MainActivity.class);
@@ -297,22 +268,6 @@ public class ChangeEventActivity extends AppCompatActivity implements OnMapReady
         }
     }
 
-    public void inertOrUpdateDateBatch(String sqls) {
-        SQLiteDatabase db = helper.getWritableDatabase();
-        db.beginTransaction();
-        try {
-            db.execSQL(sqls);
-// 设置事务标志为成功，当结束事务时就会提交事务
-            db.setTransactionSuccessful();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-// 结束事务
-            db.endTransaction();
-            db.close();
-        }
-    }
-
     public List<String> getInput() {
         List<String> strings = new ArrayList<>();
 
@@ -325,7 +280,6 @@ public class ChangeEventActivity extends AppCompatActivity implements OnMapReady
         number = (EditText) findViewById(R.id.phone_input);
         String phone = number.getText().toString();
 
-
         description = (EditText) findViewById(R.id.description_input);
         String descriptions = description.getText().toString();
 
@@ -336,42 +290,24 @@ public class ChangeEventActivity extends AppCompatActivity implements OnMapReady
         strings.add(importance);
         strings.add(etat);
         strings.add(phone);
-        strings.add(latitude);
-        strings.add(longtitude);
+        if(currentLocation!=null) {
+            strings.add(Double.toString(currentLocation.getLatitude()));
+            strings.add(Double.toString(currentLocation.getLongitude()));
+        }
+        else {
+            strings.add(latitude);
+            strings.add(longtitude);
+        }
 
-        Log.i(ACTIVITY, strings.get(0));
-        Log.i(ACTIVITY, strings.get(1));
-        Log.i(ACTIVITY, strings.get(2));
-        Log.i(ACTIVITY, strings.get(3));
-        Log.i(ACTIVITY, strings.get(4));
-        Log.i(ACTIVITY, strings.get(5));
-        Log.i(ACTIVITY, strings.get(6));
         return strings;
     }
-
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longtitude));
-        mMap.addMarker(new MarkerOptions().position(latLng).title("I am Here"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-    }
-
-    public void createMapView(){
-        supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
-        supportMapFragment.getMapAsync(this);
-        Log.i(ACTIVITY, latitude);
-        Log.i(ACTIVITY, longtitude);
-    }
-
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch (buttonView.getId()){
             case R.id.switch1:
                 if(isChecked) {
-                    createMapView();
+                    getLocationPermission();
                     isLocated = true;
                 }
                 else{
@@ -379,6 +315,117 @@ public class ChangeEventActivity extends AppCompatActivity implements OnMapReady
                     isLocated= false;
                     }
                 break;
+        }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "onMapReady: map is ready");
+        mMap = googleMap;
+
+        if (mLocationPermissionsGranted) {
+            getDeviceLocation();
+
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            mMap.setMyLocationEnabled(true);
+            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+        }
+    }
+
+    private void getDeviceLocation() {
+        Log.d(TAG, "getDeviceLocation: getting the devices current location");
+
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(ChangeEventActivity.this);
+
+        try {
+            if (mLocationPermissionsGranted) {
+
+                final Task location = mFusedLocationProviderClient.getLastLocation();
+                location.addOnCompleteListener(new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "onComplete: found location!");
+                            currentLocation = (Location) task.getResult();
+
+                            if(currentLocation!=null) {
+                                moveCamera(new LatLng(currentLocation.getAltitude(),currentLocation.getLongitude()),
+                                        DEFAULT_ZOOM);
+                            }
+
+                        } else {
+                            Log.d(TAG, "onComplete: current location is null");
+                            Toast.makeText(ChangeEventActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        } catch (SecurityException e) {
+            Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
+        }
+    }
+
+    private void moveCamera(LatLng latLng, float zoom){
+        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+    }
+
+    private void initMap(){
+        Log.d(TAG, "initMap: initializing map");
+        supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
+        supportMapFragment.getMapAsync(this);
+    }
+
+    private void getLocationPermission(){
+        Log.d(TAG, "getLocationPermission: getting location permissions");
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION};
+
+        if(ContextCompat.checkSelfPermission(this,
+                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            if(ContextCompat.checkSelfPermission(this,
+                    COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+                mLocationPermissionsGranted = true;
+                initMap();
+            }else{
+                ActivityCompat.requestPermissions(ChangeEventActivity.this,
+                        permissions,
+                        LOCATION_PERMISSION_REQUEST_CODE);
+            }
+        }else{
+            ActivityCompat.requestPermissions(ChangeEventActivity.this,
+                    permissions,
+                    LOCATION_PERMISSION_REQUEST_CODE);
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Log.d(TAG, "onRequestPermissionsResult: called.");
+        mLocationPermissionsGranted = false;
+
+        switch(requestCode){
+            case LOCATION_PERMISSION_REQUEST_CODE:{
+                if(grantResults.length > 0){
+                    for(int i = 0; i < grantResults.length; i++){
+                        if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
+                            mLocationPermissionsGranted = false;
+                            Log.d(TAG, "onRequestPermissionsResult: permission failed");
+                            return;
+                        }
+                    }
+                    Log.d(TAG, "onRequestPermissionsResult: permission granted");
+                    mLocationPermissionsGranted = true;
+                    //initialize our map
+                    initMap();
+                }
+            }
         }
     }
 

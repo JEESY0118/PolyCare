@@ -13,11 +13,11 @@
     <string name="declar">Déclarer</string>
     <string name="graph">Graphe</string>
     <string name="map">Map</string>
-    <string name="nom">*nom</string>
-    <string name="pernom">*pernom</string>
-    <string name="titre">*titre</string>
-    <string name="t_l_phone">téléphone</string>
-    <string name="description">description</string>
+    <string name="nom">*Nom : </string>
+    <string name="pernom">*Pernom : </string>
+    <string name="titre">*Titre : </string>
+    <string name="t_l_phone">Téléphone : </string>
+    <string name="description">Description : </string>
     <string name="partagez_votre_localisation">Partagez votre localisation</string>
     <string name="button">valider</string>
     <string name="urgence">urgence</string>
@@ -33,10 +33,10 @@
     <string name="graphe_d_etat">Graphe d\'etat</string>
     <string name="graphe_d_urgence">Graphe d\'urgence</string>
     <string name="graphe_de_category">Graphe de category</string>
-    <string name="event_activity">Détails d\'un évenement</string>
-    <string name="declar_activity">Déclaration d\'un évenement</string>
-    <string name="change_activity">Modification d\'un évenement</string>
-    <string name="permission_rationale_location">Access to the location service is required to demonstrate the \'my location\' feature, which shows your current location on the map.</string>
-    <string name="location_permission_denied">This sample requires location permission to enable the \'my location\' layer. Please try again and grant access to use the location.\nIf the permission has been permanently denied, it can be enabled from the System Settings &gt; Apps &gt; \'Google Maps API Demos\'.</string>
-    <string name="permission_required_toast">Location permission is required for this demo.</string>
+    <string name="event_activity">Détails d\'un évènement</string>
+    <string name="declar_activity">Déclaration d\'un évènement</string>
+    <string name="change_activity">Modification d\'un évènement</string>
+    <string name="category">*Category :</string>
+    <string name="hh">*Urgence :</string>
+
 </resources>

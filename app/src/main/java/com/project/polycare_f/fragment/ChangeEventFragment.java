@@ -1,28 +1,28 @@
-package com.project.polycare_f.activity;
+package com.project.polycare_f.fragment;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
-import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.MotionEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -34,20 +34,21 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.project.polycare_f.R;
 import com.project.polycare_f.data.DBHelper;
-import com.project.polycare_f.data.Event;
 import com.project.polycare_f.gps.GPSTracker;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-public class ChangeEventActivity extends AppCompatActivity implements OnMapReadyCallback, CompoundButton.OnCheckedChangeListener{
+public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
+        CompoundButton.OnCheckedChangeListener, Button.OnClickListener{
+
+    private String mArgument;
+    public static final String ARGUMENT = "argument";
+    private View view;
     public static final String ACTIVITY = "debug here";
     List<String> urgences = new ArrayList<>();
     List<String> categories = new ArrayList<>();
@@ -65,8 +66,12 @@ public class ChangeEventActivity extends AppCompatActivity implements OnMapReady
     boolean isLocated = false;
     LatLng latLng;
     private Switch aSwitch;
+    private OnChooseListener mlistener;
+    ArrayList<String> texts = new ArrayList<>();
+    Activity mActivity;
 
     private static final String TAG = "MapActivity";
+    private boolean isValided = false;
 
     private Boolean mLocationPermissionsGranted = false;
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -75,55 +80,52 @@ public class ChangeEventActivity extends AppCompatActivity implements OnMapReady
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 15f;
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-            setContentView(R.layout.change_event_item_land);
-        }
-        else {
-            setContentView(R.layout.change_event_item);
-        }
 
-        helper = new DBHelper(this);
-        aSwitch = (Switch) findViewById(R.id.switch1);
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.change_event_item, container, false);
+
+
+        helper = new DBHelper(getContext());
+        aSwitch = (Switch) view.findViewById(R.id.switch1);
         aSwitch.setOnCheckedChangeListener(this);
 
-        prenom = (EditText) findViewById(R.id.prenom_input);
-        title = (EditText) findViewById(R.id.title_input);
-        description = (EditText) findViewById(R.id.description_input);
-        number = (EditText) findViewById(R.id.phone_input);
+        prenom = (EditText) view.findViewById(R.id.prenom_input);
+        title = (EditText) view.findViewById(R.id.title_input);
+        description = (EditText) view.findViewById(R.id.description_input);
+        number = (EditText) view.findViewById(R.id.phone_input);
 
-        Intent intent = getIntent();
-        arthor = intent.getExtras().getString("Name");
-        titre = intent.getExtras().getString("Title");
-        des =intent.getExtras().getString("Description");
-        phone = intent.getExtras().getString("Phone");
-        importance = intent.getExtras().getString("Importance");
-        category = intent.getExtras().getString("Category");
-        etat = intent.getExtras().getString("State");
-        id = intent.getExtras().getInt("Id");
-        date = intent.getExtras().getString("Date");
-        latitude = intent.getExtras().getString("Latitude");
-        longtitude = intent.getExtras().getString("Longtitude");
+        Button button = (Button) view.findViewById(R.id.button);
+        button.setOnClickListener(this);
 
-
-        prenom.setText(arthor);
-        title.setText(titre);
-        description.setText(des);
-        number.setText(phone);
+        if(getArguments()!=null){
+            texts = getArguments().getStringArrayList("data");
+            prenom.setText(texts.get(0));
+            title.setText(texts.get(1));
+            category = texts.get(2);
+            description.setText(texts.get(3));
+            importance = texts.get(4);
+            date = texts.get(5);
+            etat = texts.get(6);
+            number.setText(texts.get(7));
+            latitude = texts.get(8);
+            longtitude = texts.get(9);
+            id = Integer.parseInt(texts.get(10));
+        }
 
         createCategorySpinner();
         createUrgenceSpinner();
         createStateSpinner();
+        return view;
     }
-
 
     private void createUrgenceSpinner() {
         setUrgences();
-        urg = (Spinner) findViewById(R.id.Spinner_urgence);
+        urg = (Spinner) view.findViewById(R.id.Spinner_urgence);
         //第二步：为下拉列表定义一个适配器，这里就用到里前面定义的list。
-        adapterUr = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, urgences);
+        adapterUr = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, urgences);
         //第三步：为适配器设置下拉列表下拉时的菜单样式。
         adapterUr.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //第四步：将适配器添加到下拉列表上
@@ -143,9 +145,9 @@ public class ChangeEventActivity extends AppCompatActivity implements OnMapReady
     private void createCategorySpinner() {
 
         setCategories();
-        cate = (Spinner) findViewById(R.id.Spinner_category);
+        cate = (Spinner) view.findViewById(R.id.Spinner_category);
         //第二步：为下拉列表定义一个适配器，这里就用到里前面定义的list。
-        adapterCate = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+        adapterCate = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, categories);
         //第三步：为适配器设置下拉列表下拉时的菜单样式。
         adapterCate.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //第四步：将适配器添加到下拉列表上
@@ -164,9 +166,9 @@ public class ChangeEventActivity extends AppCompatActivity implements OnMapReady
 
     private void createStateSpinner() {
         setEtat();
-        state = (Spinner) findViewById(R.id.Spinner_state);
+        state = (Spinner) view.findViewById(R.id.Spinner_state);
         //第二步：为下拉列表定义一个适配器，这里就用到里前面定义的list。
-        adapterSta = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, states);
+        adapterSta = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, states);
         //第三步：为适配器设置下拉列表下拉时的菜单样式。
         adapterSta.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //第四步：将适配器添加到下拉列表上
@@ -183,8 +185,8 @@ public class ChangeEventActivity extends AppCompatActivity implements OnMapReady
         });
     }
 
-    public void onclick(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    public void onclick() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setIcon(R.drawable.ic_add_alert_black_24dp);//设置图标
         builder.setTitle("Validation de la modification");//设置对话框的标题
         builder.setMessage("Vous voulez applique la modification？");//设置对话框的内容
@@ -194,34 +196,33 @@ public class ChangeEventActivity extends AppCompatActivity implements OnMapReady
             public void onClick(DialogInterface arg0, int arg1) {
                 List<String> strings = getInput();
                 String sql =
-                        "UPDATE events set event_title= " + "'"+strings.get(0)+"',"+
-                        " event_category = " + "'"+category+"',"+
-                        " event_description= " + "'"+strings.get(2)+"',"+
-                        " event_reporter= " + "'"+strings.get(3)+"',"+
-                        " event_importance= " +"'"+importance+"',"+
-                        " event_state= " +"'"+etat+"',"+
-                        " event_number= " +"'"+strings.get(6)+"',"+
-                                " event_latitude= " +"'"+strings.get(7)+"',"+
-                                " event_longtitude= " +"'"+strings.get(8)+"'"+
-                        " where event_id = "+"'"+id+"'";
+                        "UPDATE events set event_title= " + "'"+strings.get(1)+"',"+
+                                " event_category = " + "'"+category+"',"+
+                                " event_description= " + "'"+strings.get(3)+"',"+
+                                " event_reporter= " + "'"+strings.get(0)+"',"+
+                                " event_importance= " +"'"+importance+"',"+
+                                " event_state= " +"'"+etat+"',"+
+                                " event_number= " +"'"+strings.get(7)+"',"+
+                                " event_latitude= " +"'"+strings.get(8)+"',"+
+                                " event_longtitude= " +"'"+strings.get(9)+"'"+
+                                " where event_id = "+"'"+id+"'";
                 helper.inertOrUpdateDateBatch(sql);
-                Toast.makeText(ChangeEventActivity.this, "Réussi", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent();
-                intent.setClass(ChangeEventActivity.this, MainActivity.class);
-                startActivity(intent);
+                mlistener.onChoosed(getInput());
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_event, new EventDetailsFragment(),null)
+                        .addToBackStack(null).commit();
             }
         });
         builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {  //取消按钮
 
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
-                Toast.makeText(ChangeEventActivity.this, "Annuler", Toast.LENGTH_SHORT).show();
 
             }
         });
         AlertDialog b = builder.create();
         b.show();  //必须show一下才能看到对话框，跟Toast一样的道理
-
     }
 
     private void setCategories(){
@@ -271,32 +272,35 @@ public class ChangeEventActivity extends AppCompatActivity implements OnMapReady
     public List<String> getInput() {
         List<String> strings = new ArrayList<>();
 
-        prenom = (EditText) findViewById(R.id.prenom_input);
+        prenom = (EditText) view.findViewById(R.id.prenom_input);
         String name = prenom.getText().toString();
 
-        title = (EditText) findViewById(R.id.title_input);
+        title = (EditText) view.findViewById(R.id.title_input);
         String titre = title.getText().toString();
 
-        number = (EditText) findViewById(R.id.phone_input);
+        number = (EditText) view.findViewById(R.id.phone_input);
         String phone = number.getText().toString();
 
-        description = (EditText) findViewById(R.id.description_input);
+        description = (EditText) view.findViewById(R.id.description_input);
         String descriptions = description.getText().toString();
 
+        strings.add(name);
         strings.add(titre);
         strings.add(category);
         strings.add(descriptions);
-        strings.add(name);
         strings.add(importance);
+        strings.add(date);
         strings.add(etat);
         strings.add(phone);
         if(currentLocation!=null) {
             strings.add(Double.toString(currentLocation.getLatitude()));
             strings.add(Double.toString(currentLocation.getLongitude()));
+            strings.add(String.valueOf(id));
         }
         else {
             strings.add(latitude);
             strings.add(longtitude);
+            strings.add(String.valueOf(id));
         }
 
         return strings;
@@ -313,21 +317,21 @@ public class ChangeEventActivity extends AppCompatActivity implements OnMapReady
                 else{
                     mMap.clear();
                     isLocated= false;
-                    }
+                }
                 break;
         }
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Toast.makeText(this, "Map est prête Ready", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Map est prête Ready", Toast.LENGTH_SHORT).show();
         mMap = googleMap;
 
         if (mLocationPermissionsGranted) {
             getDeviceLocation();
 
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(),
                     Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
@@ -338,7 +342,7 @@ public class ChangeEventActivity extends AppCompatActivity implements OnMapReady
 
     private void getDeviceLocation() {
 
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(ChangeEventActivity.this);
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
         try {
             if (mLocationPermissionsGranted) {
@@ -356,7 +360,7 @@ public class ChangeEventActivity extends AppCompatActivity implements OnMapReady
                             }
 
                         } else {
-                            Toast.makeText(ChangeEventActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "unable to get current location", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -370,7 +374,7 @@ public class ChangeEventActivity extends AppCompatActivity implements OnMapReady
     }
 
     private void initMap(){
-        supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
+        supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.myMap);
         supportMapFragment.getMapAsync(this);
     }
 
@@ -378,19 +382,19 @@ public class ChangeEventActivity extends AppCompatActivity implements OnMapReady
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION};
 
-        if(ContextCompat.checkSelfPermission(this,
+        if(ContextCompat.checkSelfPermission(getContext(),
                 FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            if(ContextCompat.checkSelfPermission(this,
+            if(ContextCompat.checkSelfPermission(getContext(),
                     COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
                 mLocationPermissionsGranted = true;
                 initMap();
             }else{
-                ActivityCompat.requestPermissions(ChangeEventActivity.this,
+                ActivityCompat.requestPermissions(getActivity(),
                         permissions,
                         LOCATION_PERMISSION_REQUEST_CODE);
             }
         }else{
-            ActivityCompat.requestPermissions(ChangeEventActivity.this,
+            ActivityCompat.requestPermissions(getActivity(),
                     permissions,
                     LOCATION_PERMISSION_REQUEST_CODE);
         }
@@ -416,6 +420,38 @@ public class ChangeEventActivity extends AppCompatActivity implements OnMapReady
                 }
             }
         }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.button:
+                onclick();
+                break;
+        }
+    }
+
+    public static  ChangeEventFragment newInstance(ArrayList<String> texts){
+        ChangeEventFragment changeEventFragment = new ChangeEventFragment();
+        Bundle bundle = new Bundle();
+        bundle.putStringArrayList("data", texts);
+        changeEventFragment.setArguments(bundle);
+        return changeEventFragment;
+    }
+
+
+    public interface OnChooseListener{
+        void onChoosed(List<String> texts);
+    }
+
+    public void setResultListener(OnChooseListener listener){
+        mlistener = listener;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.mActivity = activity;
     }
 
 }

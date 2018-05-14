@@ -28,3 +28,11 @@ captures/
 .idea/libraries  
 # Keystore files  
 *.jks  
+
+app/build/
+
+\.idea/
+
+\.DS_Store
+
+app/

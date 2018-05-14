@@ -3,6 +3,7 @@ package com.project.polycare_f.fragment;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +39,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.project.polycare_f.R;
+import com.project.polycare_f.activity.EventActivity;
 import com.project.polycare_f.data.DBHelper;
+import com.project.polycare_f.data.Event;
 import com.project.polycare_f.gps.GPSTracker;
 
 import java.util.ArrayList;
@@ -207,11 +211,8 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
                                 " event_longtitude= " +"'"+strings.get(9)+"'"+
                                 " where event_id = "+"'"+id+"'";
                 helper.inertOrUpdateDateBatch(sql);
-                mlistener.onChoosed(getInput());
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_event, new EventDetailsFragment(),null)
-                        .addToBackStack(null).commit();
+                mlistener.onChoosed(strings);
+                getActivity().getSupportFragmentManager().popBackStack();
             }
         });
         builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {  //取消按钮

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,7 +34,7 @@ import com.project.polycare_f.data.DBHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventDetailsFragment extends Fragment implements OnMapReadyCallback, Button.OnClickListener{
+public class EventDetailsFragment extends Fragment implements OnMapReadyCallback, Button.OnClickListener {
     private TextView titleview, arthorview, categoryview, importanceview, dateview, descriptionview, numberview, stateview;
     public static final String ACTIVITY = "debug here";
     String title, category, description, importance, date, state, phonenumber;
@@ -43,11 +45,14 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
     String latitude, longtitude;
     GoogleMap mMap;
     View view;
+    boolean isCreated = false;
     ArrayList<String> data = new ArrayList<>();
+    List<String> mTexts = new ArrayList<>();
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            view = inflater.inflate(R.layout.event_item, container, false);
+        view = inflater.inflate(R.layout.event_item, container, false);
 
         helper = new DBHelper(getContext());
         titleview = (TextView) view.findViewById(R.id.title_view);
@@ -72,20 +77,8 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
         state = intent.getExtras().getString("State");
         phonenumber = intent.getExtras().getString("Phone");
         id = intent.getExtras().getInt("Id");
-        latitude= intent.getExtras().getString("Latitude");
-        longtitude= intent.getExtras().getString("Longtitude");
-
-        data.add(arthor);
-        data.add(title);
-        data.add(category);
-        data.add(description);
-        data.add(importance);
-        data.add(date);
-        data.add(state);
-        data.add(phonenumber);
-        data.add(latitude);
-        data.add(longtitude);
-        data.add(String.valueOf(id));
+        latitude = intent.getExtras().getString("Latitude");
+        longtitude = intent.getExtras().getString("Longtitude");
 
         arthorview.setText("Arthor : " + arthor);
         titleview.setText("Titre : " + title);
@@ -98,12 +91,25 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
         showImportance(importance);
         createMapView();
 
+        setNewTextAfterChange();
+
+        data.add(arthor);
+        data.add(title);
+        data.add(category);
+        data.add(description);
+        data.add(importance);
+        data.add(date);
+        data.add(state);
+        data.add(phonenumber);
+        data.add(latitude);
+        data.add(longtitude);
+        data.add(String.valueOf(id));
         return view;
     }
 
 
-    private void showImportance(String importance){
-        switch (importance){
+    private void showImportance(String importance) {
+        switch (importance) {
             case "Faible":
                 importanceview.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_star_faible_done, 0, 0);
                 break;
@@ -129,30 +135,21 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.modifier:
                 ChangeEventFragment changeEventFragment = ChangeEventFragment.newInstance(data);
 
                 changeEventFragment.setResultListener(new ChangeEventFragment.OnChooseListener() {
                     @Override
                     public void onChoosed(List<String> texts) {
-                        arthorview.setText("Arthor : " + texts.get(0));
-                        titleview.setText("Titre : " + texts.get(1));
-                        categoryview.setText("Catégorie : " + texts.get(2));
-                        descriptionview.setText("Description : " + texts.get(3));
-                        dateview.setText("Date : " + texts.get(5));
-                        stateview.setText("État : " + texts.get(6));
-                        numberview.setText("Téléphone : " + texts.get(7));
-                        latitude = texts.get(8);
-                        longtitude = texts.get(9);
-                        importance = texts.get(4);
-                        createMapView();
+                        mTexts = texts;
+                        isCreated = true;
                     }
                 });
 
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragment_event, changeEventFragment,null)
+                        .replace(R.id.fragment_event, changeEventFragment, null)
                         .addToBackStack(null).commit();
                 break;
             case R.id.rapeler:
@@ -178,7 +175,7 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
             public void onClick(DialogInterface arg0, int arg1) {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_CALL);
-                intent.setData(Uri.parse("tel:"+phonenumber));
+                intent.setData(Uri.parse("tel:" + phonenumber));
                 startActivity(intent);
             }
         });
@@ -205,7 +202,7 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
                 Intent intent1 = new Intent(getContext(), MainActivity.class);
-                String sql = "delete from events where event_id= " + "'"+id+"'";
+                String sql = "delete from events where event_id= " + "'" + id + "'";
                 helper.inertOrUpdateDateBatch(sql);
                 startActivity(intent1);
             }
@@ -240,11 +237,40 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.button2:
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
                 break;
         }
+    }
+
+    private void setNewTextAfterChange(){
+        if (isCreated) {
+            arthor = mTexts.get(0);
+            title = mTexts.get(1);
+            category = mTexts.get(2);
+            description =mTexts.get(3);
+            importance = mTexts.get(4);
+            date = mTexts.get(5);
+            state = mTexts.get(6);
+            phonenumber = mTexts.get(7);
+            latitude = mTexts.get(8);
+            longtitude =mTexts.get(9);
+
+            arthorview.setText("Arthor : " + mTexts.get(0));
+            titleview.setText("Titre : " + mTexts.get(1));
+            categoryview.setText("Catégorie : " + mTexts.get(2));
+            descriptionview.setText("Description : " + mTexts.get(3));
+            dateview.setText("Date : " + mTexts.get(5));
+            stateview.setText("État : " + mTexts.get(6));
+            numberview.setText("Téléphone : " + mTexts.get(7));
+            latitude = mTexts.get(8);
+            longtitude = mTexts.get(9);
+            importance = mTexts.get(4);
+            showImportance(importance);
+            createMapView();
+        }
+
     }
 }

@@ -83,6 +83,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 intent.putExtra("Phone", data.get(position).getNumber());
                 intent.putExtra("Latitude", data.get(position).getLatitude());
                 intent.putExtra("Longtitude", data.get(position).getLontitude());
+                intent.putExtra("Location", data.get(position).getLocation());
 
                 context.startActivity(intent);
             }

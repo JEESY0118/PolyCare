@@ -61,9 +61,9 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
     List<String> categories = new ArrayList<>();
     List<String> states = new ArrayList<>();
     private ArrayAdapter<String> adapterUr,adapterCate,adapterSta;
-    EditText prenom, title,description, number;
+    EditText prenom, title,description, number, mLocation;
     Spinner urg, cate, state;
-    String arthor, titre, des, phone, importance, etat, category,date,latitude, longtitude;
+    String arthor, titre, des, phone, importance, etat, category,date,latitude, longtitude, location;
     int id;
     DBHelper helper;
     SupportMapFragment supportMapFragment;
@@ -103,6 +103,7 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
         title = (EditText) view.findViewById(R.id.title_input);
         description = (EditText) view.findViewById(R.id.description_input);
         number = (EditText) view.findViewById(R.id.phone_input);
+        mLocation = (EditText) view.findViewById(R.id.location);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.modifie);
@@ -124,6 +125,7 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
             latitude = texts.get(8);
             longtitude = texts.get(9);
             id = Integer.parseInt(texts.get(10));
+            mLocation.setText(texts.get(11));
         }
 
         createCategorySpinner();
@@ -215,7 +217,8 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
                                 " event_state= " +"'"+etat+"',"+
                                 " event_number= " +"'"+strings.get(7)+"',"+
                                 " event_latitude= " +"'"+strings.get(8)+"',"+
-                                " event_longtitude= " +"'"+strings.get(9)+"'"+
+                                " event_longtitude= " +"'"+strings.get(9)+"',"+
+                                " event_location= " +"'"+strings.get(11)+"'"+
                                 " where event_id = "+"'"+id+"'";
                 helper.inertOrUpdateDateBatch(sql);
                 mlistener.onChoosed(strings);
@@ -292,10 +295,13 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
         description = (EditText) view.findViewById(R.id.description_input);
         String descriptions = description.getText().toString();
 
+        mLocation = (EditText) view.findViewById(R.id.location);
+        String location = mLocation.getText().toString();
+
         strings.add(name);
         strings.add(titre);
         strings.add(category);
-        strings.add(descriptions);
+        strings.add(ifNull(descriptions));
         strings.add(importance);
         strings.add(date);
         strings.add(etat);
@@ -304,11 +310,13 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
             strings.add(Double.toString(currentLocation.getLatitude()));
             strings.add(Double.toString(currentLocation.getLongitude()));
             strings.add(String.valueOf(id));
+            strings.add(ifNull(location));
         }
         else {
             strings.add(latitude);
             strings.add(longtitude);
             strings.add(String.valueOf(id));
+            strings.add(ifNull(location));
         }
 
         return strings;
@@ -460,6 +468,10 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.mActivity = activity;
+    }
+
+    private String ifNull(String s){
+        return s+"";
     }
 
 }

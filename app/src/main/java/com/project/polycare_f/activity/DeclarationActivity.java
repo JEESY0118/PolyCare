@@ -59,10 +59,9 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
     private ArrayAdapter<String> adapterCate;
     List<String> categories = new ArrayList<String>();
     List<String> urgences = new ArrayList<String>();
-    EditText prenom, title,description, number;
+    EditText prenom, title,description, number, location;
     private Switch aSwitch;
     SupportMapFragment supportMapFragment;
-    private GPSTracker gpsTracker;
     Location currentLocation;
     double latitude, longtitude;
     GoogleMap mMap;
@@ -158,10 +157,10 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
                 List<String> strings = getInput();
                 String sql = "\n" +
                         "INSERT INTO events (event_title, event_category, event_description,event_reporter ," +
-                        "event_importance,event_state, event_date,event_number, event_latitude, event_longtitude )\n" +
+                        "event_importance,event_state, event_date,event_number, event_latitude, event_longtitude, event_location)\n" +
                         "VALUES('"+strings.get(0) + "','" + cate + "','"+ strings.get(1) +"','" + strings.get(4) + "','" +
                         urg + "','" + strings.get(5) + "','" + strings.get(3) + "','" + strings.get(2) +
-                        "','"+strings.get(6)+"','"+strings.get(7)+"');";
+                        "','"+strings.get(6)+"','"+strings.get(7)+"','"+ strings.get(8)+"');";
                 Log.i(ACTIVITY_TAG, sql);
                 helper.inertOrUpdateDateBatch(sql);
                 Toast.makeText(DeclarationActivity.this, "Réussi", Toast.LENGTH_SHORT).show();
@@ -203,6 +202,9 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
         description = (EditText) findViewById(R.id.description_input);
         String descriptions = description.getText().toString();
 
+        location = (EditText) findViewById(R.id.location);
+        String pos = location.getText().toString();
+
         String etat = "A faire";
 
         strings.add(titre);
@@ -213,6 +215,7 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
         strings.add(etat);
         strings.add(Double.toString(latitude));
         strings.add(Double.toString(longtitude));
+        strings.add(pos);
 
         return strings;
     }

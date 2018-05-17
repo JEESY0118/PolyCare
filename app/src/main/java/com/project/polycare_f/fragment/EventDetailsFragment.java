@@ -39,9 +39,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventDetailsFragment extends Fragment implements OnMapReadyCallback, Button.OnClickListener {
-    private TextView titleview, arthorview, categoryview, importanceview, dateview, descriptionview, numberview, stateview;
+    private TextView titleview, arthorview, categoryview, importanceview, dateview, descriptionview, numberview, stateview,locationview;
     public static final String ACTIVITY = "debug here";
-    String title, category, description, importance, date, state, phonenumber;
+    String title, category, description, importance, date, state, phonenumber, location;
     String arthor;
     int id;
     DBHelper helper;
@@ -67,6 +67,7 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
         descriptionview = (TextView) view.findViewById(R.id.description_view);
         numberview = (TextView) view.findViewById(R.id.phone_view);
         stateview = (TextView) view.findViewById(R.id.state);
+        locationview = (TextView) view.findViewById(R.id.location);
 
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
@@ -89,14 +90,16 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
         id = intent.getExtras().getInt("Id");
         latitude = intent.getExtras().getString("Latitude");
         longtitude = intent.getExtras().getString("Longtitude");
+        location = intent.getExtras().getString("Location");
 
-        arthorview.setText("Arthor : " + arthor);
-        titleview.setText("Titre : " + title);
-        categoryview.setText("Catégorie : " + category);
-        dateview.setText("Date : " + date);
-        descriptionview.setText("Description : " + description);
-        stateview.setText("État : " + state);
-        numberview.setText("Téléphone : " + phonenumber);
+        arthorview.setText(" Arthor : " + ifNull(arthor));
+        titleview.setText(" Titre : " + ifNull(title));
+        categoryview.setText(" Catégorie : " + ifNull(category));
+        dateview.setText(" Date : " + ifNull(date));
+        descriptionview.setText(" Description : " + ifNull(description));
+        stateview.setText(" État : " + ifNull(state));
+        numberview.setText(" Téléphone : " + ifNull(phonenumber));
+        locationview.setText(" Localisation : "+ ifNull(location));
 
         showImportance(importance);
         createMapView();
@@ -114,6 +117,7 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
         data.add(latitude);
         data.add(longtitude);
         data.add(String.valueOf(id));
+        data.add(location);
         return view;
     }
 
@@ -231,10 +235,12 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longtitude));
-        mMap.addMarker(new MarkerOptions().position(latLng).title("I am Here"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.setMinZoomPreference(16);
+        if(!latitude.equals("null") && !latitude.equals("null")) {
+            LatLng latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longtitude));
+            mMap.addMarker(new MarkerOptions().position(latLng).title("I am Here"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            mMap.setMinZoomPreference(16);
+        }
     }
 
     private void createMapView() {
@@ -266,20 +272,27 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
             phonenumber = mTexts.get(7);
             latitude = mTexts.get(8);
             longtitude =mTexts.get(9);
+            location = mTexts.get(11);
 
-            arthorview.setText("Arthor : " + mTexts.get(0));
-            titleview.setText("Titre : " + mTexts.get(1));
-            categoryview.setText("Catégorie : " + mTexts.get(2));
-            descriptionview.setText("Description : " + mTexts.get(3));
-            dateview.setText("Date : " + mTexts.get(5));
-            stateview.setText("État : " + mTexts.get(6));
-            numberview.setText("Téléphone : " + mTexts.get(7));
+            arthorview.setText("Arthor : " + ifNull(mTexts.get(0)));
+            titleview.setText("Titre : " + ifNull(mTexts.get(1)));
+            categoryview.setText("Catégorie : " + ifNull(mTexts.get(2)));
+            descriptionview.setText("Description : " + ifNull(mTexts.get(3)));
+            dateview.setText("Date : " + ifNull(mTexts.get(5)));
+            stateview.setText("État : " + ifNull(mTexts.get(6)));
+            numberview.setText("Téléphone : " + ifNull(mTexts.get(7)));
             latitude = mTexts.get(8);
             longtitude = mTexts.get(9);
             importance = mTexts.get(4);
+            locationview.setText(" Localisation : "+ifNull(location));
+
             showImportance(importance);
             createMapView();
         }
 
+    }
+
+    private String ifNull(String s){
+       return s+" ";
     }
 }

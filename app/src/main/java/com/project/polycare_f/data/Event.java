@@ -3,7 +3,7 @@ package com.project.polycare_f.data;
 import java.util.List;
 
 public class Event {
-    private String title;
+    private String title, location;
     private String category;
     private String description;
     private String reporter;
@@ -13,8 +13,9 @@ public class Event {
     private String number,latitude, lontitude;
     private int id;
 
+
     public Event(int id, String title, String category, String description, String reporter, String importance, String state, String date, String number,
-                 String latitude, String lontitude) {
+                 String latitude, String lontitude, String location) {
         this.title = title;
         this.category = category;
         this.description = description;
@@ -26,6 +27,7 @@ public class Event {
         this.id = id;
         this.latitude = latitude;
         this.lontitude = lontitude;
+        this.location = location;
     }
 
     public String getTitle() {
@@ -137,5 +139,11 @@ public class Event {
         return false;
     }
 
+    public String getLocation() {
+        return location;
+    }
 
+    public void setLocation(String location) {
+        this.location = location;
+    }
 }

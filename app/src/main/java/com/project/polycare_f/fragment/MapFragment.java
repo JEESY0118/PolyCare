@@ -65,20 +65,28 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        //LatLng latLng = new LatLng(Double.parseDouble(), Double.parseDouble());
         for (Event e : events) {
-            double latitude = Double.parseDouble(e.getLatitude());
-            double longtitude = Double.parseDouble(e.getLontitude());
-            LatLng latLng = new LatLng(latitude, longtitude);
-            mMap.addMarker(new MarkerOptions().position(latLng).title(e.getTitle()));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-            mMap.setMinZoomPreference(16);
+            if( !e.getLatitude().equals("null") && !e.getLontitude().equals("null") && e.getLontitude()!=null && e.getLatitude()!=null) {
+                LatLng latLng = new LatLng(Double.parseDouble(e.getLatitude()), Double.parseDouble(e.getLontitude()));
+                mMap.addMarker(new MarkerOptions().position(latLng).title(ifNull(e.getLocation())));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                mMap.setMinZoomPreference(16);
+            }
         }
     }
 
     private void createMapView() {
         supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         supportMapFragment.getMapAsync(this);
+    }
+
+    private String ifNull(String s){
+        if(s==null){
+            return "Pas de description de localisation";
+        }
+        else {
+            return s;
+        }
     }
 
 }

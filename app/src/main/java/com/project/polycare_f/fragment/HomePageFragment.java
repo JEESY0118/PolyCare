@@ -2,19 +2,30 @@ package com.project.polycare_f.fragment;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.project.polycare_f.R;
@@ -22,6 +33,7 @@ import com.project.polycare_f.activity.DeclarationActivity;
 import com.project.polycare_f.data.DBHelper;
 import com.project.polycare_f.data.Event;
 import com.project.polycare_f.adapter.RecyclerViewAdapter;
+import com.project.polycare_f.interfaces.myItemMoveCallBack;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,6 +58,7 @@ public class  HomePageFragment extends Fragment {
     private View rootview;
     public static final String ACTIVITY =  "debug here";
     int numberOfEvents;
+    Toolbar toolbar;
 
     @Nullable
     @Override
@@ -61,6 +74,7 @@ public class  HomePageFragment extends Fragment {
         events = dbHelper.getAllEvent(cate);
         numberOfEvents = events.size();
 
+        createCateSpinner();
         FloatingActionButton fab = (FloatingActionButton) rootview.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,13 +85,25 @@ public class  HomePageFragment extends Fragment {
             }
         });
 
-        createCateSpinner();
-        createImpSpinner();
+        toolbar = (Toolbar) rootview.findViewById(R.id.toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        toolbar.setTitle(R.string.empty);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+
 
         recyclerview = rootview.findViewById(R.id.recyclerview);
-        viewAdapter= new RecyclerViewAdapter(getContext(), events);
+        viewAdapter= new RecyclerViewAdapter(getContext(), events, dbHelper);
         recyclerview.setLayoutManager(new GridLayoutManager(getContext(), 1));
         recyclerview.setAdapter(viewAdapter);
+        ItemTouchHelper.Callback callback = new myItemMoveCallBack(viewAdapter);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+        itemTouchHelper.attachToRecyclerView(recyclerview);
 
         return rootview;
     }
@@ -102,6 +128,10 @@ public class  HomePageFragment extends Fragment {
         cateSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
             public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 cate = cateSpinner.getSelectedItem().toString();
+                TextView tv = (TextView) arg1;
+                tv.setTextColor(Color.WHITE);
+                tv.setTextSize(20);
+                tv.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
                 List<Event> newsEvents= getNewEventsAccordingToCate(events, cate);
                 if(!newsEvents.isEmpty()) {
                     viewAdapter.setData(newsEvents);
@@ -119,41 +149,7 @@ public class  HomePageFragment extends Fragment {
         });
     }
 
-    private void createImpSpinner(){
-        tris.add("Date");
-        tris.add("Urgence");
-        tris.add("État");
 
-        impSpinner = rootview.findViewById(R.id.Spinner_tri);
-        adapterImp = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_item, tris);
-        adapterImp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        impSpinner.setAdapter(adapterImp);
-        impSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
-            public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                sort = impSpinner.getSelectedItem().toString();
-                switch (sort){
-                    case "Date":
-                        getSortByDate(events);
-                        viewAdapter.setData(events);
-                        recyclerview.setAdapter(viewAdapter);
-                        break;
-                    case "Urgence":
-                        List<Event> list1 = getSortByImportance(events);
-                        viewAdapter.setData(list1);
-                        recyclerview.setAdapter(viewAdapter);
-                        break;
-                    case "État":
-                        List<Event> list2 = getSortByState(events);
-                        viewAdapter.setData(list2);
-                        recyclerview.setAdapter(viewAdapter);
-                        break;
-                }
-            }
-            public void onNothingSelected(AdapterView<?> arg0) {
-
-            }
-        });
-    }
 
     /**
      * get events according to its category
@@ -253,6 +249,40 @@ public class  HomePageFragment extends Fragment {
                 return 0;
             }
         });
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_sort, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.date_sort:
+                getSortByDate(events);
+                viewAdapter.setData(events);
+                recyclerview.setAdapter(viewAdapter);
+                break;
+            case R.id.state_sort:
+                List<Event> list2 = getSortByState(events);
+                viewAdapter.setData(list2);
+                recyclerview.setAdapter(viewAdapter);
+                break;
+            case R.id.urgence_sort:
+                List<Event> list1 = getSortByImportance(events);
+                viewAdapter.setData(list1);
+                recyclerview.setAdapter(viewAdapter);
+                break;
+
+        }
+        return true;
     }
 
 }

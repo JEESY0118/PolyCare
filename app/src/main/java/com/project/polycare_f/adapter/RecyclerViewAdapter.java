@@ -1,18 +1,25 @@
 package com.project.polycare_f.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.project.polycare_f.R;
 import com.project.polycare_f.activity.EventActivity;
+import com.project.polycare_f.activity.MainActivity;
+import com.project.polycare_f.data.DBHelper;
 import com.project.polycare_f.data.Event;
+import com.project.polycare_f.interfaces.ItemMoveAdapater;
 
 import java.util.List;
 
@@ -21,17 +28,19 @@ import java.util.List;
  * 用来管理数据，把数据和前端连到一起，是一个展示数据的载体
  */
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> implements ItemMoveAdapater{
 
     public static final String ACTIVITY = "RecyclerView: ";
     private Context context;
     //abstraction，通过context来访问资源，还可以启动其他组件，activity，service，得到这种服务
     //像一个提供了应用的运行环境，通过这个来访问资源
     private List<Event> data;
+    DBHelper helper;
 
-    public RecyclerViewAdapter(Context context, List<Event> data) {
+    public RecyclerViewAdapter(Context context, List<Event> data, DBHelper helper) {
         this.context = context;
         this.data = data;
+        this.helper = helper;
     }
 
     @Override
@@ -56,7 +65,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         setIcon(holder, position);
-
 
         //set listener
         holder.cardView.setOnClickListener(new View.OnClickListener() {
@@ -115,6 +123,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.data = data;
     }
 
+    @Override
+    public void onItemDelete(int position) {
+        data.remove(position);
+        notifyItemRemoved(position);
+        Toast.makeText(context, "Vous avez supprimé un évènement", Toast.LENGTH_SHORT).show();
+//        String sql = "delete from events where event_id= " + "'" +  data.get(position).getId() + "'";
+//        helper.inertOrUpdateDateBatch(sql);
+    }
+
     /**
      * dans holder, we find the view by id, in cardview_item.xml
      */
@@ -124,7 +141,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         public MyViewHolder(View itemView) {
             super(itemView);
-
             title = (TextView) itemView.findViewById(R.id.title);
             date = (TextView) itemView.findViewById(R.id.date);
             circle = (TextView) itemView.findViewById(R.id.circle);
@@ -132,6 +148,5 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             state = (TextView) itemView.findViewById(R.id.state);
         }
     }
-
 }
 

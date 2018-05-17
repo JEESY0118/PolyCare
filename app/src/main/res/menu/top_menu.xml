@@ -6,9 +6,9 @@
     android:title= "Modifier"/>
     <item
         android:id="@+id/rapeler"
-        android:title="Rapeler"/>
+        android:title="Téléphoner"/>
     <item
         android:id = "@+id/delete"
-        android:title= "Delete"/>
+        android:title= "Supprimer"/>
 
 </menu>

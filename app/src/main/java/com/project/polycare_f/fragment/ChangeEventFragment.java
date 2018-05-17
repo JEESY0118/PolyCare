@@ -17,6 +17,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +27,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -100,6 +103,10 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
         title = (EditText) view.findViewById(R.id.title_input);
         description = (EditText) view.findViewById(R.id.description_input);
         number = (EditText) view.findViewById(R.id.phone_input);
+
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.modifie);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
         Button button = (Button) view.findViewById(R.id.button);
         button.setOnClickListener(this);

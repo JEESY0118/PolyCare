@@ -44,3 +44,4 @@ out/
 # gradle
 build/
 .gradle
+\.DS_Store

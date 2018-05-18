@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,6 +17,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -23,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -50,22 +54,23 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class DeclarationActivity  extends AppCompatActivity implements OnMapReadyCallback, CompoundButton.OnCheckedChangeListener{
+public class DeclarationActivity extends AppCompatActivity implements OnMapReadyCallback, CompoundButton.OnCheckedChangeListener {
     private static final String ACTIVITY_TAG = "LogDemo";
     private DBHelper helper;
-    private Spinner spinner,cateSpinner;
+    private Spinner spinner, cateSpinner;
     private String cate, urg;
     private ArrayAdapter<String> adapter;
     private ArrayAdapter<String> adapterCate;
     List<String> categories = new ArrayList<String>();
     List<String> urgences = new ArrayList<String>();
-    EditText prenom, title,description, number, location;
+    EditText prenom, title, description, number, location;
     private Switch aSwitch;
     SupportMapFragment supportMapFragment;
     Location currentLocation;
     double latitude, longtitude;
     GoogleMap mMap;
     int numberOfEvents;
+    Button button;
 
     private static final String TAG = "MapActivity";
 
@@ -76,15 +81,14 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 15f;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             setContentView(R.layout.declaration_activity_land);
-        }
-
-        else {
+        } else {
             setContentView(R.layout.declaration_activity);
         }
 
@@ -94,6 +98,13 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
         aSwitch = (Switch) findViewById(R.id.mapopener);
         aSwitch.setOnCheckedChangeListener(this);
 
+        button = (Button) findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onclick(view);
+            }
+        });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -118,6 +129,7 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
                 urg = spinner.getSelectedItem().toString();
                 Log.i(ACTIVITY_TAG, urg);
             }
+
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
@@ -139,6 +151,7 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
                 cate = cateSpinner.getSelectedItem().toString();
                 Log.i(ACTIVITY_TAG, cate);
             }
+
             public void onNothingSelected(AdapterView<?> arg0) {
 
             }
@@ -146,40 +159,41 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
     }
 
     public void onclick(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setIcon(R.drawable.ic_add_alert_black_24dp);//设置图标
-        builder.setTitle("Validation de déclaration");//设置对话框的标题
-        builder.setMessage("Vous voulez valider？");//设置对话框的内容
-        builder.setPositiveButton("Valider", new DialogInterface.OnClickListener() {  //这个是设置确定按钮
+        if(avoidEmptyInfo(getInput())) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setIcon(R.drawable.ic_add_alert_black_24dp);//设置图标
+            builder.setTitle("Validation de déclaration");//设置对话框的标题
+            builder.setMessage("Vous voulez valider？");//设置对话框的内容
+            builder.setPositiveButton("Valider", new DialogInterface.OnClickListener() {  //这个是设置确定按钮
 
-            @Override
-            public void onClick(DialogInterface arg0, int arg1) {
-                List<String> strings = getInput();
-                String sql = "\n" +
-                        "INSERT INTO events (event_title, event_category, event_description,event_reporter ," +
-                        "event_importance,event_state, event_date,event_number, event_latitude, event_longtitude, event_location)\n" +
-                        "VALUES('"+strings.get(0) + "','" + cate + "','"+ strings.get(1) +"','" + strings.get(4) + "','" +
-                        urg + "','" + strings.get(5) + "','" + strings.get(3) + "','" + strings.get(2) +
-                        "','"+strings.get(6)+"','"+strings.get(7)+"','"+ strings.get(8)+"');";
-                Log.i(ACTIVITY_TAG, sql);
-                helper.inertOrUpdateDateBatch(sql);
-                Toast.makeText(DeclarationActivity.this, "Réussi", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent();
-                intent.setClass(DeclarationActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
-        builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {  //取消按钮
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                    List<String> strings = getInput();
+                    String sql = "\n" +
+                            "INSERT INTO events (event_title, event_category, event_description,event_reporter ," +
+                            "event_importance,event_state, event_date,event_number, event_latitude, event_longtitude, event_location)\n" +
+                            "VALUES('" + strings.get(0) + "','" + cate + "','" + strings.get(1) + "','" + strings.get(4) + "','" +
+                            urg + "','" + strings.get(5) + "','" + strings.get(3) + "','" + strings.get(2) +
+                            "','" + strings.get(6) + "','" + strings.get(7) + "','" + strings.get(8) + "');";
+                    Log.i(ACTIVITY_TAG, sql);
+                    helper.inertOrUpdateDateBatch(sql);
+                    Toast.makeText(DeclarationActivity.this, "Réussi", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent();
+                    intent.setClass(DeclarationActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+            });
+            builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {  //取消按钮
 
-            @Override
-            public void onClick(DialogInterface arg0, int arg1) {
-                Toast.makeText(DeclarationActivity.this, "Annuler", Toast.LENGTH_SHORT).show();
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                    Toast.makeText(DeclarationActivity.this, "Annuler", Toast.LENGTH_SHORT).show();
 
-            }
-        });
-        AlertDialog b = builder.create();
-        b.show();  //必须show一下才能看到对话框，跟Toast一样的道理
-
+                }
+            });
+            AlertDialog b = builder.create();
+            b.show();  //必须show一下才能看到对话框，跟Toast一样的道理
+        }
     }
 
     public List<String> getInput() {
@@ -207,11 +221,11 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
 
         String etat = "A faire";
 
-        strings.add(titre);
+        strings.add(titre);  //0
         strings.add(descriptions);
         strings.add(phone);
         strings.add(date);
-        strings.add(name);
+        strings.add(name);//4
         strings.add(etat);
         strings.add(Double.toString(latitude));
         strings.add(Double.toString(longtitude));
@@ -220,15 +234,53 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
         return strings;
     }
 
+    private boolean avoidEmptyInfo(List<String> strings) {
+        if (strings.get(0).equals("")) {
+            Log.i(ACTIVITY_TAG, strings.get(0));
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setIcon(R.drawable.ic_add_alert_black_24dp);//设置图标
+            builder.setTitle("Merci de corriger les informations!");//设置对话框的标题
+            builder.setMessage("Veuillez-vous entrer un titre? ");//设置对话框的内容
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {  //这个是设置确定按钮
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+
+                }
+            });
+            AlertDialog b = builder.create();
+            b.show();  //必须show一下才能看到对话框，跟Toast一样的道理
+            return false;
+        }
+
+        else if (strings.get(4).equals("")) {
+            Log.i(ACTIVITY_TAG, strings.get(4));
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+            builder1.setIcon(R.drawable.ic_add_alert_black_24dp);//设置图标
+            builder1.setTitle("Merci de corriger les informations!");//设置对话框的标题
+            builder1.setMessage("Veuillez-vous entrer votre nom? ");//设置对话框的内容
+            builder1.setPositiveButton("OK", new DialogInterface.OnClickListener() {  //这个是设置确定按钮
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+
+                }
+            });
+            AlertDialog b1 = builder1.create();
+            b1.show();  //必须show一下才能看到对话框，跟Toast一样的道理
+            return false;
+        }
+        return true;
+
+    }
+
+
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (buttonView.getId()){
+        switch (buttonView.getId()) {
             case R.id.mapopener:
-                if(isChecked){
+                if (isChecked) {
                     Log.i(ACTIVITY_TAG, "Open");
                     getLocationPermission();
-                }
-                else {
+                } else {
                     mMap.clear();
                     Log.i(ACTIVITY_TAG, "Close");
                 }
@@ -238,6 +290,7 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
 
     /**
      * if we have permission, we get the location of the device
+     *
      * @param googleMap
      */
     @Override
@@ -274,10 +327,10 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
                         if (task.isSuccessful()) {
                             currentLocation = (Location) task.getResult();
 
-                            if(currentLocation!=null) {
+                            if (currentLocation != null) {
                                 latitude = currentLocation.getLatitude();
                                 longtitude = currentLocation.getLongitude();
-                                moveCamera(new LatLng(latitude,longtitude),
+                                moveCamera(new LatLng(latitude, longtitude),
                                         DEFAULT_ZOOM);
                             }
 
@@ -292,18 +345,17 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
     }
 
     /**
-     *
      * @param latLng
      * @param zoom
      */
-    private void moveCamera(LatLng latLng, float zoom){
+    private void moveCamera(LatLng latLng, float zoom) {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
 
     /**
      * show map
      */
-    private void initMap(){
+    private void initMap() {
         supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         supportMapFragment.getMapAsync(this);
     }
@@ -311,22 +363,22 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
     /**
      * get permission
      */
-    private void getLocationPermission(){
+    private void getLocationPermission() {
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION};
 
-        if(ContextCompat.checkSelfPermission(this,
-                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            if(ContextCompat.checkSelfPermission(this,
-                    COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(this,
+                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this,
+                    COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mLocationPermissionsGranted = true;
                 initMap();
-            }else{
+            } else {
                 ActivityCompat.requestPermissions(DeclarationActivity.this,
                         permissions,
                         LOCATION_PERMISSION_REQUEST_CODE);
             }
-        }else{
+        } else {
             ActivityCompat.requestPermissions(DeclarationActivity.this,
                     permissions,
                     LOCATION_PERMISSION_REQUEST_CODE);
@@ -335,7 +387,6 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
 
 
     /**
-     *
      * @param requestCode
      * @param permissions
      * @param grantResults
@@ -344,11 +395,11 @@ public class DeclarationActivity  extends AppCompatActivity implements OnMapRead
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         mLocationPermissionsGranted = false;
 
-        switch(requestCode){
-            case LOCATION_PERMISSION_REQUEST_CODE:{
-                if(grantResults.length > 0){
-                    for(int i = 0; i < grantResults.length; i++){
-                        if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
+        switch (requestCode) {
+            case LOCATION_PERMISSION_REQUEST_CODE: {
+                if (grantResults.length > 0) {
+                    for (int i = 0; i < grantResults.length; i++) {
+                        if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
                             mLocationPermissionsGranted = false;
                             return;
                         }

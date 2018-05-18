@@ -2,13 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-    android:id = "@+id/modifier"
-    android:title= "Modifier"/>
+        android:id="@+id/modifier"
+        android:icon="@drawable/ic_mode_edit_black_24dp"
+        android:title="   Modifier" />
     <item
         android:id="@+id/rapeler"
-        android:title="Téléphoner"/>
+        android:icon="@drawable/ic_call_black_24dp"
+        android:title="   Téléphoner" />
     <item
-        android:id = "@+id/delete"
-        android:title= "Supprimer"/>
+        android:id="@+id/delete"
+        android:icon="@drawable/ic_delete_black_24dp"
+        android:title="   Supprimer" />
 
 </menu>

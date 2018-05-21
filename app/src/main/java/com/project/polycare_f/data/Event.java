@@ -1,21 +1,26 @@
 package com.project.polycare_f.data;
 
+import android.nfc.Tag;
+import android.util.Log;
+
 import java.util.List;
+import java.util.logging.Logger;
 
 public class Event {
     private String title, location;
     private String category;
     private String description;
-    private String reporter;
     private String importance;
     private String state;
     private String date;
-    private String number,latitude, lontitude;
+    private String latitude, lontitude;
+    private String reporter_number, reporter;
+    private String assignee_number, assignee;
     private int id;
 
 
     public Event(int id, String title, String category, String description, String reporter, String importance, String state, String date, String number,
-                 String latitude, String lontitude, String location) {
+                 String latitude, String lontitude, String assignee, String assignee_number, String location) {
         this.title = title;
         this.category = category;
         this.description = description;
@@ -23,7 +28,9 @@ public class Event {
         this.importance = importance;
         this.state = state;
         this.date = date;
-        this.number = number;
+        this.reporter_number = number;
+        this.assignee = assignee;
+        this.assignee_number = assignee_number;
         this.id = id;
         this.latitude = latitude;
         this.lontitude = lontitude;
@@ -86,13 +93,21 @@ public class Event {
         this.date = date;
     }
 
-    public String getNumber() {
-        return number;
+    public String getReporter_number() {
+        return reporter_number;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setReporter_number(String number) {
+        this.reporter_number = number;
     }
+
+    public String getAssignee() {return assignee; }
+
+    public void setAssignee(String assignee) { this.assignee = assignee; }
+
+    public String getAssignee_number() { return assignee_number; }
+
+    public void setAssignee_number(String assignee_number) { this.assignee_number = assignee_number; }
 
     public int getId() {
         return id;

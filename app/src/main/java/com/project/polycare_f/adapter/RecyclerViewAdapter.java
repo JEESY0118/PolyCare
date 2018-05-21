@@ -72,9 +72,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 intent.putExtra("Description", data.get(position).getDescription());
                 intent.putExtra("State", data.get(position).getState());
                 intent.putExtra("Date", data.get(position).getDate());
-                intent.putExtra("Phone", data.get(position).getNumber());
+                intent.putExtra("Phone", data.get(position).getReporter_number());
                 intent.putExtra("Latitude", data.get(position).getLatitude());
                 intent.putExtra("Longtitude", data.get(position).getLontitude());
+                intent.putExtra("Assignee", data.get(position).getAssignee());
+                intent.putExtra("Assignee_Number", data.get(position).getAssignee_number());
 
                 context.startActivity(intent);
             }

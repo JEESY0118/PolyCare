@@ -9,10 +9,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -50,6 +54,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         events = helper.getAllEvent("Tout");
         createMapView();
 
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.map);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+
         return view;
     }
 
@@ -57,20 +65,28 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        //LatLng latLng = new LatLng(Double.parseDouble(), Double.parseDouble());
         for (Event e : events) {
-            double latitude = Double.parseDouble(e.getLatitude());
-            double longtitude = Double.parseDouble(e.getLontitude());
-            LatLng latLng = new LatLng(latitude, longtitude);
-            mMap.addMarker(new MarkerOptions().position(latLng).title(e.getTitle()));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-            mMap.setMinZoomPreference(16);
+            if( !e.getLatitude().equals("null") && !e.getLontitude().equals("null") && e.getLontitude()!=null && e.getLatitude()!=null) {
+                LatLng latLng = new LatLng(Double.parseDouble(e.getLatitude()), Double.parseDouble(e.getLontitude()));
+                mMap.addMarker(new MarkerOptions().position(latLng).title(ifNull(e.getLocation())));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                mMap.setMinZoomPreference(16);
+            }
         }
     }
 
     private void createMapView() {
         supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         supportMapFragment.getMapAsync(this);
+    }
+
+    private String ifNull(String s){
+        if(s==null){
+            return "Pas de description de localisation";
+        }
+        else {
+            return s;
+        }
     }
 
 }

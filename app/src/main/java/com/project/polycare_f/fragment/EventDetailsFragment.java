@@ -9,6 +9,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.MenuBuilder;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,6 +21,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,14 +36,15 @@ import com.project.polycare_f.R;
 import com.project.polycare_f.activity.MainActivity;
 import com.project.polycare_f.data.DBHelper;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class EventDetailsFragment extends Fragment implements OnMapReadyCallback, Button.OnClickListener{
-    private TextView titleview, arthorview, categoryview, importanceview, dateview, descriptionview, numberview, stateview, assignee_view, assignee_number_view;
+public class EventDetailsFragment extends Fragment implements OnMapReadyCallback, Button.OnClickListener {
+    private TextView titleview, arthorview, categoryview, importanceview, dateview, descriptionview, numberview, stateview,locationview, assignee_view, assignee_number_view;
     public static final String ACTIVITY = "debug here";
-    String title, category, description, importance, date, state, phonenumber, assignee, assignee_number;
+    String title, category, description, importance, date, state, phonenumber, location, assignee, assignee_number;
     String arthor;
     int id;
     DBHelper helper;
@@ -44,11 +52,14 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
     String latitude, longtitude;
     GoogleMap mMap;
     View view;
+    boolean isCreated = false;
     ArrayList<String> data = new ArrayList<>();
+    List<String> mTexts = new ArrayList<>();
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            view = inflater.inflate(R.layout.event_item, container, false);
+        view = inflater.inflate(R.layout.event_item, container, false);
 
         helper = new DBHelper(getContext());
         titleview = (TextView) view.findViewById(R.id.title_view);
@@ -61,6 +72,12 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
         stateview = (TextView) view.findViewById(R.id.state);
         assignee_view = (TextView) view.findViewById(R.id.assignee_view);
         assignee_number_view = (TextView) view.findViewById(R.id.assignee_phone_view);
+        locationview = (TextView) view.findViewById(R.id.location);
+
+
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.details);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
         Button button = (Button) view.findViewById(R.id.button2);
         button.setOnClickListener(this);
@@ -79,6 +96,21 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
         longtitude= intent.getExtras().getString("Longtitude");
         assignee = intent.getExtras().getString("Assignee");
         assignee_number = intent.getExtras().getString("Assignee_Number");
+        location = intent.getExtras().getString("Location");
+
+        arthorview.setText(" Arthor : " + ifNull(arthor));
+        titleview.setText(" Titre : " + ifNull(title));
+        categoryview.setText(" Catégorie : " + ifNull(category));
+        dateview.setText(" Date : " + ifNull(date));
+        descriptionview.setText(" Description : " + ifNull(description));
+        stateview.setText(" État : " + ifNull(state));
+        numberview.setText(" Téléphone : " + ifNull(phonenumber));
+        locationview.setText(" Localisation : "+ ifNull(location));
+
+        showImportance(importance);
+        createMapView();
+
+        setNewTextAfterChange();
 
         data.add(arthor);
         data.add(title);
@@ -93,6 +125,7 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
         data.add(assignee);
         data.add(assignee_number);
         data.add(String.valueOf(id));
+        data.add(location);
 
         arthorview.setText("Auteur : " + arthor);
         titleview.setText("Titre : " + title);
@@ -112,8 +145,8 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
     }
 
 
-    private void showImportance(String importance){
-        switch (importance){
+    private void showImportance(String importance) {
+        switch (importance) {
             case "Faible":
                 importanceview.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_star_faible_done, 0, 0);
                 break;
@@ -139,7 +172,7 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.modifier:
                 ChangeEventFragment changeEventFragment = ChangeEventFragment.newInstance(data);
 
@@ -158,12 +191,14 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
                         importance = texts.get(4);
                         // TODO rajouter assignee
                         createMapView();
+                        mTexts = texts;
+                        isCreated = true;
                     }
                 });
 
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragment_event, changeEventFragment,null)
+                        .replace(R.id.fragment_event, changeEventFragment, null)
                         .addToBackStack(null).commit();
                 break;
             case R.id.rapeler:
@@ -190,7 +225,7 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
             public void onClick(DialogInterface arg0, int arg1) {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_CALL);
-                intent.setData(Uri.parse("tel:"+phonenumber));
+                intent.setData(Uri.parse("tel:" + phonenumber));
                 startActivity(intent);
             }
         });
@@ -217,7 +252,7 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
                 Intent intent1 = new Intent(getContext(), MainActivity.class);
-                String sql = "delete from events where event_id= " + "'"+id+"'";
+                String sql = "delete from events where event_id= " + "'" + id + "'";
                 helper.inertOrUpdateDateBatch(sql);
                 startActivity(intent1);
             }
@@ -231,16 +266,17 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
         });
         AlertDialog b = builder.create();
         b.show();  //必须show一下才能看到对话框，跟Toast一样的道理
-
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longtitude));
-        mMap.addMarker(new MarkerOptions().position(latLng).title("I am Here"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.setMinZoomPreference(16);
+        if(!latitude.equals("null") && !latitude.equals("null")) {
+            LatLng latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longtitude));
+            mMap.addMarker(new MarkerOptions().position(latLng).title("I am Here"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            mMap.setMinZoomPreference(16);
+        }
     }
 
     private void createMapView() {
@@ -252,11 +288,62 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.button2:
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
                 break;
         }
+    }
+
+    private void setNewTextAfterChange(){
+        if (isCreated) {
+            arthor = mTexts.get(0);
+            title = mTexts.get(1);
+            category = mTexts.get(2);
+            description =mTexts.get(3);
+            importance = mTexts.get(4);
+            date = mTexts.get(5);
+            state = mTexts.get(6);
+            phonenumber = mTexts.get(7);
+            latitude = mTexts.get(8);
+            longtitude =mTexts.get(9);
+            location = mTexts.get(11);
+
+            arthorview.setText("Arthor : " + ifNull(mTexts.get(0)));
+            titleview.setText("Titre : " + ifNull(mTexts.get(1)));
+            categoryview.setText("Catégorie : " + ifNull(mTexts.get(2)));
+            descriptionview.setText("Description : " + ifNull(mTexts.get(3)));
+            dateview.setText("Date : " + ifNull(mTexts.get(5)));
+            stateview.setText("État : " + ifNull(mTexts.get(6)));
+            numberview.setText("Téléphone : " + ifNull(mTexts.get(7)));
+            latitude = mTexts.get(8);
+            longtitude = mTexts.get(9);
+            importance = mTexts.get(4);
+            locationview.setText(" Localisation : "+ifNull(location));
+
+            showImportance(importance);
+            createMapView();
+        }
+
+    }
+
+    private String ifNull(String s){
+       return s+" ";
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        if (menu != null) {
+            if (menu.getClass() == MenuBuilder.class) {
+                try {
+                    Method m = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
+                    m.setAccessible(true);
+                    m.invoke(menu, true);
+                } catch (Exception e) {
+                }
+            }
+        }
+        super.onPrepareOptionsMenu(menu);
     }
 }

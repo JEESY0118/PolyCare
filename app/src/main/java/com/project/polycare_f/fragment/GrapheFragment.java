@@ -8,12 +8,16 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.project.polycare_f.R;
 import com.project.polycare_f.data.DBHelper;
@@ -59,6 +63,10 @@ public class GrapheFragment extends Fragment implements Button.OnClickListener{
         transaction.add(R.id.chart_fragment, chartUrgence);
         transaction.commit();
         urgence.setSelected(true);
+
+        Toolbar toolbar = (Toolbar) rootview.findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.graph);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
         return rootview;
     }

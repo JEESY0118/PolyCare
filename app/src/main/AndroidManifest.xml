@@ -9,7 +9,6 @@
         android:supportsRtl="true"
         android:background="@drawable/border"
         android:theme="@style/AppTheme">
-        <uses-library android:name="com.google.android.maps"/>
         <activity android:name=".activity.MainActivity"
             android:configChanges="orientation|keyboardHidden">
             <intent-filter>
@@ -24,6 +23,7 @@
             android:label="@string/declar_activity"
             android:theme="@style/AppTheme"/>
         <activity android:name=".activity.EventActivity"></activity>
+
         <meta-data android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAh_LBhFXMO-ZGnekJkiF7gLX5PtyZRd2U"/>
 

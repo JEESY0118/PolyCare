@@ -3,6 +3,7 @@ package com.project.polycare_f.fragment;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,6 +16,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +28,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -37,14 +43,16 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.project.polycare_f.R;
+import com.project.polycare_f.activity.EventActivity;
 import com.project.polycare_f.data.DBHelper;
+import com.project.polycare_f.data.Event;
 import com.project.polycare_f.gps.GPSTracker;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
-        CompoundButton.OnCheckedChangeListener, Button.OnClickListener{
+        CompoundButton.OnCheckedChangeListener, Button.OnClickListener {
 
     private String mArgument;
     public static final String ARGUMENT = "argument";
@@ -53,10 +61,10 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
     List<String> urgences = new ArrayList<>();
     List<String> categories = new ArrayList<>();
     List<String> states = new ArrayList<>();
-    private ArrayAdapter<String> adapterUr,adapterCate,adapterSta;
-    EditText prenom, title,description, number;
+    private ArrayAdapter<String> adapterUr, adapterCate, adapterSta;
+    EditText prenom, title, description, number, mLocation;
     Spinner urg, cate, state;
-    String arthor, titre, des, phone, importance, etat, category,date,latitude, longtitude;
+    String arthor, titre, des, phone, importance, etat, category, date, latitude, longtitude, location;
     int id;
     DBHelper helper;
     SupportMapFragment supportMapFragment;
@@ -96,11 +104,16 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
         title = (EditText) view.findViewById(R.id.title_input);
         description = (EditText) view.findViewById(R.id.description_input);
         number = (EditText) view.findViewById(R.id.phone_input);
+        mLocation = (EditText) view.findViewById(R.id.location);
+
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.modifie);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
         Button button = (Button) view.findViewById(R.id.button);
         button.setOnClickListener(this);
 
-        if(getArguments()!=null){
+        if (getArguments() != null) {
             texts = getArguments().getStringArrayList("data");
             prenom.setText(texts.get(0));
             title.setText(texts.get(1));
@@ -113,6 +126,7 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
             latitude = texts.get(8);
             longtitude = texts.get(9);
             id = Integer.parseInt(texts.get(10));
+            mLocation.setText(texts.get(11));
         }
 
         createCategorySpinner();
@@ -186,46 +200,46 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
     }
 
     public void onclick() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setIcon(R.drawable.ic_add_alert_black_24dp);//设置图标
-        builder.setTitle("Validation de la modification");//设置对话框的标题
-        builder.setMessage("Vous voulez applique la modification？");//设置对话框的内容
-        builder.setPositiveButton("Appliquer", new DialogInterface.OnClickListener() {  //这个是设置确定按钮
+        if (avoidEmptyInfo(getInput())) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setIcon(R.drawable.ic_add_alert_black_24dp);//设置图标
+            builder.setTitle("Validation de la modification");//设置对话框的标题
+            builder.setMessage("Vous voulez applique la modification？");//设置对话框的内容
+            builder.setPositiveButton("Appliquer", new DialogInterface.OnClickListener() {  //这个是设置确定按钮
 
-            @Override
-            public void onClick(DialogInterface arg0, int arg1) {
-                List<String> strings = getInput();
-                String sql =
-                        "UPDATE events set event_title= " + "'"+strings.get(1)+"',"+
-                                " event_category = " + "'"+category+"',"+
-                                " event_description= " + "'"+strings.get(3)+"',"+
-                                " event_reporter= " + "'"+strings.get(0)+"',"+
-                                " event_importance= " +"'"+importance+"',"+
-                                " event_state= " +"'"+etat+"',"+
-                                " event_number= " +"'"+strings.get(7)+"',"+
-                                " event_latitude= " +"'"+strings.get(8)+"',"+
-                                " event_longtitude= " +"'"+strings.get(9)+"'"+
-                                " where event_id = "+"'"+id+"'";
-                helper.inertOrUpdateDateBatch(sql);
-                mlistener.onChoosed(getInput());
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_event, new EventDetailsFragment(),null)
-                        .addToBackStack(null).commit();
-            }
-        });
-        builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {  //取消按钮
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                    List<String> strings = getInput();
+                    String sql =
+                            "UPDATE events set event_title= " + "'" + strings.get(1) + "'," +
+                                    " event_category = " + "'" + category + "'," +
+                                    " event_description= " + "'" + strings.get(3) + "'," +
+                                    " event_reporter= " + "'" + strings.get(0) + "'," +
+                                    " event_importance= " + "'" + importance + "'," +
+                                    " event_state= " + "'" + etat + "'," +
+                                    " event_number= " + "'" + strings.get(7) + "'," +
+                                    " event_latitude= " + "'" + strings.get(8) + "'," +
+                                    " event_longtitude= " + "'" + strings.get(9) + "'," +
+                                    " event_location= " + "'" + strings.get(11) + "'" +
+                                    " where event_id = " + "'" + id + "'";
+                    helper.inertOrUpdateDateBatch(sql);
+                    mlistener.onChoosed(strings);
+                    getActivity().getSupportFragmentManager().popBackStack();
+                }
+            });
+            builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {  //取消按钮
 
-            @Override
-            public void onClick(DialogInterface arg0, int arg1) {
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
 
-            }
-        });
-        AlertDialog b = builder.create();
-        b.show();  //必须show一下才能看到对话框，跟Toast一样的道理
+                }
+            });
+            AlertDialog b = builder.create();
+            b.show();  //必须show一下才能看到对话框，跟Toast一样的道理
+        }
     }
 
-    private void setCategories(){
+    private void setCategories() {
         List<String> cates = new ArrayList<>();
         cates.add("Matériel");
         cates.add("Organisation");
@@ -234,36 +248,36 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
         cates.add("Autre");
 
         categories.add(category);
-        for (String s: cates) {
-            if(!s.equals(category)){
+        for (String s : cates) {
+            if (!s.equals(category)) {
                 categories.add(s);
             }
         }
     }
 
-    private void setUrgences(){
+    private void setUrgences() {
         List<String> urs = new ArrayList<>();
         urs.add("Faible");
         urs.add("Moyenne");
         urs.add("Elevée");
 
         urgences.add(importance);
-        for (String s: urs) {
-            if(!s.equals(importance)){
+        for (String s : urs) {
+            if (!s.equals(importance)) {
                 urgences.add(s);
             }
         }
     }
 
-    private void setEtat(){
+    private void setEtat() {
         List<String> etats = new ArrayList<>();
         etats.add("A faire");
         etats.add("En cours");
         etats.add("Résolu");
 
         states.add(etat);
-        for (String s: etats) {
-            if(!s.equals(etat)){
+        for (String s : etats) {
+            if (!s.equals(etat)) {
                 states.add(s);
             }
         }
@@ -284,23 +298,27 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
         description = (EditText) view.findViewById(R.id.description_input);
         String descriptions = description.getText().toString();
 
+        mLocation = (EditText) view.findViewById(R.id.location);
+        String location = mLocation.getText().toString();
+
         strings.add(name);
         strings.add(titre);
         strings.add(category);
-        strings.add(descriptions);
+        strings.add(ifNull(descriptions));
         strings.add(importance);
         strings.add(date);
         strings.add(etat);
         strings.add(phone);
-        if(currentLocation!=null) {
+        if (currentLocation != null) {
             strings.add(Double.toString(currentLocation.getLatitude()));
             strings.add(Double.toString(currentLocation.getLongitude()));
             strings.add(String.valueOf(id));
-        }
-        else {
+            strings.add(ifNull(location));
+        } else {
             strings.add(latitude);
             strings.add(longtitude);
             strings.add(String.valueOf(id));
+            strings.add(ifNull(location));
         }
 
         return strings;
@@ -308,15 +326,14 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (buttonView.getId()){
+        switch (buttonView.getId()) {
             case R.id.switch1:
-                if(isChecked) {
+                if (isChecked) {
                     getLocationPermission();
                     isLocated = true;
-                }
-                else{
+                } else {
                     mMap.clear();
-                    isLocated= false;
+                    isLocated = false;
                 }
                 break;
         }
@@ -354,8 +371,8 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
                         if (task.isSuccessful()) {
                             currentLocation = (Location) task.getResult();
 
-                            if(currentLocation!=null) {
-                                moveCamera(new LatLng(currentLocation.getAltitude(),currentLocation.getLongitude()),
+                            if (currentLocation != null) {
+                                moveCamera(new LatLng(currentLocation.getAltitude(), currentLocation.getLongitude()),
                                         DEFAULT_ZOOM);
                             }
 
@@ -369,31 +386,31 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    private void moveCamera(LatLng latLng, float zoom){
+    private void moveCamera(LatLng latLng, float zoom) {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
 
-    private void initMap(){
+    private void initMap() {
         supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.myMap);
         supportMapFragment.getMapAsync(this);
     }
 
-    private void getLocationPermission(){
+    private void getLocationPermission() {
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION};
 
-        if(ContextCompat.checkSelfPermission(getContext(),
-                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            if(ContextCompat.checkSelfPermission(getContext(),
-                    COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(getContext(),
+                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(getContext(),
+                    COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mLocationPermissionsGranted = true;
                 initMap();
-            }else{
+            } else {
                 ActivityCompat.requestPermissions(getActivity(),
                         permissions,
                         LOCATION_PERMISSION_REQUEST_CODE);
             }
-        }else{
+        } else {
             ActivityCompat.requestPermissions(getActivity(),
                     permissions,
                     LOCATION_PERMISSION_REQUEST_CODE);
@@ -405,11 +422,11 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         mLocationPermissionsGranted = false;
 
-        switch(requestCode){
-            case LOCATION_PERMISSION_REQUEST_CODE:{
-                if(grantResults.length > 0){
-                    for(int i = 0; i < grantResults.length; i++){
-                        if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
+        switch (requestCode) {
+            case LOCATION_PERMISSION_REQUEST_CODE: {
+                if (grantResults.length > 0) {
+                    for (int i = 0; i < grantResults.length; i++) {
+                        if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
                             mLocationPermissionsGranted = false;
                             return;
                         }
@@ -424,14 +441,14 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.button:
                 onclick();
                 break;
         }
     }
 
-    public static  ChangeEventFragment newInstance(ArrayList<String> texts){
+    public static ChangeEventFragment newInstance(ArrayList<String> texts) {
         ChangeEventFragment changeEventFragment = new ChangeEventFragment();
         Bundle bundle = new Bundle();
         bundle.putStringArrayList("data", texts);
@@ -440,11 +457,11 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
     }
 
 
-    public interface OnChooseListener{
+    public interface OnChooseListener {
         void onChoosed(List<String> texts);
     }
 
-    public void setResultListener(OnChooseListener listener){
+    public void setResultListener(OnChooseListener listener) {
         mlistener = listener;
     }
 
@@ -453,5 +470,44 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
         super.onAttach(activity);
         this.mActivity = activity;
     }
+
+    private String ifNull(String s) {
+        return s + "";
+    }
+
+    private boolean avoidEmptyInfo(List<String> strings) {
+        if (strings.get(1).equals("")) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setIcon(R.drawable.ic_add_alert_black_24dp);//设置图标
+            builder.setTitle("Merci de corriger les informations!");//设置对话框的标题
+            builder.setMessage("Veuillez-vous entrer un titre? ");//设置对话框的内容
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {  //这个是设置确定按钮
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+
+                }
+            });
+            AlertDialog b = builder.create();
+            b.show();  //必须show一下才能看到对话框，跟Toast一样的道理
+            return false;
+        } else if (strings.get(0).equals("")) {
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
+            builder1.setIcon(R.drawable.ic_add_alert_black_24dp);//设置图标
+            builder1.setTitle("Merci de corriger les informations!");//设置对话框的标题
+            builder1.setMessage("Veuillez-vous entrer votre nom? ");//设置对话框的内容
+            builder1.setPositiveButton("OK", new DialogInterface.OnClickListener() {  //这个是设置确定按钮
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+
+                }
+            });
+            AlertDialog b1 = builder1.create();
+            b1.show();  //必须show一下才能看到对话框，跟Toast一样的道理
+            return false;
+        }
+        return true;
+
+    }
+
 
 }

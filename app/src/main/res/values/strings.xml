@@ -38,5 +38,8 @@
     <string name="change_activity">Modification d\'un évènement</string>
     <string name="category">*Category :</string>
     <string name="hh">*Urgence :</string>
+    <string name="empty"> </string>
+    <string name="details">Détails d\'évènement</string>
+    <string name="modifie">Modifier un évènement</string>
 
 </resources>

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class Event {
-    private String title;
+    private String title, location;
     private String category;
     private String description;
     private String importance;
@@ -18,8 +18,9 @@ public class Event {
     private String assignee_number, assignee;
     private int id;
 
+
     public Event(int id, String title, String category, String description, String reporter, String importance, String state, String date, String number,
-                 String latitude, String lontitude, String assignee, String assignee_number) {
+                 String latitude, String lontitude, String assignee, String assignee_number, String location) {
         this.title = title;
         this.category = category;
         this.description = description;
@@ -33,6 +34,7 @@ public class Event {
         this.id = id;
         this.latitude = latitude;
         this.lontitude = lontitude;
+        this.location = location;
     }
 
     public String getTitle() {
@@ -152,5 +154,11 @@ public class Event {
         return false;
     }
 
+    public String getLocation() {
+        return location;
+    }
 
+    public void setLocation(String location) {
+        this.location = location;
+    }
 }

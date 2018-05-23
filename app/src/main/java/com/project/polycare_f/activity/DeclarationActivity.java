@@ -63,7 +63,7 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
     private ArrayAdapter<String> adapterCate;
     List<String> categories = new ArrayList<String>();
     List<String> urgences = new ArrayList<String>();
-    EditText prenom, title, description, number, location;
+    EditText prenom, title, description, number, location, assignee_name, assignee_number;
     private Switch aSwitch;
     SupportMapFragment supportMapFragment;
     Location currentLocation;
@@ -171,10 +171,11 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
                     List<String> strings = getInput();
                     String sql = "\n" +
                             "INSERT INTO events (event_title, event_category, event_description,event_reporter ," +
-                            "event_importance,event_state, event_date,event_number, event_latitude, event_longtitude, event_location)\n" +
+                            "event_importance,event_state, event_date,event_number, event_latitude, event_longtitude, event_assignee, event_assignee_number, event_location)\n" +
                             "VALUES('" + strings.get(0) + "','" + cate + "','" + strings.get(1) + "','" + strings.get(4) + "','" +
                             urg + "','" + strings.get(5) + "','" + strings.get(3) + "','" + strings.get(2) +
-                            "','" + strings.get(6) + "','" + strings.get(7) + "','" + strings.get(8) + "');";
+                            "','" + strings.get(6) + "','" + strings.get(7) + "','" + strings.get(8) + "','" +
+                            strings.get(9) + "','" + strings.get(10) + "');";
                     Log.i(ACTIVITY_TAG, sql);
                     helper.inertOrUpdateDateBatch(sql);
                     Toast.makeText(DeclarationActivity.this, "Réussi", Toast.LENGTH_SHORT).show();
@@ -212,6 +213,12 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
         number = (EditText) findViewById(R.id.phone_input);
         String phone = number.getText().toString();
 
+        assignee_name = (EditText) findViewById(R.id.assignee_name_input);
+        String assignee = assignee_name.getText().toString();
+
+        assignee_number = (EditText) findViewById(R.id.assignee_phone_input);
+        String assignee_phone = assignee_number.getText().toString();
+
 
         description = (EditText) findViewById(R.id.description_input);
         String descriptions = description.getText().toString();
@@ -229,6 +236,8 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
         strings.add(etat);
         strings.add(Double.toString(latitude));
         strings.add(Double.toString(longtitude));
+        strings.add(assignee);
+        strings.add(assignee_phone);
         strings.add(pos);
 
         return strings;

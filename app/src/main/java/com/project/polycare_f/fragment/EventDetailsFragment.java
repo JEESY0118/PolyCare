@@ -179,7 +179,7 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
                 changeEventFragment.setResultListener(new ChangeEventFragment.OnChooseListener() {
                     @Override
                     public void onChoosed(List<String> texts) {
-                        arthorview.setText("Arthor : " + texts.get(0));
+                        arthorview.setText("Author : " + texts.get(0));
                         titleview.setText("Titre : " + texts.get(1));
                         categoryview.setText("Catégorie : " + texts.get(2));
                         descriptionview.setText("Description : " + texts.get(3));
@@ -189,6 +189,7 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
                         latitude = texts.get(8);
                         longtitude = texts.get(9);
                         importance = texts.get(4);
+                        //assignee_view.setText("Destinataire : "+texts.get());
                         // TODO rajouter assignee
                         createMapView();
                         mTexts = texts;

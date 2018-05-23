@@ -60,8 +60,10 @@
                     android:id="@+id/Spinner_category"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="1"
                     android:background="@android:drawable/btn_dropdown"
+                    android:spinnerMode="dialog"
                     tools:layout_editor_absoluteX="0dp"
                     tools:layout_editor_absoluteY="1dp">
 
@@ -88,8 +90,10 @@
                     android:id="@+id/Spinner_urgence"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="1"
                     android:background="@android:drawable/btn_dropdown"
+                    android:spinnerMode="dialog"
                     tools:layout_editor_absoluteX="0dp"
                     tools:layout_editor_absoluteY="1dp">
 
@@ -134,6 +138,34 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/assignee_name_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:hint="@string/destinataire"
+                    android:inputType="text" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/assignee_phone_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:hint="@string/destinataire_telephone"
+                    android:inputType="phone" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_weight="1">
 
@@ -141,24 +173,12 @@
                     android:id="@+id/phone_input"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:hint="@string/t_l_phone"
                     android:inputType="phone" />
 
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/assignee_name_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="@string/destinataire"
-                    android:inputType="text" />
-
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/assignee_phone_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="@string/destinataire_telephone"
-                    android:inputType="phone" />
-
             </android.support.design.widget.TextInputLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"

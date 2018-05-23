@@ -66,7 +66,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         for (Event e : events) {
-            if( !e.getLatitude().equals("null") && !e.getLontitude().equals("null") && e.getLontitude()!=null && e.getLatitude()!=null) {
+            if(e.getLontitude()!=null && e.getLatitude()!=null  && !e.getLatitude().equals("null") && !e.getLontitude().equals("null")) {
                 LatLng latLng = new LatLng(Double.parseDouble(e.getLatitude()), Double.parseDouble(e.getLontitude()));
                 mMap.addMarker(new MarkerOptions().position(latLng).title(ifNull(e.getLocation())));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));

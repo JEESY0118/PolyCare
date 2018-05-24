@@ -28,7 +28,7 @@ import java.util.List;
  * 用来管理数据，把数据和前端连到一起，是一个展示数据的载体
  */
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> implements ItemMoveAdapater{
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> implements ItemMoveAdapater {
 
     public static final String ACTIVITY = "RecyclerView: ";
     private Context context;
@@ -48,11 +48,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         View view;
         //用来加载布局
         LayoutInflater inflater = LayoutInflater.from(context);
-        if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            view = inflater.inflate(R.layout.card_view_land, parent, false);
-        } else {
-            view = inflater.inflate(R.layout.card_view, parent, false);
-        }
+        view = inflater.inflate(R.layout.card_view, parent, false);
 
 
         return new MyViewHolder(view);
@@ -139,7 +135,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
      * dans holder, we find the view by id, in cardview_item.xml
      */
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView title,date, circle, state;
+        TextView title, date, circle, state;
         CardView cardView;
 
         public MyViewHolder(View itemView) {

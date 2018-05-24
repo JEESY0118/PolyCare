@@ -5,8 +5,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -21,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -54,13 +58,16 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
     List<String> categories = new ArrayList<String>();
     List<String> urgences = new ArrayList<String>();
     EditText prenom, title, description, number, location , assignee_name, assignee_number;
+    ImageButton contact_choose;
     Switch aSwitch, locationCustomer;
     SupportMapFragment supportMapFragment;
     Location currentLocation;
+    String assignee, assignee_phone;
     GoogleMap mMap;
     int numberOfEvents;
     Button button;
     Marker marker;
+    public static final int RESULT_PICK_CONTACT = 1;
 
     private static final String TAG = "MapActivity";
 
@@ -91,6 +98,8 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
 
         locationCustomer = findViewById(R.id.locationCustomer);
         locationCustomer.setOnCheckedChangeListener(this);
+        assignee_name = (EditText) findViewById(R.id.assignee_name_input);
+        assignee_number = (EditText) findViewById(R.id.assignee_phone_input);
 
         button = findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -101,11 +110,53 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
             }
         });
 
+        contact_choose = (ImageButton) findViewById(R.id.import_contact_button);
+        contact_choose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                choose_contact();
+            }
+        });
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
         numberOfEvents = intent.getExtras().getInt("Number");
+    }
+
+    private void choose_contact() {
+        Intent i=new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts"));
+        i.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
+        startActivityForResult(i,RESULT_PICK_CONTACT);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case RESULT_PICK_CONTACT:
+                    Cursor cursor = null;
+                    try {
+
+                        Uri uri = data.getData();
+                        cursor = getContentResolver().query(uri, null, null, null, null);
+                        cursor.moveToFirst();
+                        int  phoneIndex =cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                        int  nameIndex =cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+                        assignee_phone = cursor.getString(phoneIndex);
+                        assignee = cursor.getString(nameIndex);
+
+                        assignee_name.setText(assignee);
+                        assignee_number.setText(assignee_phone);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+            }
+        } else {
+            Log.e("Failed", "Not able to pick contact");
+        }
     }
 
     private void createUrgenceSpinner() {

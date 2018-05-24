@@ -6,10 +6,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
-import com.google.android.gms.maps.SupportMapFragment;
 import com.project.polycare_f.R;
 import com.project.polycare_f.fragment.EventDetailsFragment;
-import com.project.polycare_f.fragment.HomePageFragment;
 
 public class EventActivity extends AppCompatActivity{
     FragmentManager fragmentManager;

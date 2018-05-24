@@ -50,7 +50,6 @@ import com.project.polycare_f.R;
 import com.project.polycare_f.activity.EventActivity;
 import com.project.polycare_f.data.DBHelper;
 import com.project.polycare_f.data.Event;
-import com.project.polycare_f.gps.GPSTracker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +74,6 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
     int id;
     DBHelper helper;
     SupportMapFragment supportMapFragment;
-    GPSTracker gpsTracker;
     Location currentLocation;
     GoogleMap mMap;
     boolean isLocated = false;
@@ -102,7 +100,6 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.change_event_item, container, false);
-        Log.d("TAAAAAAAAAAGGGGGGGGGG","*****************");
 
 
         helper = new DBHelper(getContext());

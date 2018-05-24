@@ -30,6 +30,18 @@
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
                 app:titleTextColor="@color/cardview_light_background">
 
+                <ImageView
+                    android:id="@+id/button"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginLeft="310dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_send_black_24dp"
+                    android:onClick="onclick"
+                    android:text="@string/button" />
+
             </android.support.v7.widget.Toolbar>
 
             <TextView
@@ -260,39 +272,6 @@
                     android:id="@+id/map_layout"
                     android:layout_width="match_parent"
                     android:layout_height="300dp">
-
-                    <fragment
-                        android:id="@+id/map"
-                        class="com.google.android.gms.maps.SupportMapFragment"
-                        android:layout_width="match_parent"
-                        android:layout_height="350dp"
-                        android:layout_marginTop="-100dp"
-                        android:layout_marginBottom="-100dp"
-                        android:name="com.google.android.gms.maps.MapFragment"/>
-
-                    <ImageView
-                        android:id="@+id/transparent_image"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="#00000000" />
-
-                </RelativeLayout>
-
-
-                <Button
-                    android:id="@+id/button"
-                    style="@android:style/Widget.Material.Light.Button.Toggle"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="2dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_weight="1"
-                    android:background="?android:attr/statusBarColor"
-                    android:onClick="onclick"
-                    android:text="@string/button"
-                    android:textColor="#FFFFFF"
-                    tools:text="Valider" />
-
 
             </LinearLayout>
 

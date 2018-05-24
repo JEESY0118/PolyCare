@@ -343,6 +343,7 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
                 Log.i(ACTIVITY_TAG, "Open");
                 getLocationPermission();
                 locationCustomer.setVisibility(View.VISIBLE);
+
             } else {
                 mMap.clear();
                 locationCustomer.setVisibility(View.GONE);
@@ -356,6 +357,7 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
                 mMap.setOnMarkerDragListener(this);
                 marker = mMap.addMarker(new MarkerOptions().position(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())));
                 marker.setVisible(true);
+
                 marker.setDraggable(true);
             } else {
                 marker.setVisible(false);

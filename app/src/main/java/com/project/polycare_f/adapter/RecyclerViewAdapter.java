@@ -8,6 +8,7 @@ import android.content.res.Configuration;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,7 +105,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             case "Elevée":
                 holder.circle.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_star_elevee_done, 0, 0);
                 break;
-
         }
     }
 
@@ -124,11 +124,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onItemDelete(int position) {
-        data.remove(position);
-        notifyItemRemoved(position);
-        Toast.makeText(context, "Vous avez supprimé un évènement", Toast.LENGTH_SHORT).show();
-        String sql = "delete from events where event_id= " + "'" +  data.get(position-1).getId() + "'";
-        helper.inertOrUpdateDateBatch(sql);
+            data.remove(position);
+            notifyItemRemoved(position);
+            Toast.makeText(context, "Vous avez supprimé un évènement", Toast.LENGTH_SHORT).show();
+            Log.i("RecyclerView", "Position : " + position);
+//            String sql = "delete from events where event_id= " + "'" + data.get(position).getId() + "'";
+//            helper.inertOrUpdateDateBatch(sql);
     }
 
     /**

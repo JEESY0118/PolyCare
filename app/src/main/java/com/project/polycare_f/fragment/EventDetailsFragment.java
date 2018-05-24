@@ -106,6 +106,8 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
         stateview.setText(" État : " + ifNull(state));
         numberview.setText(" Téléphone : " + ifNull(phonenumber));
         locationview.setText(" Localisation : "+ ifNull(location));
+        assignee_view.setText(" Destinataire : " + ifNull(assignee));
+        assignee_number_view.setText(" Téléphone du destinataire : "+ifNull(assignee_number));
 
         showImportance(importance);
         createMapView();
@@ -189,9 +191,10 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
                         latitude = texts.get(8);
                         longtitude = texts.get(9);
                         importance = texts.get(4);
-                        assignee_view.setText("Destinataire : "+texts.get(10));
-                        assignee_number_view.setText("Numéros du destinataire : "+texts.get(11));
-                        // TODO rajouter assignee
+                        assignee_view.setText("Destinataire : "+texts.get(12));
+                        assignee_number_view.setText("Numéros du destinataire : "+texts.get(13));
+                        id = Integer.parseInt(texts.get(10));
+                        locationview.setText(texts.get(11));
                         createMapView();
                         mTexts = texts;
                         isCreated = true;
@@ -298,18 +301,18 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
         }
     }
 
-    private void setNewTextAfterChange(){
+    private void setNewTextAfterChange() {
         if (isCreated) {
             arthor = mTexts.get(0);
             title = mTexts.get(1);
             category = mTexts.get(2);
-            description =mTexts.get(3);
+            description = mTexts.get(3);
             importance = mTexts.get(4);
             date = mTexts.get(5);
             state = mTexts.get(6);
             phonenumber = mTexts.get(7);
             latitude = mTexts.get(8);
-            longtitude =mTexts.get(9);
+            longtitude = mTexts.get(9);
             assignee = mTexts.get(12);
             assignee_number = mTexts.get(13);
             location = mTexts.get(11);
@@ -324,15 +327,15 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
             latitude = mTexts.get(8);
             longtitude = mTexts.get(9);
             importance = mTexts.get(4);
-            assignee_view.setText("Destinataire : "+ifNull(mTexts.get(10)));
-            assignee_number_view.setText("Numéros du destinataire : "+ifNull(mTexts.get(11)));
-            // TODO recuperer les infos
-            locationview.setText(" Localisation : "+ifNull(location));
+            id = Integer.parseInt(mTexts.get(10));
+            assignee_view.setText("Destinataire : " + ifNull(mTexts.get(12)));
+            assignee_number_view.setText("Numéros du destinataire : " + ifNull(mTexts.get(13)));
+            locationview.setText(" Localisation : " + ifNull(mTexts.get(11)));
 
             showImportance(importance);
             createMapView();
-        }
 
+        }
     }
 
     private String ifNull(String s){

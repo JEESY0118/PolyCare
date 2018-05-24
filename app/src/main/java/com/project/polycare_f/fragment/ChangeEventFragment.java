@@ -333,8 +333,8 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
             strings.add(String.valueOf(id));
             strings.add(ifNull(location));
         }
-        strings.add(assignee);
-        strings.add(assignee_number);
+        strings.add(ifNull(assignee));
+        strings.add(ifNull(assignee_number));
 
         return strings;
     }

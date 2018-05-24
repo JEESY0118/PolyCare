@@ -53,7 +53,7 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
     private ArrayAdapter<String> adapterCate;
     List<String> categories = new ArrayList<String>();
     List<String> urgences = new ArrayList<String>();
-    EditText prenom, title, description, number, location;
+    EditText prenom, title, description, number, location, assignee_name, assignee_number;
     private Switch aSwitch, locationCustomer;
     SupportMapFragment supportMapFragment;
     Location currentLocation;

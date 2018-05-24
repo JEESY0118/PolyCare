@@ -42,11 +42,10 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="20dp"
                     android:layout_weight="0"
-                    android:text="Déclarer un incident"
+                    android:text="Détails d'un incident"
                     android:textColor="@color/cardview_light_background"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-                
+                    android:textSize="18sp" />
+
             </android.support.v7.widget.Toolbar>
 
 
@@ -111,6 +110,7 @@
                 tools:text="Reportaire : " />
 
             <LinearLayout
+                android:id="@+id/author_number_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0"
@@ -143,6 +143,7 @@
                 tools:text="Destinataire : " />
 
             <LinearLayout
+                android:id="@+id/assignee_number_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0"

@@ -119,20 +119,20 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
 
         setNewTextAfterChange();
 
-        data.add(arthor);
-        data.add(title);
-        data.add(category);
-        data.add(description);
-        data.add(importance);
-        data.add(date);
-        data.add(state);
-        data.add(author_phoneNumber);
-        data.add(latitude);
-        data.add(longtitude);
-        data.add(assignee);
-        data.add(assignee_number);
+        data.add(ifNull(arthor));
+        data.add(ifNull(title));
+        data.add(ifNull(category));
+        data.add(ifNull(description));
+        data.add(ifNull(importance));
+        data.add(ifNull(date));
+        data.add(ifNull(state));
+        data.add(ifNull(author_phoneNumber));
+        data.add(ifNull(latitude));
+        data.add(ifNull(longtitude));
+        data.add(ifNull(assignee));
+        data.add(ifNull(assignee_number));
         data.add(String.valueOf(id));
-        data.add(location);
+        data.add(ifNull(location));
 
         arthorview.setText("Auteur : " + arthor);
         titleview.setText("Titre : " + title);
@@ -143,6 +143,19 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
         numberview.setText("Téléphone du: " + author_phoneNumber);
         assignee_view.setText("Destinataire : "+assignee);
         assignee_number_view.setText("Numéro du destinataire : "+assignee_number);
+
+        if (toHide(arthor))arthorview.setVisibility(View.GONE);
+        if (toHide(title))titleview.setVisibility(View.GONE);
+        if (toHide(category))categoryview.setVisibility(View.GONE);
+        if (toHide(date))dateview.setVisibility(View.GONE);
+        if (toHide(description))descriptionview.setVisibility(View.GONE);
+        if (toHide(state))stateview.setVisibility(View.GONE);
+        if (toHide(author_phoneNumber))view.findViewById(R.id.author_number_container).setVisibility(View.GONE);
+        if (toHide(assignee))assignee_view.setVisibility(View.GONE);
+        if (toHide(assignee_number))view.findViewById(R.id.assignee_number_container).setVisibility(View.GONE);
+        if(toHide(location))locationview.setVisibility(View.GONE);
+
+
 
 
         showImportance(importance);
@@ -200,21 +213,27 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
                 changeEventFragment.setResultListener(new ChangeEventFragment.OnChooseListener() {
                     @Override
                     public void onChoosed(List<String> texts) {
-                        arthorview.setText("Author : " + texts.get(0));
-                        titleview.setText("Titre : " + texts.get(1));
-                        categoryview.setText("Catégorie : " + texts.get(2));
-                        descriptionview.setText("Description : " + texts.get(3));
-                        dateview.setText("Date : " + texts.get(5));
-                        stateview.setText("État : " + texts.get(6));
-                        numberview.setText("Téléphone : " + texts.get(7));
-                        latitude = texts.get(8);
-                        longtitude = texts.get(9);
-                        importance = texts.get(4);
-                        assignee_view.setText("Destinataire : "+texts.get(12));
-                        assignee_number_view.setText("Numéros du destinataire : "+texts.get(13));
+                        arthorview.setText("Author : " + ifNull(texts.get(0)));
+                        titleview.setText("Titre : " + ifNull(texts.get(1)));
+                        categoryview.setText("Catégorie : " + ifNull(texts.get(2)));
+                        descriptionview.setText("Description : " + ifNull(texts.get(3)));
+                        dateview.setText("Date : " + ifNull(texts.get(5)));
+                        stateview.setText("État : " + ifNull(texts.get(6)));
+                        numberview.setText("Téléphone : " + ifNull(texts.get(7)));
+                        latitude = ifNull(texts.get(8));
+                        longtitude = ifNull(texts.get(9));
+                        importance = ifNull(texts.get(4));
+                        assignee_view.setText("Destinataire : "+ifNull(texts.get(12)));
+                        assignee_number_view.setText("Numéros du destinataire : "+ifNull(texts.get(13)));
                         id = Integer.parseInt(texts.get(10));
-                        locationview.setText(texts.get(11));
+                        locationview.setText(ifNull(texts.get(11)));
                         createMapView();
+
+                        mTexts.clear();
+                        for (String s: texts) {
+                            s = ifNull(s);
+                            mTexts.add(s);
+                        }
                         mTexts = texts;
                         isCreated = true;
                     }
@@ -295,8 +314,13 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        if(!latitude.equals("null") && !longtitude.equals("null") &&
-                !latitude.equals("") && !longtitude.equals("")) {
+        if(!latitude.equals("\"null\"") && !longtitude.equals("\"null\"") &&
+                !latitude.equals("") && !longtitude.equals("")
+                && !latitude.equals("null ") && !longtitude.equals("null ")
+        && !latitude.equals("null") && !longtitude.equals("null")){
+            Log.i("TAAGG",latitude);
+            Log.i("TAAGG",""+(!latitude.equals("null")));
+            Log.i("TAAGG",longtitude);
             LatLng latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longtitude));
             mMap.addMarker(new MarkerOptions().position(latLng).title("I am Here"));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -305,7 +329,10 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
     }
 
     private void createMapView() {
-        if (longtitude != null && latitude != null) {
+        if (longtitude != null && latitude != null &&
+                !latitude.equals("\"null\"") && !longtitude.equals("\"null\"") &&
+                !latitude.equals("") && !longtitude.equals("")
+                && !latitude.equals("null") && !longtitude.equals("null")) {
             supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.myMap);
             supportMapFragment.getMapAsync(this);
         }
@@ -338,6 +365,7 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
             location = mTexts.get(11);
 
             arthorview.setText("Arthor : " + ifNull(mTexts.get(0)));
+            arthorview.setVisibility(View.GONE);
             titleview.setText("Titre : " + ifNull(mTexts.get(1)));
             categoryview.setText("Catégorie : " + ifNull(mTexts.get(2)));
             descriptionview.setText("Description : " + ifNull(mTexts.get(3)));
@@ -359,7 +387,7 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
     }
 
     private String ifNull(String s){
-       return s+" ";
+       return s+"";
     }
 
     @Override
@@ -375,5 +403,9 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
             }
         }
         super.onPrepareOptionsMenu(menu);
+    }
+
+    private boolean toHide(String s){
+        return s == null || s.equals(" ") || s.equals("") || s.equals("null");
     }
 }

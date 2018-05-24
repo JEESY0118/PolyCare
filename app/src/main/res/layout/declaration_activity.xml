@@ -29,6 +29,17 @@
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
                 app:titleTextColor="@color/cardview_light_background">
 
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:layout_weight="0"
+                    android:text="Déclarer un incident"
+                    android:textColor="@color/cardview_light_background"
+                    android:textSize="18sp" />
+
+
                 <ImageView
                     android:id="@+id/button"
                     android:layout_width="50dp"

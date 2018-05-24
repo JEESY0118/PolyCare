@@ -115,6 +115,7 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
         });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Déclarer un incident");
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();

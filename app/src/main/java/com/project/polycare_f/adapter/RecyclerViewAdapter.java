@@ -127,8 +127,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         data.remove(position);
         notifyItemRemoved(position);
         Toast.makeText(context, "Vous avez supprimé un évènement", Toast.LENGTH_SHORT).show();
-//        String sql = "delete from events where event_id= " + "'" +  data.get(position).getId() + "'";
-//        helper.inertOrUpdateDateBatch(sql);
+        String sql = "delete from events where event_id= " + "'" +  data.get(position-1).getId() + "'";
+        helper.inertOrUpdateDateBatch(sql);
     }
 
     /**

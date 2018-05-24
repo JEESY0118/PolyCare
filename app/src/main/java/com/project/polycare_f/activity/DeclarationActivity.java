@@ -53,8 +53,8 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
     private ArrayAdapter<String> adapterCate;
     List<String> categories = new ArrayList<String>();
     List<String> urgences = new ArrayList<String>();
-    EditText prenom, title, description, number, location, assignee_name, assignee_number;
-    private Switch aSwitch, locationCustomer;
+    EditText prenom, title, description, number, location , assignee_name, assignee_number;
+    Switch aSwitch, locationCustomer;
     SupportMapFragment supportMapFragment;
     Location currentLocation;
     GoogleMap mMap;
@@ -230,14 +230,17 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
         strings.add(name);//4
         strings.add(etat);
 
-        if(!marker.isVisible()) {
-            Log.d(TAG,"RESULTAT SANS MARKER"+Double.toString(currentLocation.getLongitude()));
+        if(marker!=null){
+                if(!marker.isVisible()) {
+                    strings.add(Double.toString(currentLocation.getLatitude()));
+                    strings.add(Double.toString(currentLocation.getLongitude()));
+                }else{
+                    strings.add(Double.toString(marker.getPosition().latitude));
+                    strings.add(Double.toString(marker.getPosition().longitude));
+                }
+        }else {
             strings.add(Double.toString(currentLocation.getLatitude()));
             strings.add(Double.toString(currentLocation.getLongitude()));
-        }else{
-            Log.d(TAG,"RESULTAT AVEC MARKER"+Double.toString(marker.getPosition().longitude));
-            strings.add(Double.toString(marker.getPosition().latitude));
-            strings.add(Double.toString(marker.getPosition().longitude));
         }
         strings.add(assignee);
         strings.add(assignee_phone);
@@ -301,11 +304,12 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
                 mMap.clear();
                 locationCustomer.setVisibility(View.GONE);
                 Log.i(ACTIVITY_TAG, "Close");
+                marker.setVisible(false);
             }
         }
         if(buttonView.getId()==R.id.locationCustomer){
             if(isChecked) {
-                getLocationPermission();
+                getLocationPermission ();
                 mMap.setOnMarkerDragListener(this);
                 marker = mMap.addMarker(new MarkerOptions().position(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())));
                 marker.setVisible(true);

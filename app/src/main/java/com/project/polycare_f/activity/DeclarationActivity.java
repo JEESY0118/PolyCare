@@ -1,13 +1,10 @@
 package com.project.polycare_f.activity;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,19 +14,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -41,20 +32,19 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.project.polycare_f.R;
 import com.project.polycare_f.data.DBHelper;
-import com.project.polycare_f.data.Event;
-import com.project.polycare_f.gps.GPSTracker;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class DeclarationActivity extends AppCompatActivity implements OnMapReadyCallback, CompoundButton.OnCheckedChangeListener {
+public class DeclarationActivity extends AppCompatActivity implements OnMapReadyCallback, CompoundButton.OnCheckedChangeListener, GoogleMap.OnMarkerDragListener {
     private static final String ACTIVITY_TAG = "LogDemo";
     private DBHelper helper;
     private Spinner spinner, cateSpinner;
@@ -63,18 +53,18 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
     private ArrayAdapter<String> adapterCate;
     List<String> categories = new ArrayList<String>();
     List<String> urgences = new ArrayList<String>();
-    EditText prenom, title, description, number, location, assignee_name, assignee_number;
-    private Switch aSwitch;
+    EditText prenom, title, description, number, location;
+    private Switch aSwitch, locationCustomer;
     SupportMapFragment supportMapFragment;
     Location currentLocation;
-    double latitude, longtitude;
     GoogleMap mMap;
     int numberOfEvents;
     Button button;
+    Marker marker;
 
     private static final String TAG = "MapActivity";
 
-    private Boolean mLocationPermissionsGranted = false;
+    private Boolean getLocationPermision = false;
     private FusedLocationProviderClient mFusedLocationProviderClient;
 
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
@@ -95,11 +85,16 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
         helper = new DBHelper(this);
         createUrgenceSpinner();
         createCategorySpinner();
-        aSwitch = (Switch) findViewById(R.id.mapopener);
+
+        aSwitch = findViewById(R.id.mapopener);
         aSwitch.setOnCheckedChangeListener(this);
 
-        button = (Button) findViewById(R.id.button);
+        locationCustomer = findViewById(R.id.locationCustomer);
+        locationCustomer.setOnCheckedChangeListener(this);
+
+        button = findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 onclick(view);
@@ -234,8 +229,16 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
         strings.add(date);
         strings.add(name);//4
         strings.add(etat);
-        strings.add(Double.toString(latitude));
-        strings.add(Double.toString(longtitude));
+
+        if(!marker.isVisible()) {
+            Log.d(TAG,"RESULTAT SANS MARKER"+Double.toString(currentLocation.getLongitude()));
+            strings.add(Double.toString(currentLocation.getLatitude()));
+            strings.add(Double.toString(currentLocation.getLongitude()));
+        }else{
+            Log.d(TAG,"RESULTAT AVEC MARKER"+Double.toString(marker.getPosition().longitude));
+            strings.add(Double.toString(marker.getPosition().latitude));
+            strings.add(Double.toString(marker.getPosition().longitude));
+        }
         strings.add(assignee);
         strings.add(assignee_phone);
         strings.add(pos);
@@ -248,8 +251,8 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
             Log.i(ACTIVITY_TAG, strings.get(0));
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setIcon(R.drawable.ic_add_alert_black_24dp);//设置图标
-            builder.setTitle("Merci de corriger les informations!");//设置对话框的标题
-            builder.setMessage("Veuillez-vous entrer un titre? ");//设置对话框的内容
+            builder.setTitle("Merci de corriger les informations");//设置对话框的标题
+            builder.setMessage("Veuillez entrer un titre");//设置对话框的内容
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {  //这个是设置确定按钮
                 @Override
                 public void onClick(DialogInterface arg0, int arg1) {
@@ -278,78 +281,99 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
             return false;
         }
         return true;
-
     }
 
 
+
+    /**
+     * @param buttonView the button from wich the method is called
+     * @param isChecked the current button value
+     *        if isChecked is true we need to get the location
+     */
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (buttonView.getId()) {
-            case R.id.mapopener:
-                if (isChecked) {
-                    Log.i(ACTIVITY_TAG, "Open");
-                    getLocationPermission();
-                } else {
-                    mMap.clear();
-                    Log.i(ACTIVITY_TAG, "Close");
-                }
-                break;
+        if(buttonView.getId()==R.id.mapopener){
+            if (isChecked) {
+                Log.i(ACTIVITY_TAG, "Open");
+                getLocationPermission();
+                locationCustomer.setVisibility(View.VISIBLE);
+            } else {
+                mMap.clear();
+                locationCustomer.setVisibility(View.GONE);
+                Log.i(ACTIVITY_TAG, "Close");
+            }
+        }
+        if(buttonView.getId()==R.id.locationCustomer){
+            if(isChecked) {
+                getLocationPermission();
+                mMap.setOnMarkerDragListener(this);
+                marker = mMap.addMarker(new MarkerOptions().position(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())));
+                marker.setVisible(true);
+                marker.setDraggable(true);
+            }
+            else{
+                marker.setVisible(false);
+            }
         }
     }
 
     /**
-     * if we have permission, we get the location of the device
+     * show map ,
+     * OnReadyMap will be called asynchronously
+     */
+    private void initMap() {
+        supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        supportMapFragment.getMapAsync(this);
+    }
+
+
+
+    /**
+     * @param googleMap the GoogleMap object
+     *        Method called when the map called by initMap has finished instanciation.
      *
-     * @param googleMap
+     *        check the permisions for getting the location
+     *        set the object values if it is permitted
      */
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        Toast.makeText(this, "Map is prête", Toast.LENGTH_SHORT).show();
+    public void onMapReady(GoogleMap googleMap){
         mMap = googleMap;
-
-        if (mLocationPermissionsGranted) {
-            getDeviceLocation();
-
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
+        getDeviceLocation();
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED)
+        {
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
         }
     }
+
 
     /**
      * get location of device
      */
     private void getDeviceLocation() {
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(DeclarationActivity.this);
-
         try {
-            if (mLocationPermissionsGranted) {
-
+            if (getLocationPermision) {
                 final Task location = mFusedLocationProviderClient.getLastLocation();
-                location.addOnCompleteListener(new OnCompleteListener() {
+                location.addOnCompleteListener(new OnCompleteListener() { // quand on a eu la position exacte
                     @Override
                     public void onComplete(@NonNull Task task) {
                         if (task.isSuccessful()) {
                             currentLocation = (Location) task.getResult();
-
                             if (currentLocation != null) {
-                                latitude = currentLocation.getLatitude();
-                                longtitude = currentLocation.getLongitude();
-                                moveCamera(new LatLng(latitude, longtitude),
-                                        DEFAULT_ZOOM);
+                                moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM);
                             }
-
                         } else {
-                            Toast.makeText(DeclarationActivity.this, "impossible de to trouver la localisation", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DeclarationActivity.this, "Impossible de trouver la localisation", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
             }
         } catch (SecurityException e) {
+            Log.i(ACTIVITY_TAG,e.getStackTrace().toString());
         }
     }
 
@@ -362,63 +386,52 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
     }
 
     /**
-     * show map
-     */
-    private void initMap() {
-        supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        supportMapFragment.getMapAsync(this);
-    }
-
-    /**
-     * get permission
+     * va voir dans ContextConpat si on a les permissions pour la localisation
+     * si oui lance initMap
      */
     private void getLocationPermission() {
-        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION};
-
-        if (ContextCompat.checkSelfPermission(this,
-                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            if (ContextCompat.checkSelfPermission(this,
-                    COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                mLocationPermissionsGranted = true;
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+        if (ContextCompat.checkSelfPermission(this, FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            && ContextCompat.checkSelfPermission(this, COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                getLocationPermision = true;
                 initMap();
-            } else {
-                ActivityCompat.requestPermissions(DeclarationActivity.this,
-                        permissions,
-                        LOCATION_PERMISSION_REQUEST_CODE);
-            }
         } else {
-            ActivityCompat.requestPermissions(DeclarationActivity.this,
-                    permissions,
-                    LOCATION_PERMISSION_REQUEST_CODE);
+            ActivityCompat.requestPermissions(DeclarationActivity.this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
         }
     }
 
-
     /**
-     * @param requestCode
-     * @param permissions
-     * @param grantResults
+     * @param requestCode ?
+     * @param permissions the asked permissions
+     * @param grantResults the answers
+     *
+     * check if every answer is granteed, if they are , pass getLocationPermission to true.
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        mLocationPermissionsGranted = false;
-
-        switch (requestCode) {
-            case LOCATION_PERMISSION_REQUEST_CODE: {
-                if (grantResults.length > 0) {
-                    for (int i = 0; i < grantResults.length; i++) {
-                        if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                            mLocationPermissionsGranted = false;
-                            return;
-                        }
-                    }
-                    mLocationPermissionsGranted = true;
-                    //initialize our map
-                    initMap();
+        getLocationPermision = false;
+        if (requestCode==LOCATION_PERMISSION_REQUEST_CODE && grantResults.length > 0) {
+            for(Integer i:grantResults) {
+                if (i != PackageManager.PERMISSION_GRANTED) {
+                    getLocationPermision = false;
+                    return;
                 }
             }
+            getLocationPermision = true;
         }
     }
+    @Override
+    public void onMarkerDrag(Marker marker){
+        marker.getPosition();
+    }
+    @Override
+    public void onMarkerDragStart(Marker marker){
+        marker.getPosition();
 
+    }
+    @Override
+    public void onMarkerDragEnd(Marker marker){
+        marker.getPosition();
+
+    }
 }

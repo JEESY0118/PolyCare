@@ -221,11 +221,20 @@
                     android:text="@string/partagez_votre_localisation"
                     android:textSize="16sp" />
 
+                <Switch
+                    android:id="@+id/locationCustomer"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:text="Déplacer le point"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
+
                 <fragment
                     android:id="@+id/map"
                     class="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="350dp"
                     android:layout_weight="1" />
 
                 <Button

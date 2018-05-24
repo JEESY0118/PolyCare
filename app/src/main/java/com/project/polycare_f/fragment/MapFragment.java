@@ -26,6 +26,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -66,9 +67,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         for (Event e : events) {
-            if(e.getLontitude()!=null && e.getLatitude()!=null  && !e.getLatitude().equals("null") && !e.getLontitude().equals("null")) {
+            if(e.getLontitude()!=null && e.getLatitude()!=null) {
                 LatLng latLng = new LatLng(Double.parseDouble(e.getLatitude()), Double.parseDouble(e.getLontitude()));
-                mMap.addMarker(new MarkerOptions().position(latLng).title(ifNull(e.getLocation())));
+                Marker marker =mMap.addMarker(new MarkerOptions().position(latLng).title(e.getTitle()));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                 mMap.setMinZoomPreference(16);
             }

@@ -69,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         events = dbHelper.getAllEvent(cate);
         numberOfEvents = events.size();
 
+        createCateSpinner();
+
         mapView = (ImageView) findViewById(R.id.map);
         rechercher = (EditText) findViewById(R.id.rechercher);
         search = (ImageButton) findViewById(R.id.search);
@@ -128,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         categories.add("Tout");
         categories.addAll(dbHelper.getCategories());
 
-        cateSpinner = rootview.findViewById(R.id.Spinner_cate);
+        cateSpinner =findViewById(R.id.Spinner_cate);
 
         //第二步：为下拉列表定义一个适配器，这里就用到里前面定义的list。
         //we have to define an adapter for spinner

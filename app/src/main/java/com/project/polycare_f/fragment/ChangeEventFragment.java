@@ -406,7 +406,7 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Toast.makeText(getContext(), "Map est prête Ready", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Map est prête", Toast.LENGTH_SHORT).show();
         mMap = googleMap;
 
         if (mLocationPermissionsGranted) {

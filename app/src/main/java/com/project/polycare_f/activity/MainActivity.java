@@ -11,6 +11,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -129,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void createCateSpinner() {
         categories.add("Tout");
         categories.addAll(dbHelper.getCategories());
+        categories.add("A assigner");
 
         cateSpinner =findViewById(R.id.Spinner_cate);
 
@@ -169,9 +171,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public List<Event> getNewEventsAccordingToCate(List<Event> events, String cate) {
         List<Event> eventList = new ArrayList<>();
-        if (!cate.equals("Tout")) {
+        if (!cate.equals("Tout") && !(cate.equals("A assigner"))) {
             for (Event event : events) {
                 if (event.getCategory().equals(cate)) {
+                    eventList.add(event);
+                }
+            }
+            return eventList;
+        } else if (cate.equals("A assigner")){
+            for (Event event : events) {
+                Log.d("WEI",event.getAssignee());
+                if (event.getAssignee()==null || event.getAssignee().equals("") || event.getAssignee().equals("null")) {
                     eventList.add(event);
                 }
             }

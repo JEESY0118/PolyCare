@@ -225,8 +225,8 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
                                     " event_number= " + "'" + strings.get(7) + "'," +
                                     " event_latitude= " + "'" + strings.get(8) + "'," +
                                     " event_longtitude= " + "'" + strings.get(9) + "'," +
-                                    " event_location= " + "'" + strings.get(11) + "'" +
-                                    " event_assignee= " + "'" + strings.get(12)+ "'" +
+                                    " event_location= " + "'" + strings.get(11) + "'," +
+                                    " event_assignee= " + "'" + strings.get(12)+ "'," +
                                     " event_assignee_number= " + "'" + strings.get(13)+ "'" +
                                     " where event_id = " + "'" + id + "'";
                     helper.inertOrUpdateDateBatch(sql);

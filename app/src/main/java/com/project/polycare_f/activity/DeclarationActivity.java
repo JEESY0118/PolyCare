@@ -257,7 +257,7 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
         assignee_name = (EditText) findViewById(R.id.assignee_name_input);
         String assignee = assignee_name.getText().toString();
 
-        assignee_number = (EditText) findViewById(R.id.assignee_phone_input);
+        assignee_number = (EditText) findViewById(R.id.assignee_number_input);
         String assignee_phone = assignee_number.getText().toString();
 
 
@@ -285,8 +285,13 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
                 strings.add(Double.toString(marker.getPosition().longitude));
             }
         } else {
-            strings.add(Double.toString(currentLocation.getLatitude()));
-            strings.add(Double.toString(currentLocation.getLongitude()));
+            if(currentLocation!=null) {
+                strings.add(Double.toString(currentLocation.getLatitude()));
+                strings.add(Double.toString(currentLocation.getLongitude()));
+            }else {
+                strings.add("null");
+                strings.add("null");
+            }
         }
         strings.add(assignee);
         strings.add(assignee_phone);

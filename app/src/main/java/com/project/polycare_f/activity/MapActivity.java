@@ -43,7 +43,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
         for (Event e : events) {
-            if (e.getLontitude() != null && e.getLatitude() != null) {
+            if (e.getLontitude() != null && e.getLatitude() != null&& e.getLatitude().equals("null") && !e.getLontitude().equals("null") &&
+                    !e.getLatitude().equals("") && !e.getLontitude().equals("")) {
                 LatLng latLng = new LatLng(Double.parseDouble(e.getLatitude()), Double.parseDouble(e.getLontitude()));
                 Marker marker = this.googleMap.addMarker(new MarkerOptions().position(latLng).title(e.getTitle()));
                 marker.setTag(e);

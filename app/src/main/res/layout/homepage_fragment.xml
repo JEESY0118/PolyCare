@@ -59,21 +59,13 @@
                 android:layout_weight="0.3"
                 app:srcCompat="@drawable/map" />
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/rechercher"
+            <android.support.v7.widget.SearchView
+                android:id="@+id/search"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:hint="Rechercher" />
-
-            <ImageButton
-                android:id="@+id/search"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.1"
                 android:clickable="true"
-                android:focusable="true"
-                app:srcCompat="@drawable/ic_search_black_24dp" />
+                android:focusable="true" />
 
         </LinearLayout>
 

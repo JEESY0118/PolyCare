@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
@@ -18,7 +19,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -57,8 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int numberOfEvents;
     Toolbar toolbar;
     ImageView mapView;
-    EditText rechercher;
-    ImageButton search;
+    SearchView search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         createCateSpinner();
 
         mapView = (ImageView) findViewById(R.id.map);
-        rechercher = (EditText) findViewById(R.id.rechercher);
-        search = (ImageButton) findViewById(R.id.search);
+        search = (SearchView) findViewById(R.id.search);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         mapView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,22 +82,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        search.setOnClickListener(new View.OnClickListener() {
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onClick(View view) {
-                String toSearch = rechercher.getText().toString();
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
                 List<Event> eventList = new ArrayList<>();
                 for (Event event : events) {
-                    if (event.getDescription().toString().contains(toSearch) ||
-                            event.getAssignee().contains(toSearch) ||
-                            event.getCategory().contains(toSearch) ||
-                            event.getReporter().contains(toSearch) ||
-                            event.getTitle().contains(toSearch)) {
+                    if (event.getDescription().toString().contains(newText) ||
+                            event.getAssignee().contains(newText) ||
+                            event.getCategory().contains(newText) ||
+                            event.getReporter().contains(newText) ||
+                            event.getTitle().contains(newText)) {
                         eventList.add(event);
                     }
                 }
                 viewAdapter.setData(eventList);
                 recyclerview.setAdapter(viewAdapter);
+                return false;
             }
         });
 

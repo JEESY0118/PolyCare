@@ -89,16 +89,30 @@
                 android:layout_weight="1"
                 android:textColor="#463939"
                 android:textSize="16sp"
-                tools:text="Prénom : " />
+                tools:text="Reportaire : " />
 
-            <TextView
-                android:id="@+id/phone_view"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                android:textColor="#463939"
-                android:textSize="16sp"
-                tools:text="Téléphone : " />
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/phone_view"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:textColor="#463939"
+                    android:textSize="16sp"
+                    tools:text="Tél du reportaire : " />
+
+                <ImageButton
+                    android:id="@+id/call_author"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="0.1"
+                    app:srcCompat="@drawable/ic_call_black_24dp" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/assignee_view"
@@ -109,14 +123,37 @@
                 android:textSize="16sp"
                 tools:text="Destinataire : " />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/assignee_phone_view"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:textColor="#463939"
+                    android:textSize="16sp"
+                    tools:text="Tél du destinataire : " />
+
+                <ImageButton
+                    android:id="@+id/call_assignee"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.1"
+                    app:srcCompat="@drawable/ic_call_black_24dp" />
+            </LinearLayout>
+
             <TextView
-                android:id="@+id/assignee_phone_view"
+                android:id="@+id/location"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_weight="1"
+                android:layout_weight="0"
                 android:textColor="#463939"
                 android:textSize="16sp"
-                tools:text="Tél du destinataire : " />
+                android:text="Localisation : " />
 
             <LinearLayout
                 android:layout_width="match_parent"

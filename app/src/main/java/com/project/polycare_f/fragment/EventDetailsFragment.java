@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,7 +45,7 @@ import java.util.logging.Logger;
 public class EventDetailsFragment extends Fragment implements OnMapReadyCallback, Button.OnClickListener {
     private TextView titleview, arthorview, categoryview, importanceview, dateview, descriptionview, numberview, stateview,locationview, assignee_view, assignee_number_view;
     public static final String ACTIVITY = "debug here";
-    String title, category, description, importance, date, state, phonenumber, location, assignee, assignee_number;
+    String title, category, description, importance, date, state, author_phoneNumber, assignee_phoneNumber, location, assignee, assignee_number;
     String arthor;
     int id;
     DBHelper helper;
@@ -52,6 +53,7 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
     String latitude, longtitude;
     GoogleMap mMap;
     View view;
+    ImageButton call_author, call_assignee;
     boolean isCreated = false;
     ArrayList<String> data = new ArrayList<>();
     List<String> mTexts = new ArrayList<>();
@@ -73,6 +75,8 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
         assignee_view = (TextView) view.findViewById(R.id.assignee_view);
         assignee_number_view = (TextView) view.findViewById(R.id.assignee_phone_view);
         locationview = (TextView) view.findViewById(R.id.location);
+        call_author = (ImageButton) view.findViewById(R.id.call_author) ;
+        call_assignee = (ImageButton) view.findViewById(R.id.call_assignee);
 
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
@@ -90,7 +94,7 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
         importance = intent.getExtras().getString("Importance");
         date = intent.getExtras().getString("Date");
         state = intent.getExtras().getString("State");
-        phonenumber = intent.getExtras().getString("Phone");
+        author_phoneNumber = intent.getExtras().getString("Phone");
         id = intent.getExtras().getInt("Id");
         latitude= intent.getExtras().getString("Latitude");
         longtitude= intent.getExtras().getString("Longtitude");
@@ -104,7 +108,7 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
         dateview.setText(" Date : " + ifNull(date));
         descriptionview.setText(" Description : " + ifNull(description));
         stateview.setText(" État : " + ifNull(state));
-        numberview.setText(" Téléphone : " + ifNull(phonenumber));
+        numberview.setText(" Téléphone : " + ifNull(author_phoneNumber));
         locationview.setText(" Localisation : "+ ifNull(location));
         assignee_view.setText(" Destinataire : " + ifNull(assignee));
         assignee_number_view.setText(" Téléphone du destinataire : "+ifNull(assignee_number));
@@ -121,7 +125,7 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
         data.add(importance);
         data.add(date);
         data.add(state);
-        data.add(phonenumber);
+        data.add(author_phoneNumber);
         data.add(latitude);
         data.add(longtitude);
         data.add(assignee);
@@ -135,13 +139,27 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
         dateview.setText("Date : " + date);
         descriptionview.setText("Description : " + description);
         stateview.setText("État : " + state);
-        numberview.setText("Téléphone : " + phonenumber);
+        numberview.setText("Téléphone du: " + author_phoneNumber);
         assignee_view.setText("Destinataire : "+assignee);
-        assignee_number_view.setText("num du destinataire : "+assignee_number);
+        assignee_number_view.setText("Numéro du destinataire : "+assignee_number);
 
 
         showImportance(importance);
         createMapView();
+
+        call_assignee.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                phone(assignee_number);
+            }
+        });
+
+        call_author.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                phone(author_phoneNumber);
+            }
+        });
 
         return view;
     }
@@ -206,9 +224,9 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
                         .replace(R.id.fragment_event, changeEventFragment, null)
                         .addToBackStack(null).commit();
                 break;
-            case R.id.rapeler:
-                phone();
-                break;
+            //case R.id.rapeler:
+               // phone();
+                //break;
             case R.id.delete:
                 //DELETE FROM  events WHERE event_id=0
                 delete();
@@ -218,19 +236,19 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
         return true;
     }
 
-    //TODO appeler le deuxieme numeros
-    public void phone() {
+
+    public void phone(final String numberToCall) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setIcon(R.drawable.ic_call_black_24dp);//设置图标
         builder.setTitle("Validation");//设置对话框的标题
-        builder.setMessage("Vous voulez appele " + phonenumber + " ? ");//设置对话框的内容
+        builder.setMessage("Vous voulez appele " + numberToCall + " ? ");//设置对话框的内容
         builder.setPositiveButton("Appeler", new DialogInterface.OnClickListener() {  //这个是设置确定按钮
             @SuppressLint("MissingPermission")
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_CALL);
-                intent.setData(Uri.parse("tel:" + phonenumber));
+                intent.setData(Uri.parse("tel:" + numberToCall));
                 startActivity(intent);
             }
         });
@@ -310,7 +328,7 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
             importance = mTexts.get(4);
             date = mTexts.get(5);
             state = mTexts.get(6);
-            phonenumber = mTexts.get(7);
+            author_phoneNumber = mTexts.get(7);
             latitude = mTexts.get(8);
             longtitude = mTexts.get(9);
             assignee = mTexts.get(12);

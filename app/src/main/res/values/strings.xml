@@ -16,7 +16,7 @@
     <string name="nom">*Nom : </string>
     <string name="pernom">*Pernom : </string>
     <string name="titre">*Titre : </string>
-    <string name="t_l_phone">Téléphone : </string>
+    <string name="t_l_phone">Mon téléphone : </string>
     <string name="description">Description : </string>
     <string name="partagez_votre_localisation">Partagez votre localisation</string>
     <string name="button">valider</string>

@@ -5,10 +5,10 @@
         android:id="@+id/modifier"
         android:icon="@drawable/ic_mode_edit_black_24dp"
         android:title="   Modifier" />
-    <item
-        android:id="@+id/rapeler"
-        android:icon="@drawable/ic_call_black_24dp"
-        android:title="   Téléphoner" />
+    <!--<item-->
+        <!--android:id="@+id/rapeler"-->
+        <!--android:icon="@drawable/ic_call_black_24dp"-->
+        <!--android:title="   Téléphoner" />-->
     <item
         android:id="@+id/delete"
         android:icon="@drawable/ic_delete_black_24dp"

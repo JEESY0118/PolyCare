@@ -8,8 +8,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -28,6 +31,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -51,6 +55,8 @@ import com.project.polycare_f.gps.GPSTracker;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
+
 public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
         CompoundButton.OnCheckedChangeListener, Button.OnClickListener {
 
@@ -63,6 +69,7 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
     List<String> states = new ArrayList<>();
     private ArrayAdapter<String> adapterUr, adapterCate, adapterSta;
     EditText prenom, title, description, number, mLocation, assignee_view, assignee_number_view;
+    ImageButton contact_choose;
     Spinner urg, cate, state;
     String arthor, titre, des, phone, importance, etat, category, date, latitude, longtitude, location, assignee, assignee_number;
     int id;
@@ -77,6 +84,7 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
     private OnChooseListener mlistener;
     ArrayList<String> texts = new ArrayList<>();
     Activity mActivity;
+    static  final int RESULT_PICK_CONTACT = 1;
 
     private static final String TAG = "MapActivity";
     private boolean isValided = false;
@@ -109,6 +117,8 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
         assignee_view = (EditText) view.findViewById(R.id.assignee_name_input);
         assignee_number_view = (EditText) view.findViewById(R.id.assignee_phone_input);
 
+        contact_choose = (ImageButton) view.findViewById(R.id.import_contact_button);
+
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.modifie);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -137,7 +147,50 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
         createCategorySpinner();
         createUrgenceSpinner();
         createStateSpinner();
+
+        contact_choose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                choose_contact();
+            }
+        });
+
         return view;
+    }
+
+    private void choose_contact() {
+        Intent i=new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts"));
+        i.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
+        startActivityForResult(i,RESULT_PICK_CONTACT);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case RESULT_PICK_CONTACT:
+                    Cursor cursor = null;
+                    try {
+
+                        Uri uri = data.getData();
+                        cursor = getContext().getContentResolver().query(uri, null, null, null, null);
+                        cursor.moveToFirst();
+                        int  phoneIndex =cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                        int  nameIndex =cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+                        assignee_number = cursor.getString(phoneIndex);
+                        assignee = cursor.getString(nameIndex);
+
+                        assignee_view.setText(assignee);
+                        assignee_number_view.setText(assignee_number);
+                        Log.e("Name and Contact :",assignee+","+assignee_number);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+            }
+        } else {
+            Log.e("Failed", "Not able to pick contact");
+        }
     }
 
     private void createUrgenceSpinner() {

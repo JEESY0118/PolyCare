@@ -135,34 +135,33 @@
                 android:layout_weight="0"
                 android:text="   Informations optionnelles :"
                 android:textStyle="bold" />
-
-            <android.support.design.widget.TextInputLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0">
+                android:layout_height="50dp"
+                android:layout_weight="0"
+                android:orientation="horizontal">
 
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/assignee_name_input"
+                <ImageButton
+                    android:id="@+id/import_contact_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    app:srcCompat="@drawable/ic_contact_phone_black_24dp" />
+
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:hint="@string/destinataire"
-                    android:inputType="text" />
-            </android.support.design.widget.TextInputLayout>
+                    android:layout_weight="0">
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0">
-
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/assignee_phone_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:hint="@string/destinataire_telephone"
-                    android:inputType="phone" />
-            </android.support.design.widget.TextInputLayout>
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/assignee_name_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:hint="@string/destinataire"
+                        android:inputType="text" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -222,18 +221,19 @@
                     android:textSize="16sp" />
 
                 <Switch
-                    android:id="@+id/locationcustomer"
+                    android:id="@+id/locationCustomer"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_weight="1"
-                    android:text="@string/partagez_votre_localisation"
-                    android:textSize="16sp" />
+                    android:text="Déplacer le point"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
 
                 <fragment
                     android:id="@+id/map"
                     class="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="350dp"
                     android:layout_weight="1" />
 
                 <Button
@@ -248,6 +248,7 @@
                     android:onClick="onclick"
                     android:text="@string/button"
                     tools:text="Valider" />
+
 
             </LinearLayout>
 

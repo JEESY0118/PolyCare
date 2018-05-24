@@ -57,7 +57,7 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
     private ArrayAdapter<String> adapterCate;
     List<String> categories = new ArrayList<String>();
     List<String> urgences = new ArrayList<String>();
-    EditText prenom, title, description, number, location , assignee_name, assignee_number;
+    EditText prenom, title, description, number, location, assignee_name, assignee_number;
     ImageButton contact_choose;
     Switch aSwitch, locationCustomer;
     SupportMapFragment supportMapFragment;
@@ -82,12 +82,7 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            setContentView(R.layout.declaration_activity_land);
-        } else {
-            setContentView(R.layout.declaration_activity);
-        }
+        setContentView(R.layout.declaration_activity);
 
         helper = new DBHelper(this);
         createUrgenceSpinner();
@@ -126,9 +121,9 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
     }
 
     private void choose_contact() {
-        Intent i=new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts"));
+        Intent i = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts"));
         i.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
-        startActivityForResult(i,RESULT_PICK_CONTACT);
+        startActivityForResult(i, RESULT_PICK_CONTACT);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -141,8 +136,8 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
                         Uri uri = data.getData();
                         cursor = getContentResolver().query(uri, null, null, null, null);
                         cursor.moveToFirst();
-                        int  phoneIndex =cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-                        int  nameIndex =cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+                        int phoneIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                        int nameIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
                         assignee_phone = cursor.getString(phoneIndex);
                         assignee = cursor.getString(nameIndex);
 
@@ -205,7 +200,7 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
     }
 
     public void onclick(View view) {
-        if(avoidEmptyInfo(getInput())) {
+        if (avoidEmptyInfo(getInput())) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setIcon(R.drawable.ic_add_alert_black_24dp);//设置图标
             builder.setTitle("Validation de déclaration");//设置对话框的标题
@@ -281,15 +276,15 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
         strings.add(name);//4
         strings.add(etat);
 
-        if(marker!=null){
-                if(!marker.isVisible()) {
-                    strings.add(Double.toString(currentLocation.getLatitude()));
-                    strings.add(Double.toString(currentLocation.getLongitude()));
-                }else{
-                    strings.add(Double.toString(marker.getPosition().latitude));
-                    strings.add(Double.toString(marker.getPosition().longitude));
-                }
-        }else {
+        if (marker != null) {
+            if (!marker.isVisible()) {
+                strings.add(Double.toString(currentLocation.getLatitude()));
+                strings.add(Double.toString(currentLocation.getLongitude()));
+            } else {
+                strings.add(Double.toString(marker.getPosition().latitude));
+                strings.add(Double.toString(marker.getPosition().longitude));
+            }
+        } else {
             strings.add(Double.toString(currentLocation.getLatitude()));
             strings.add(Double.toString(currentLocation.getLongitude()));
         }
@@ -316,9 +311,7 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
             AlertDialog b = builder.create();
             b.show();  //必须show一下才能看到对话框，跟Toast一样的道理
             return false;
-        }
-
-        else if (strings.get(4).equals("")) {
+        } else if (strings.get(4).equals("")) {
             Log.i(ACTIVITY_TAG, strings.get(4));
             AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
             builder1.setIcon(R.drawable.ic_add_alert_black_24dp);//设置图标
@@ -338,15 +331,14 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
     }
 
 
-
     /**
      * @param buttonView the button from wich the method is called
-     * @param isChecked the current button value
-     *        if isChecked is true we need to get the location
+     * @param isChecked  the current button value
+     *                   if isChecked is true we need to get the location
      */
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if(buttonView.getId()==R.id.mapopener){
+        if (buttonView.getId() == R.id.mapopener) {
             if (isChecked) {
                 Log.i(ACTIVITY_TAG, "Open");
                 getLocationPermission();
@@ -358,15 +350,14 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
                 marker.setVisible(false);
             }
         }
-        if(buttonView.getId()==R.id.locationCustomer){
-            if(isChecked) {
-                getLocationPermission ();
+        if (buttonView.getId() == R.id.locationCustomer) {
+            if (isChecked) {
+                getLocationPermission();
                 mMap.setOnMarkerDragListener(this);
                 marker = mMap.addMarker(new MarkerOptions().position(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())));
                 marker.setVisible(true);
                 marker.setDraggable(true);
-            }
-            else{
+            } else {
                 marker.setVisible(false);
             }
         }
@@ -382,23 +373,21 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
     }
 
 
-
     /**
      * @param googleMap the GoogleMap object
-     *        Method called when the map called by initMap has finished instanciation.
-     *
-     *        check the permisions for getting the location
-     *        set the object values if it is permitted
+     *                  Method called when the map called by initMap has finished instanciation.
+     *                  <p>
+     *                  check the permisions for getting the location
+     *                  set the object values if it is permitted
      */
     @Override
-    public void onMapReady(GoogleMap googleMap){
+    public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         getDeviceLocation();
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED)
-        {
+                == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
         }
@@ -428,7 +417,7 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
                 });
             }
         } catch (SecurityException e) {
-            Log.i(ACTIVITY_TAG,e.getStackTrace().toString());
+            Log.i(ACTIVITY_TAG, e.getStackTrace().toString());
         }
     }
 
@@ -447,26 +436,26 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
     private void getLocationPermission() {
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
         if (ContextCompat.checkSelfPermission(this, FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-            && ContextCompat.checkSelfPermission(this, COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                getLocationPermision = true;
-                initMap();
+                && ContextCompat.checkSelfPermission(this, COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            getLocationPermision = true;
+            initMap();
         } else {
             ActivityCompat.requestPermissions(DeclarationActivity.this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
         }
     }
 
     /**
-     * @param requestCode ?
-     * @param permissions the asked permissions
+     * @param requestCode  ?
+     * @param permissions  the asked permissions
      * @param grantResults the answers
-     *
-     * check if every answer is granteed, if they are , pass getLocationPermission to true.
+     *                     <p>
+     *                     check if every answer is granteed, if they are , pass getLocationPermission to true.
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         getLocationPermision = false;
-        if (requestCode==LOCATION_PERMISSION_REQUEST_CODE && grantResults.length > 0) {
-            for(Integer i:grantResults) {
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE && grantResults.length > 0) {
+            for (Integer i : grantResults) {
                 if (i != PackageManager.PERMISSION_GRANTED) {
                     getLocationPermision = false;
                     return;
@@ -475,17 +464,20 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
             getLocationPermision = true;
         }
     }
+
     @Override
-    public void onMarkerDrag(Marker marker){
+    public void onMarkerDrag(Marker marker) {
         marker.getPosition();
     }
+
     @Override
-    public void onMarkerDragStart(Marker marker){
+    public void onMarkerDragStart(Marker marker) {
         marker.getPosition();
 
     }
+
     @Override
-    public void onMarkerDragEnd(Marker marker){
+    public void onMarkerDragEnd(Marker marker) {
         marker.getPosition();
 
     }

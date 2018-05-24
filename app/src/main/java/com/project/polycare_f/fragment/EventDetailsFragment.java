@@ -294,7 +294,8 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        if(!latitude.equals("null") && !latitude.equals("null")) {
+        if(!latitude.equals("null") && !longtitude.equals("null") &&
+                !latitude.equals("") && !longtitude.equals("")) {
             LatLng latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longtitude));
             mMap.addMarker(new MarkerOptions().position(latLng).title("I am Here"));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));

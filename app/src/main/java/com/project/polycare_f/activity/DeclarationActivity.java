@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -65,7 +66,7 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
     String assignee, assignee_phone;
     GoogleMap mMap;
     int numberOfEvents;
-    Button button;
+    ImageView button;
     Marker marker;
     public static final int RESULT_PICK_CONTACT = 1;
 
@@ -94,7 +95,7 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
         locationCustomer = findViewById(R.id.locationCustomer);
         locationCustomer.setOnCheckedChangeListener(this);
         assignee_name = (EditText) findViewById(R.id.assignee_name_input);
-        assignee_number = (EditText) findViewById(R.id.assignee_phone_input);
+        assignee_number = (EditText) findViewById(R.id.assignee_number_input);
 
         button = findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -114,6 +115,7 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
         });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Déclaration d'un incident");
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();

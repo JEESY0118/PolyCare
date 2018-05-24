@@ -29,6 +29,13 @@
                 android:minHeight="?attr/actionBarSize"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
                 app:titleTextColor="@color/cardview_light_background">
+
+                <ImageView
+                    android:id="@+id/back"
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/ic_arrow_back_black_24dp" />
+
             </android.support.v7.widget.Toolbar>
 
             <LinearLayout
@@ -175,13 +182,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="260dp"
                     android:layout_weight="1" />
-
-                <Button
-                    android:id="@+id/button2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorPrimary"
-                    android:text="Retour au tableau" />
 
             </LinearLayout>
 

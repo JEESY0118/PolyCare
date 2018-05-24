@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,7 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class EventDetailsFragment extends Fragment implements OnMapReadyCallback, Button.OnClickListener {
+public class EventDetailsFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener {
     private TextView titleview, arthorview, categoryview, importanceview, dateview, descriptionview, numberview, stateview,locationview, assignee_view, assignee_number_view;
     public static final String ACTIVITY = "debug here";
     String title, category, description, importance, date, state, author_phoneNumber, assignee_phoneNumber, location, assignee, assignee_number;
@@ -83,8 +84,8 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
         toolbar.setTitle(R.string.details);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
-        Button button = (Button) view.findViewById(R.id.button2);
-        button.setOnClickListener(this);
+        ImageView imageView = (ImageView) view.findViewById(R.id.back);
+        imageView.setOnClickListener(this);
 
         Intent intent = getActivity().getIntent();
         arthor = intent.getExtras().getString("Name");
@@ -313,7 +314,7 @@ public class EventDetailsFragment extends Fragment implements OnMapReadyCallback
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.button2:
+            case R.id.back:
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
                 break;

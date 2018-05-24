@@ -108,6 +108,25 @@ public class HomePageFragment extends Fragment implements View.OnClickListener{
             }
         });
 
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String toSearch = rechercher.getText().toString();
+                List<Event> eventList = new ArrayList<>();
+                for (Event event : events){
+                    if(event.getDescription().toString().contains(toSearch) ||
+                            event.getAssignee().contains(toSearch) ||
+                            event.getCategory().contains(toSearch) ||
+                            event.getReporter().contains(toSearch) ||
+                            event.getTitle().contains(toSearch)){
+                        eventList.add(event);
+                    }
+                }
+                viewAdapter.setData(eventList);
+                recyclerview.setAdapter(viewAdapter);
+            }
+        });
+
         toolbar.setTitle(R.string.empty);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 

@@ -18,6 +18,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,6 +26,8 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -90,6 +93,37 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
 
         aSwitch = findViewById(R.id.mapopener);
         aSwitch.setOnCheckedChangeListener(this);
+
+
+        final ScrollView mainScrollView = (ScrollView) findViewById(R.id.scroll);
+        ImageView transparentImageView = (ImageView) findViewById(R.id.transparent_image);
+
+        transparentImageView.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                switch (action) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Disallow ScrollView to intercept touch events.
+                        mainScrollView.requestDisallowInterceptTouchEvent(true);
+                        // Disable touch on transparent view
+                        return false;
+
+                    case MotionEvent.ACTION_UP:
+                        // Allow ScrollView to intercept touch events.
+                        mainScrollView.requestDisallowInterceptTouchEvent(false);
+                        return true;
+
+                    case MotionEvent.ACTION_MOVE:
+                        mainScrollView.requestDisallowInterceptTouchEvent(true);
+                        return false;
+
+                    default:
+                        return true;
+                }
+            }
+        });
 
         locationCustomer = findViewById(R.id.locationCustomer);
         locationCustomer.setOnCheckedChangeListener(this);
@@ -348,7 +382,10 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
                 mMap.clear();
                 locationCustomer.setVisibility(View.GONE);
                 Log.i(ACTIVITY_TAG, "Close");
-                marker.setVisible(false);
+                locationCustomer.setChecked(false);
+                if(marker!=null) {
+                    marker.setVisible(false);
+                }
             }
         }
         if (buttonView.getId() == R.id.locationCustomer) {

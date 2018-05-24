@@ -8,7 +8,8 @@
     android:orientation="vertical"
     tools:context=".activity.DeclarationActivity">
 
-    <android.support.v4.widget.NestedScrollView
+    <ScrollView
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -37,9 +38,37 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:layout_weight="0"
-                android:text=" * Informations demandées :"
+                android:text=" * Informations obligatoires :"
                 android:textSize="14sp"
                 android:textStyle="bold" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/title_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:hint="@string/titre"
+                    android:inputType="text" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/prenom_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/nom" />
+            </android.support.design.widget.TextInputLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -54,7 +83,7 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="10dp"
                     android:layout_weight="0.5"
-                    android:text="@string/category" />
+                    android:text="Catégorie" />
 
                 <Spinner
                     android:id="@+id/Spinner_category"
@@ -100,32 +129,6 @@
                 </Spinner>
             </LinearLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_weight="1">
-
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/title_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:hint="@string/titre"
-                    android:inputType="text" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_weight="1">
-
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/prenom_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="@string/nom" />
-            </android.support.design.widget.TextInputLayout>
 
             <TextView
                 android:id="@+id/textView4"
@@ -173,7 +176,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:hint="@string/t_l_phone"
+                    android:hint="@+id/t_l_phone"
                     android:inputType="phone" />
 
             </android.support.design.widget.TextInputLayout>
@@ -229,12 +232,29 @@
                     android:textSize="16sp"
                     android:visibility="gone" />
 
-                <fragment
-                    android:id="@+id/map"
-                    class="com.google.android.gms.maps.SupportMapFragment"
+
+                <RelativeLayout
+                    android:id="@+id/map_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="350dp"
-                    android:layout_weight="1" />
+                    android:layout_height="300dp">
+
+                    <fragment
+                        android:id="@+id/map"
+                        class="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="350dp"
+                        android:layout_marginTop="-100dp"
+                        android:layout_marginBottom="-100dp"
+                        android:name="com.google.android.gms.maps.MapFragment"/>
+
+                    <ImageView
+                        android:id="@+id/transparent_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="#00000000" />
+
+                </RelativeLayout>
+
 
                 <Button
                     android:id="@+id/button"
@@ -247,6 +267,7 @@
                     android:background="?android:attr/statusBarColor"
                     android:onClick="onclick"
                     android:text="@string/button"
+                    android:textColor="#FFFFFF"
                     tools:text="Valider" />
 
 
@@ -255,6 +276,6 @@
         </LinearLayout>
 
 
-    </android.support.v4.widget.NestedScrollView>
+    </ScrollView>
 
 </LinearLayout>

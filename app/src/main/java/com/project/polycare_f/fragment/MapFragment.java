@@ -55,7 +55,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
         for (Event e : events) {
-            if (e.getLontitude() != null && e.getLatitude() != null) {
+            if (e.getLontitude() != null && e.getLatitude() != null ) {
                 LatLng latLng = new LatLng(Double.parseDouble(e.getLatitude()), Double.parseDouble(e.getLontitude()));
                 Marker marker = this.googleMap.addMarker(new MarkerOptions().position(latLng).title(e.getTitle()));
                 marker.setTag(e);

@@ -62,9 +62,9 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
     List<String> categories = new ArrayList<>();
     List<String> states = new ArrayList<>();
     private ArrayAdapter<String> adapterUr, adapterCate, adapterSta;
-    EditText prenom, title, description, number, mLocation;
+    EditText prenom, title, description, number, mLocation, assignee_view, assignee_number_view;
     Spinner urg, cate, state;
-    String arthor, titre, des, phone, importance, etat, category, date, latitude, longtitude, location;
+    String arthor, titre, des, phone, importance, etat, category, date, latitude, longtitude, location, assignee, assignee_number;
     int id;
     DBHelper helper;
     SupportMapFragment supportMapFragment;
@@ -94,6 +94,7 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.change_event_item, container, false);
+        Log.d("TAAAAAAAAAAGGGGGGGGGG","*****************");
 
 
         helper = new DBHelper(getContext());
@@ -105,6 +106,8 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
         description = (EditText) view.findViewById(R.id.description_input);
         number = (EditText) view.findViewById(R.id.phone_input);
         mLocation = (EditText) view.findViewById(R.id.location);
+        assignee_view = (EditText) view.findViewById(R.id.assignee_name_input);
+        assignee_number_view = (EditText) view.findViewById(R.id.assignee_phone_input);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.modifie);
@@ -125,8 +128,10 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
             number.setText(texts.get(7));
             latitude = texts.get(8);
             longtitude = texts.get(9);
-            id = Integer.parseInt(texts.get(10));
-            mLocation.setText(texts.get(11));
+            id = Integer.parseInt(texts.get(12));
+            mLocation.setText(texts.get(13));
+            assignee_view.setText(texts.get(10));
+            assignee_number_view.setText(texts.get(11));
         }
 
         createCategorySpinner();
@@ -221,6 +226,8 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
                                     " event_latitude= " + "'" + strings.get(8) + "'," +
                                     " event_longtitude= " + "'" + strings.get(9) + "'," +
                                     " event_location= " + "'" + strings.get(11) + "'" +
+                                    " event_assignee= " + "'" + strings.get(12)+ "'" +
+                                    " event_assignee_number= " + "'" + strings.get(13)+ "'" +
                                     " where event_id = " + "'" + id + "'";
                     helper.inertOrUpdateDateBatch(sql);
                     mlistener.onChoosed(strings);
@@ -301,6 +308,12 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
         mLocation = (EditText) view.findViewById(R.id.location);
         String location = mLocation.getText().toString();
 
+        assignee_view = (EditText) view.findViewById(R.id.assignee_name_input);
+        assignee = assignee_view.getText().toString();
+
+        assignee_number_view = (EditText) view.findViewById(R.id.assignee_phone_input);
+        assignee_number = assignee_number_view.getText().toString();
+
         strings.add(name);
         strings.add(titre);
         strings.add(category);
@@ -320,6 +333,8 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
             strings.add(String.valueOf(id));
             strings.add(ifNull(location));
         }
+        strings.add(assignee);
+        strings.add(assignee_number);
 
         return strings;
     }

@@ -188,6 +188,7 @@ public class DBHelper extends SQLiteOpenHelper {
 // 设置事务标志为成功，当结束事务时就会提交事务
             db.setTransactionSuccessful();
         } catch (Exception e) {
+            Log.d("BDD","ERROR : "+sqls);
             e.printStackTrace();
         } finally {
 // 结束事务

@@ -103,6 +103,7 @@
             android:text="Supprimer"
             android:textColor="#ffffff"
             android:textSize="18sp" />
+
     </FrameLayout>
 
 </LinearLayout>

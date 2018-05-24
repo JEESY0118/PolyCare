@@ -35,6 +35,14 @@
 
             </Spinner>
 
+            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/map"
+                class="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="100dp"
+                android:layout_weight="1" />
+
         </android.support.v7.widget.Toolbar>
 
     </LinearLayout>
@@ -55,9 +63,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="bottom|end"
+        tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp"
-        tools:ignore="MissingConstraints">
+        tools:layout_editor_absoluteY="0dp">
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"

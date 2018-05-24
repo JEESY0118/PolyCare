@@ -1,5 +1,7 @@
 package com.project.polycare_f.fragment;
 
+import android.annotation.SuppressLint;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -19,6 +21,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -29,13 +32,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.project.polycare_f.R;
 import com.project.polycare_f.activity.DeclarationActivity;
+import com.project.polycare_f.activity.MapActivity;
 import com.project.polycare_f.data.DBHelper;
 import com.project.polycare_f.data.Event;
 import com.project.polycare_f.adapter.RecyclerViewAdapter;
@@ -49,7 +64,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-public class  HomePageFragment extends Fragment {
+public class HomePageFragment extends Fragment implements View.OnClickListener{
     List<Event> events;
     List<String> categories = new ArrayList<String>();
     List<String> tris = new ArrayList<String>();
@@ -63,19 +78,39 @@ public class  HomePageFragment extends Fragment {
     private ArrayAdapter<String> adapterCate;
     private ArrayAdapter<String> adapterImp;
     private View rootview;
-    public static final String ACTIVITY =  "debug here";
+    public static final String ACTIVITY = "debug here";
     int numberOfEvents;
     Toolbar toolbar;
+    ImageView mapView;
+    EditText rechercher;
+    ImageButton search;
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+        if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             rootview = inflater.inflate(R.layout.homepage_fragment_land, container, false);
-        }
-        else {
+            Log.i("TAG", "landscape");
+        } else {
             rootview = inflater.inflate(R.layout.homepage_fragment, container, false);
         }
+
+        mapView = (ImageView) rootview.findViewById(R.id.map);
+        rechercher =(EditText) rootview.findViewById(R.id.rechercher);
+        search = (ImageButton) rootview.findViewById(R.id.search);
+        toolbar = (Toolbar) rootview.findViewById(R.id.toolbar);
+        mapView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), MapActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        toolbar.setTitle(R.string.empty);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+
         dbHelper = new DBHelper(getContext());
 
         events = dbHelper.getAllEvent(cate);
@@ -92,20 +127,8 @@ public class  HomePageFragment extends Fragment {
             }
         });
 
-        toolbar = (Toolbar) rootview.findViewById(R.id.toolbar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-        toolbar.setTitle(R.string.empty);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-
-
         recyclerview = rootview.findViewById(R.id.recyclerview);
-        viewAdapter= new RecyclerViewAdapter(getContext(), events, dbHelper);
+        viewAdapter = new RecyclerViewAdapter(getContext(), events, dbHelper);
         recyclerview.setLayoutManager(new GridLayoutManager(getContext(), 1));
         recyclerview.setAdapter(viewAdapter);
         ItemTouchHelper.Callback callback = new myItemMoveCallBack(viewAdapter);
@@ -115,7 +138,7 @@ public class  HomePageFragment extends Fragment {
         return rootview;
     }
 
-    private void createCateSpinner(){
+    private void createCateSpinner() {
         categories.add("Tout");
         categories.addAll(dbHelper.getCategories());
 
@@ -132,24 +155,24 @@ public class  HomePageFragment extends Fragment {
         cateSpinner.setAdapter(adapterCate);
         //第五步：为下拉列表设置各种事件的响应，这个事响应菜单被选中
         //add listener for spinner
-        cateSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
+        cateSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 cate = cateSpinner.getSelectedItem().toString();
                 TextView tv = (TextView) arg1;
                 tv.setTextColor(Color.WHITE);
                 tv.setTextSize(20);
                 tv.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-                List<Event> newsEvents= getNewEventsAccordingToCate(events, cate);
-                if(!newsEvents.isEmpty()) {
+                List<Event> newsEvents = getNewEventsAccordingToCate(events, cate);
+                if (!newsEvents.isEmpty()) {
                     viewAdapter.setData(newsEvents);
                     recyclerview.setAdapter(viewAdapter);
-                }
-                else {
+                } else {
                     viewAdapter.setData(newsEvents);
                     recyclerview.setAdapter(viewAdapter);
-                    Toast.makeText(getContext(), "Pas d'évenement dans "+cate, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Pas d'évenement dans " + cate, Toast.LENGTH_SHORT).show();
                 }
             }
+
             public void onNothingSelected(AdapterView<?> arg0) {
 
             }
@@ -157,16 +180,16 @@ public class  HomePageFragment extends Fragment {
     }
 
 
-
     /**
      * get events according to its category
+     *
      * @param events
      * @param cate
      * @return
      */
     public List<Event> getNewEventsAccordingToCate(List<Event> events, String cate) {
         List<Event> eventList = new ArrayList<>();
-        if(!cate.equals("Tout")) {
+        if (!cate.equals("Tout")) {
             for (Event event : events) {
                 if (event.getCategory().equals(cate)) {
                     eventList.add(event);
@@ -180,25 +203,26 @@ public class  HomePageFragment extends Fragment {
     /**
      * sorted by importance,
      * Elevée, Moyenne, Faible
+     *
      * @param events
      * @return
      */
-    public List<Event> getSortByImportance(List<Event> events){
+    public List<Event> getSortByImportance(List<Event> events) {
         List<Event> eventList = new ArrayList<>();
         for (Event e : events) {
-            if(e.getImportance().equals("Elevée")){
+            if (e.getImportance().equals("Elevée")) {
                 eventList.add(e);
             }
         }
 
         for (Event e : events) {
-            if(e.getImportance().equals("Moyenne")){
+            if (e.getImportance().equals("Moyenne")) {
                 eventList.add(e);
             }
         }
 
         for (Event e : events) {
-            if(e.getImportance().equals("Faible")){
+            if (e.getImportance().equals("Faible")) {
                 eventList.add(e);
             }
         }
@@ -206,33 +230,33 @@ public class  HomePageFragment extends Fragment {
         return eventList;
     }
 
-    public List<Event> getSortByState(List<Event> events){
+    public List<Event> getSortByState(List<Event> events) {
         List<Event> eventList = new ArrayList<>();
         for (Event e : events) {
-            if(e.getState().equals("A faire")){
+            if (e.getState().equals("A faire")) {
                 eventList.add(e);
             }
         }
 
         for (Event e : events) {
-            if(e.getState().equals("En cours")){
+            if (e.getState().equals("En cours")) {
                 eventList.add(e);
             }
         }
 
         for (Event e : events) {
-            if(e.getState().equals("Résolu")){
+            if (e.getState().equals("Résolu")) {
                 eventList.add(e);
             }
         }
 
         return eventList;
     }
-
 
 
     /**
      * sorted by date
+     *
      * @param list
      */
     private static void getSortByDate(List<Event> list) {
@@ -306,6 +330,18 @@ public class  HomePageFragment extends Fragment {
             }
         }
         super.onPrepareOptionsMenu(menu);
+    }
+
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.search:
+                return;
+            case R.id.map:
+
+        }
+
     }
 }
 

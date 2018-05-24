@@ -35,7 +35,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+        int width = this.getResources().getDisplayMetrics().widthPixels;
+        int height = this.getResources().getDisplayMetrics().heightPixels;
+        if(width>height){
             setContentView(R.layout.activity_main_land);
         }
         else {
@@ -93,7 +95,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.txt_map:
-//                if(isServicesOK()) {
                     reTxtSelect();
                     txt_map.setSelected(true);
                     if (mapFragment == null) {
@@ -102,7 +103,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     } else {
                         transaction.show(mapFragment);
                     }
-          //      }
                 break;
 
         }
@@ -128,6 +128,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         if(mapFragment!=null){
             transaction.hide(mapFragment);
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        try {
+            // Checks the orientation of the screen
+            if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                Log.i("TAG", "landscape");
+
+            } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                Log.i("TAG", "shuzhe");
+            }
+        } catch (Exception ex) {
+
         }
     }
 }

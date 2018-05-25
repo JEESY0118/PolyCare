@@ -39,8 +39,8 @@
     <string name="category">*Catégorie :</string>
     <string name="hh">*Urgence :</string>
     <string name="empty"> </string>
-    <string name="details">Détails d\'évènements</string>
-    <string name="modifie">Modifier un évènement</string>
+    <string name="details">Détails d\'évènement</string>
+    <string name="modifie">Modifier un incident</string>
     <string name="destinataire">Destinataire :</string>
     <string name="destinataire_telephone">Téléphone du destinataire</string>
 

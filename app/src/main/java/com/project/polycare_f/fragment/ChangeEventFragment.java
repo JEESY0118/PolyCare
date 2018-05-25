@@ -32,6 +32,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -57,7 +58,7 @@ import java.util.List;
 import static android.app.Activity.RESULT_OK;
 
 public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
-        CompoundButton.OnCheckedChangeListener, Button.OnClickListener {
+        CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
     private String mArgument;
     public static final String ARGUMENT = "argument";
@@ -120,7 +121,7 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
         toolbar.setTitle(R.string.modifie);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
-        Button button = (Button) view.findViewById(R.id.button);
+        ImageView button = (ImageView) view.findViewById(R.id.button);
         button.setOnClickListener(this);
 
         if (getArguments() != null) {
@@ -367,25 +368,26 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
         strings.add(name);
         strings.add(titre);
         strings.add(category);
-        strings.add(ifNull(descriptions));
+        strings.add((descriptions));
         strings.add(importance);
         strings.add(date);
         strings.add(etat);
-        strings.add(phone);
+        strings.add((phone));
         if (currentLocation != null) {
-            strings.add(Double.toString(currentLocation.getLatitude()));
-            strings.add(Double.toString(currentLocation.getLongitude()));
+            strings.add((Double.toString(currentLocation.getLatitude())));
+            strings.add((Double.toString(currentLocation.getLongitude())));
             strings.add(String.valueOf(id));
-            strings.add(ifNull(location));
+            strings.add((location));
         } else {
-            strings.add(latitude);
-            strings.add(longtitude);
+            strings.add((latitude));
+            strings.add((longtitude));
             strings.add(String.valueOf(id));
-            strings.add(ifNull(location));
+            strings.add((location));
         }
-        strings.add(ifNull(assignee));
-        strings.add(ifNull(assignee_number));
+        strings.add((assignee));
+        strings.add((assignee_number));
 
+        Log.d("ChangeEvent", " "+strings);
         return strings;
     }
 
@@ -536,9 +538,6 @@ public class ChangeEventFragment extends Fragment implements OnMapReadyCallback,
         this.mActivity = activity;
     }
 
-    private String ifNull(String s) {
-        return s + "";
-    }
 
     private boolean avoidEmptyInfo(List<String> strings) {
         if (strings.get(1).equals("")) {

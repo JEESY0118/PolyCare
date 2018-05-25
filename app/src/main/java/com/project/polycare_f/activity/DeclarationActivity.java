@@ -251,7 +251,7 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
                             urg + "','" + strings.get(5) + "','" + strings.get(3) + "','" + strings.get(2) +
                             "','" + strings.get(6) + "','" + strings.get(7) + "','" + strings.get(8) + "','" +
                             strings.get(9) + "','" + strings.get(10) + "');";
-                    Log.i(ACTIVITY_TAG, sql);
+                    Log.i("Declaration: ", ""+strings);
                     helper.inertOrUpdateDateBatch(sql);
                     Toast.makeText(DeclarationActivity.this, "Réussi", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent();
@@ -323,8 +323,8 @@ public class DeclarationActivity extends AppCompatActivity implements OnMapReady
                 strings.add(Double.toString(currentLocation.getLatitude()));
                 strings.add(Double.toString(currentLocation.getLongitude()));
             }else {
-                strings.add("null");
-                strings.add("null");
+                strings.add("");
+                strings.add("");
             }
         }
         strings.add(assignee);

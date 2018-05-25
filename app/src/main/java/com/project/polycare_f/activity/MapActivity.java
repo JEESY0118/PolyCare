@@ -17,6 +17,7 @@ import com.project.polycare_f.data.DBHelper;
 import com.project.polycare_f.data.Event;
 
 import java.util.List;
+import java.util.Vector;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback{
     SupportMapFragment supportMapFragment;
@@ -42,16 +43,26 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
+        double latTotal=0;
+        double longTotal=0;
+        int index=0;
         for (Event e : events) {
             if (e.getLontitude() != null && e.getLatitude() != null&& !e.getLatitude().equals("null") && !e.getLontitude().equals("null") &&
                     !e.getLatitude().equals("") && !e.getLontitude().equals("")) {
+                latTotal=latTotal+Double.parseDouble(e.getLatitude());
+                longTotal=longTotal+Double.parseDouble(e.getLontitude());
+                index=index+1;
                 LatLng latLng = new LatLng(Double.parseDouble(e.getLatitude()), Double.parseDouble(e.getLontitude()));
                 Marker marker = this.googleMap.addMarker(new MarkerOptions().position(latLng).title(e.getTitle()));
                 marker.setTag(e);
-                this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                this.googleMap.setMinZoomPreference(16);
+                this.googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(e.getLatitude()), Double.parseDouble(e.getLontitude())), 14.0f));
+
+
             }
         }
+        latTotal=latTotal/index;
+        longTotal=longTotal/index;
+        this.googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latTotal,longTotal), 14.0f));
     }
 
 
